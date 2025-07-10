@@ -1,0 +1,23 @@
+# Ignore virtual environments
+venv/
+env/
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore logs and temporary files
+*.log
+*.tmp
+
+# Ignore docs and PDFs
+*.pdf
+*.docx
+*.doc
+
+# Ignore Python bytecode
+__pycache__/
+*.py[cod]
+
+# Ignore Streamlit cache
+.streamlit/
