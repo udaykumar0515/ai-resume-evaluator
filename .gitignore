@@ -4,6 +4,7 @@ env/
 
 # Ignore document files
 documents/
+/data/resumes/*
 
 # Ignore OS files
 .DS_Store
@@ -24,3 +25,5 @@ __pycache__/
 
 # Ignore Streamlit cache
 .streamlit/
+
+
