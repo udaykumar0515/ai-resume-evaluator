@@ -2,7 +2,38 @@ import PyPDF2
 from docx import Document
 import re
 import unicodedata
+from transformers import pipeline
 
+class ResumeNER:
+    def __init__(self):
+        # Load the NER pipeline
+        self.ner_pipeline = pipeline(
+            "ner", 
+            model="dslim/bert-base-NER",
+            aggregation_strategy="simple"  # Group tokens into entities
+        )
+    
+    def extract_entities(self, text):
+        """Extract entities using Hugging Face."""
+        try:
+            entities = self.ner_pipeline(text)
+            return self._format_entities(entities)
+        except Exception as e:
+            print(f"NER Error: {e}")
+            return {}
+
+    def _format_entities(self, raw_entities):
+        """Group entities by type (PERSON, ORG, etc.)."""
+        grouped = {}
+        for entity in raw_entities:
+            label = entity["entity_group"]
+            if label not in grouped:
+                grouped[label] = []
+            grouped[label].append(entity["word"])
+        return grouped
+
+# Initialize globally (loads model once)
+ner = ResumeNER()
 def split_sections(text: str) -> dict:
     """
     Splits resume text into major sections using keywords.
@@ -118,6 +149,65 @@ def extract_text_from_txt(file_path_or_buffer) -> str:
         print(f"Error extracting TXT text: {e}")
         return ""
 
+import re
+
+def extract_contact_info(text):
+    contact = {}
+
+    # Name (first line or from NER)
+    lines = text.strip().splitlines()
+    if lines:
+        contact["name"] = lines[0].strip()
+
+    # Email
+    match = re.search(r"[\w\.-]+@[\w\.-]+\.\w+", text)
+    if match:
+        contact["email"] = match.group(0)
+
+    # Phone (generic international + local patterns)
+    phone_match = re.search(r"(\+91[-\s]?)?\d{10}", text)
+    if phone_match:
+        contact["phone"] = phone_match.group(0)
+
+    # LinkedIn
+    linkedin_match = re.search(r"(https?://)?(www\.)?linkedin\.com/in/[^\s]+", text)
+    if linkedin_match:
+        contact["linkedin"] = linkedin_match.group(0)
+
+    # GitHub
+    github_match = re.search(r"(https?://)?(www\.)?github\.com/[^\s]+", text)
+    if github_match:
+        contact["github"] = github_match.group(0)
+
+    return contact
+
+def parse_resume(file_path_or_buffer, file_type="pdf"):
+    # 1. Extract raw text
+    text = extract_text(file_path_or_buffer, file_type)
+    
+    # 2. Clean and split sections (rule-based)
+    sections = split_sections(text)
+
+    # 3. Global entity extraction with Hugging Face NER
+    global_entities = ner.extract_entities(text)
+
+    # 4. Per-section entity extraction
+    enhanced_sections = {}
+    for section, content in sections.items():
+        enhanced_sections[section] = {
+            "text": content,
+            "entities": ner.extract_entities(content)
+        }
+
+    # 5. Structured contact info
+    contact_info = extract_contact_info(text)
+
+    # Final structured output
+    return {
+        "sections": enhanced_sections,
+        "global_entities": global_entities,
+        "contact": contact_info
+    }
 
 def extract_text(file_path_or_buffer, file_type="pdf") -> str:
     """
@@ -147,7 +237,12 @@ sample_pdf_path = r"D:\uday\Vscode\Projects\AI_resume_evaluator\data\resumes\res
 text = extract_text(sample_pdf_path, file_type="pdf")
 sections = split_sections(text)
 
-print("=== Extracted Sections ===")
 for header, content in sections.items():
     print(f"\n{header.upper()}:")
-    print(content)
+
+    if header.lower() == "contact":
+        contact_info = extract_contact_info(content)
+        for key, value in contact_info.items():
+            print(f"{key.title()}: {value}")
+    else:
+        print(content)
