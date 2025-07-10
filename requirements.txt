@@ -1,1 +1,9 @@
-    
+scikit-learn
+transformers
+PyPDF2
+streamlit
+pandas
+numpy
+matplotlib
+seaborn
+docx
