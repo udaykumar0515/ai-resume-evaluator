@@ -2,6 +2,9 @@
 venv/
 env/
 
+# Ignore document files
+documents/
+
 # Ignore OS files
 .DS_Store
 Thumbs.db
