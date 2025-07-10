@@ -10,6 +10,7 @@ def split_sections(text: str) -> dict:
     sections = {}
     # Expanded and organized header list
     headers = [
+        "Contact", "Profile",
         "Career Objective", "Professional Summary", "Summary", "Objective",
         "Education", "Academic Background", "Qualifications",
         "Skills", "Technical Skills", "Key Skills", "Core Competencies",
@@ -20,11 +21,7 @@ def split_sections(text: str) -> dict:
         "Declaration", "References"
     ]
 
-    # Create regex pattern that matches any of these headers as whole words
-    # with optional colons and case insensitivity
-    pattern = r"(?im)^\s*(" + "|".join(re.escape(h) + r"s?" for h in headers) + r")\s*:?\s*$"
-
-    # Add lookahead to ensure we don't split on words within sentences
+    # Create regex pattern that matches any of these headers
     pattern = r"(?im)(^|\n)\s*(" + "|".join(re.escape(h) + r"s?" for h in headers) + r")\s*:?\s*($|\n)"
 
     splits = re.split(pattern, text)
@@ -45,8 +42,18 @@ def split_sections(text: str) -> dict:
             sections[current_section] += part.strip() + "\n"
     
     # Clean up sections
-    return {k: v.strip() for k, v in sections.items() if v.strip()}
-
+    sections = {k: v.strip() for k, v in sections.items() if v.strip()}
+    
+    # Post-processing for header section
+    if "Header" in sections:
+        header_content = sections.pop("Header")
+        # Check if it looks like contact info
+        if any(x in header_content.lower() for x in ["@", "http", "linkedin", "github", "phone"]):
+            sections["Contact"] = header_content
+        else:
+            sections["Profile"] = header_content
+            
+    return sections
 
 
 def clean_text(text: str) -> str:
