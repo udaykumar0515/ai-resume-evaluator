@@ -28,18 +28,3 @@
 # if __name__ == "__main__":
 #     interactive_test()
 
-# similarity.py
-from similarity import ResumeMatcher
-
-jd = "We need a developer with Python, Machine Learning, and Flask experience."
-structured_resume = {
-    "skills": ["Python", "Machine Learning", "Django", "Flask"],
-    "projects": [{"title": "ML Classifier", "description": "Built a spam classifier using sklearn"}],
-    "education": "BTech in CSE",
-    "experience": []
-}
-raw_resume = "I am good at Java and Spring Boot. Built several backend APIs."
-
-matcher = ResumeMatcher(method="tfidf")
-print("Structured:", matcher.get_similarity_score(jd, [structured_resume], mode="structured", return_analysis=True))
-print("Raw:", matcher.get_similarity_score(jd, [raw_resume], mode="raw", return_analysis=True))
