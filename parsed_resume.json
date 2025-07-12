@@ -1,0 +1,168 @@
+{
+  "metadata": {
+    "processing_date": "2025-07-12T18:25:38.361083",
+    "file_type": "pdf"
+  },
+  "sections": {
+    "Education": {
+      "text": "B.Tech, Artificial Intelligence & Machine Learning\nVardhaman College of Engineering, Hyderabad\nExpected Graduation: 2027 | 3nd Year, 5th Semester",
+      "entities": {
+        "ORG": [
+          "B. Tech",
+          "Artificial Intelligence & Machine Learning Vardhaman College of Engineering"
+        ],
+        "LOC": [
+          "Hyderabad"
+        ]
+      }
+    },
+    "Certifications": {
+      "text": "\u2022 JavaScript \u2013 Vardhaman College (83%, Apr 2025)\n\u2022 Fullstack Development \u2013 Cognifyz (2025)\n\u2022 Advanced Python \u2013 Vardhaman College (2025)\n\u2022 AI + ML Basics \u2013 Elsystems (2024)",
+      "entities": {
+        "MISC": [
+          "Java",
+          "Advanced Python"
+        ],
+        "ORG": [
+          "V",
+          "##ardhaman College",
+          "Fullstack Development",
+          "Cognifyz",
+          "V",
+          "##ardhaman College",
+          "AI",
+          "ML Basic",
+          "Elsystems"
+        ]
+      }
+    },
+    "Projects": {
+      "text": "\u2022 Confidence Detection App: React + DeepFace, scores emotional confidence.\n\u2022 Resume Ranker: Python ML model matching resumes to JD and scoring.\n\u2022 Library Management System: Python GUI + SQL, auto -generates IDs and restricts book\nissue logic.\n\u2022 Recipe Finder (Team): Dish fetcher using API, includes login, redirects to full recipe.\n\u2022 News Aggregator: Dynamic site using JS & APIs for live headlines.\n\u2022 Flappy Bird Game: Pygame clone of the classic arcade game.\n\u2022 EMI Calculator: Java -based console app for EMI computation.",
+      "entities": {
+        "MISC": [
+          "Python",
+          "Management System",
+          "Python",
+          "SQL",
+          "J",
+          "Bird Game",
+          "Calcula",
+          "Java"
+        ],
+        "ORG": [
+          "Library",
+          "EMI",
+          "EMI"
+        ]
+      }
+    },
+    "Languages": {
+      "text": "\u2022 English \u2013 Professional\n\u2022 Telugu \u2013 Native\n\u2022 Kannada \u2013 Native\n\u2022 Hindi \u2013 Conversational",
+      "entities": {
+        "MISC": [
+          "English",
+          "Telugu",
+          "Kannada",
+          "Hindi"
+        ]
+      }
+    },
+    "Declaration": {
+      "text": "I declare that the information provided above is true and correct.\nDate: June 2025 Signature: Haibathi Uday Kumar",
+      "entities": {
+        "PER": [
+          "Haibat",
+          "Uday Kumar"
+        ]
+      }
+    },
+    "Contact": {
+      "text": "Haibathi Uday Kumar\nudaykumarhaibathi@gmail.com | +91-7569311188\nLinkedIn | GitHub",
+      "entities": {
+        "PER": [
+          "Haibathi Uday Kumar",
+          "##daykumar"
+        ],
+        "ORG": [
+          "##I",
+          "GitH"
+        ]
+      }
+    }
+  },
+  "global_entities": {
+    "PER": [
+      "Haibat",
+      "Uday Kumar",
+      "##daykumar"
+    ],
+    "MISC": [
+      "##H",
+      "Python",
+      "Java",
+      "JavaScript",
+      "C",
+      "C",
+      "Java",
+      "Python",
+      "Python",
+      "Java"
+    ],
+    "ORG": [
+      "Artificial Intelligence & Machine Learning V",
+      "##ardhaman College of Engineering",
+      "V",
+      "##ardhaman College",
+      "##sta",
+      "V",
+      "##ardhaman College",
+      "Interns",
+      "Elsystems Services",
+      "ML",
+      "##T",
+      "Web Development Inter",
+      "Edunet Foundation",
+      "IBM SkillsB",
+      "M",
+      "Deep"
+    ],
+    "LOC": [
+      "Hyderabad"
+    ]
+  },
+  "contact": {
+    "name": "Haibathi Uday Kumar",
+    "email": "udaykumarhaibathi@gmail.com",
+    "phone": "+91-7569311188"
+  },
+  "education": [
+    {
+      "degree": "B.Tech",
+      "institution": "Artificial Intelligence & Machine Learning V",
+      "dates": "Apr 2025"
+    }
+  ],
+  "skills": [
+    "##T",
+    "##ardhaman College",
+    "##ardhaman College of Engineering",
+    "##sta",
+    "Artificial Intelligence & Machine Learning V",
+    "Deep",
+    "Edunet Foundation",
+    "Elsystems Services",
+    "IBM SkillsB",
+    "Interns",
+    "M",
+    "ML",
+    "V",
+    "Web Development Inter"
+  ],
+  "dates": [
+    "Apr 2025",
+    "Oct 2024",
+    "Apr 2025",
+    "June 2025",
+    "June 2025"
+  ]
+}

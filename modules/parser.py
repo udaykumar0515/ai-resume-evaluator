@@ -232,7 +232,7 @@ def extract_text(file_path_or_buffer, file_type="pdf") -> str:
     return clean_text(raw_text)
 
 # Replace with your actual path
-sample_pdf_path = r"D:\uday\Vscode\Projects\AI_resume_evaluator\data\resumes\resume_webdev.pdf"
+sample_pdf_path = r"D:\uday\Vscode\Projects\AI_resume_evaluator\resumes\resume_webdev.pdf"
 
 text = extract_text(sample_pdf_path, file_type="pdf")
 sections = split_sections(text)
