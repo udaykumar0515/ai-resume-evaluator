@@ -5,7 +5,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import unicodedata
 from collections import defaultdict
 import numpy as np
-from sentence_transformers import SentenceTransformer  # Optional for semantic similarity
+from sentence_transformers import SentenceTransformer
 import logging
 
 # Set up logging
@@ -14,44 +14,56 @@ logger = logging.getLogger(__name__)
 
 class ResumeMatcher:
     """
-    Enhanced resume-job description matching system with multiple comparison methods
-    and additional features like section weighting and match explanations.
+    Resume-job description matching system using semantic embeddings by default
+    with fallback to TF-IDF if embeddings are not available.
     """
     
     def __init__(
         self,
-        method: str = "tfidf",
+        method: str = "embedding",  # Changed default to embedding
         section_weights: Optional[Dict[str, float]] = None,
         min_skill_match: float = 0.7,
-        use_gpu: bool = False
+        use_gpu: bool = False,
+        embedding_model_name: str = 'all-MiniLM-L6-v2'
     ):
         """
         Initialize the matcher with configuration options.
         
         Args:
-            method: 'tfidf' or 'embedding' (for semantic similarity)
+            method: 'embedding' (default) or 'tfidf'
             section_weights: Dictionary of weights for structured resume sections
             min_skill_match: Minimum similarity threshold to consider skills matched
             use_gpu: Whether to use GPU for embedding model if available
+            embedding_model_name: Name of the SentenceTransformer model to use
         """
         self.method = method
         self.section_weights = section_weights or {
-            'skills': 0.4,
-            'projects': 0.3,
-            'education': 0.15,
-            'experience': 0.15
+            'skills': 0.5,  # Increased weight for skills
+            'experience': 0.3,
+            'education': 0.1,
+            'projects': 0.1
         }
         self.min_skill_match = min_skill_match
         self.embedding_model = None
+        self.embedding_model_name = embedding_model_name
         
+        # Initialize the preferred method
         if self.method == "embedding":
             try:
-                self.embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
+                self.embedding_model = SentenceTransformer(self.embedding_model_name)
                 if use_gpu:
                     self.embedding_model = self.embedding_model.to('cuda')
+                logger.info(f"Initialized embedding model: {self.embedding_model_name}")
             except ImportError:
                 logger.warning("SentenceTransformers not installed. Falling back to TF-IDF.")
                 self.method = "tfidf"
+            except Exception as e:
+                logger.warning(f"Failed to initialize embedding model: {str(e)}. Falling back to TF-IDF.")
+                self.method = "tfidf"
+        
+        if self.method == "tfidf":
+            logger.info("Using TF-IDF vectorizer for similarity calculation")
+            self.vectorizer = TfidfVectorizer(stop_words='english', ngram_range=(1, 2))
 
     @staticmethod
     def clean_text(text: str) -> str:
@@ -108,8 +120,8 @@ class ResumeMatcher:
                 weight = self.section_weights.get(field, 1.0)
                 if weight > 0:
                     section_text = " ".join(text_parts)
-                    # Repeat text based on weight (simplified approach)
-                    weighted_text.extend([section_text] * int(weight * 10))
+                    # Repeat text based on weight (more precise approach)
+                    weighted_text.append((section_text + " ") * int(weight * 10))
             return self.clean_text(" ".join(weighted_text))
         else:
             return self.clean_text(" ".join(" ".join(parts) for parts in combined_parts.values()))
@@ -117,67 +129,86 @@ class ResumeMatcher:
     def compute_tfidf_similarity(self, jd_text: str, resume_texts: List[str]) -> List[float]:
         """
         Compute cosine similarity scores between JD and multiple resumes using TF-IDF.
-        
-        Args:
-            jd_text: Job description text
-            resume_texts: List of resume texts
-            
-        Returns:
-            List of similarity scores
         """
         documents = [self.clean_text(jd_text)] + [self.clean_text(resume) for resume in resume_texts]
-        vectorizer = TfidfVectorizer(stop_words='english', ngram_range=(1, 2))
-        tfidf_matrix = vectorizer.fit_transform(documents)
+        tfidf_matrix = self.vectorizer.fit_transform(documents)
         scores = cosine_similarity(tfidf_matrix[0:1], tfidf_matrix[1:]).flatten()
         return [float(round(score, 4)) for score in scores]
 
     def compute_embedding_similarity(self, jd_text: str, resume_texts: List[str]) -> List[float]:
         """
         Compute cosine similarity scores between JD and multiple resumes using sentence embeddings.
-        
-        Args:
-            jd_text: Job description text
-            resume_texts: List of resume texts
-            
-        Returns:
-            List of similarity scores
+        More efficient batch processing.
         """
         if not self.embedding_model:
             raise ValueError("Embedding model not initialized")
             
+        # Process all texts at once for better efficiency
         documents = [self.clean_text(jd_text)] + [self.clean_text(resume) for resume in resume_texts]
-        embeddings = self.embedding_model.encode(documents)
+        
+        # Batch processing for better performance
+        batch_size = 32 if len(documents) > 32 else len(documents)
+        embeddings = self.embedding_model.encode(
+            documents,
+            batch_size=batch_size,
+            show_progress_bar=False,
+            convert_to_numpy=True
+        )
+        
+        # Normalize embeddings for more accurate cosine similarity
+        embeddings = embeddings / np.linalg.norm(embeddings, axis=1, keepdims=True)
         scores = cosine_similarity(embeddings[0:1], embeddings[1:]).flatten()
         return [float(round(score, 4)) for score in scores]
 
     def analyze_matches(self, jd_text: str, resume_text: str) -> Dict[str, Union[float, List[str]]]:
         """
-        Analyze matches between JD and resume to identify key overlapping terms.
-        
-        Args:
-            jd_text: Job description text
-            resume_text: Resume text
-            
-        Returns:
-            Dictionary with match analysis including overlapping terms
+        Enhanced match analysis with term importance and skill-specific matching.
         """
         jd_clean = self.clean_text(jd_text)
         resume_clean = self.clean_text(resume_text)
         
-        # Tokenize and find overlaps
+        # Tokenize
         jd_tokens = set(re.findall(r"\b[\w-]+\b", jd_clean))
         resume_tokens = set(re.findall(r"\b[\w-]+\b", resume_clean))
+        
+        # Find overlaps
         overlapping = jd_tokens & resume_tokens
         
         # Find bigram overlaps
-        jd_bigrams = set(zip(jd_tokens, list(jd_tokens)[1:]))
-        resume_bigrams = set(zip(resume_tokens, list(resume_tokens)[1:]))
+        jd_words = re.findall(r"\b[\w-]+\b", jd_clean)
+        resume_words = re.findall(r"\b[\w-]+\b", resume_clean)
+        
+        jd_bigrams = set(zip(jd_words, jd_words[1:]))
+        resume_bigrams = set(zip(resume_words, resume_words[1:]))
         overlapping_bigrams = jd_bigrams & resume_bigrams
+        
+        # Calculate match percentages
+        jd_total_terms = max(1, len(jd_tokens))
+        match_percentage = len(overlapping) / jd_total_terms
+        
+        # Skill-specific matching (if skills section exists)
+        skill_match = {}
+        if hasattr(self, 'section_weights') and 'skills' in self.section_weights:
+            # Simple skill matching - in real implementation you'd want a skill ontology
+            skill_terms = {'python', 'java', 'machine learning', 'aws', 
+                          'sql', 'tensorflow', 'pytorch', 'docker', 'kubernetes'}
+            jd_skills = jd_tokens & skill_terms
+            resume_skills = resume_tokens & skill_terms
+            matched_skills = jd_skills & resume_skills
+            
+            if jd_skills:
+                skill_match = {
+                    'matched_skills': list(matched_skills),
+                    'skill_coverage': len(matched_skills) / max(1, len(jd_skills))
+                }
         
         return {
             "overlapping_terms": list(overlapping),
             "overlapping_bigrams": [" ".join(bigram) for bigram in overlapping_bigrams],
-            "match_percentage": len(overlapping) / max(1, len(jd_tokens))
+            "match_percentage": match_percentage,
+            "skill_match": skill_match,
+            "jd_term_count": jd_total_terms,
+            "resume_term_count": len(resume_tokens)
         }
 
     def get_similarity_score(
@@ -188,36 +219,35 @@ class ResumeMatcher:
         return_analysis: bool = False
     ) -> List[Tuple[int, float, Optional[Dict]]]:
         """
-        Main entry point for getting similarity scores between JD and resumes.
-        
-        Args:
-            jd_text: Job description text
-            resumes: List of resumes (raw text or structured dicts)
-            mode: 'raw' for text resumes, 'structured' for parsed resumes
-            return_analysis: Whether to include match analysis
-            
-        Returns:
-            List of tuples containing (index, score, analysis_dict)
+        Main entry point with improved error handling and performance.
         """
         if not jd_text or not resumes:
             return []
             
         try:
+            # Pre-process resumes based on mode
             if mode == "structured":
                 processed_resumes = [self.combine_structured_resume(r) for r in resumes]
             else:
                 processed_resumes = [self.clean_text(r) if isinstance(r, str) else "" for r in resumes]
 
+            # Calculate similarity scores
             if self.method == "embedding":
                 scores = self.compute_embedding_similarity(jd_text, processed_resumes)
             else:
                 scores = self.compute_tfidf_similarity(jd_text, processed_resumes)
                 
+            # Prepare results with optional analysis
             results = []
             for idx, score in enumerate(scores):
                 analysis = None
                 if return_analysis:
-                    analysis = self.analyze_matches(jd_text, processed_resumes[idx])
+                    try:
+                        analysis = self.analyze_matches(jd_text, processed_resumes[idx])
+                    except Exception as e:
+                        logger.warning(f"Failed to analyze matches for resume {idx}: {str(e)}")
+                        analysis = {"error": str(e)}
+                
                 results.append((idx, score, analysis))
                 
             return results
