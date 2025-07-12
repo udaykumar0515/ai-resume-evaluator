@@ -36,6 +36,37 @@ class ResumeNER:
 
 ner = ResumeNER()
 
+SKILL_KEYWORDS = {
+    "Python": ["python"],
+    "Java": ["java"],
+    "JavaScript": ["javascript", "js"],
+    "C++": ["c\\+\\+"],
+    "C": ["c\\b"],
+    "SQL": ["sql"],
+    "HTML": ["html"],
+    "CSS": ["css"],
+    "React": ["react"],
+    "Node.js": ["node", "node.js", "nodejs"],
+    "Pygame": ["pygame"],
+    "Streamlit": ["streamlit"],
+    "Git": ["git"],
+    "Machine Learning": ["machine learning", "ml"],
+    "Data Structures": ["data structures"],
+    "Web Development": ["web development"],
+    "DeepFace": ["deepface"]
+}
+
+SKILL_CATEGORIES = {
+    "Programming Languages": ["python", "java", "javascript", "c\\+\\+", "c"],
+    "Web Technologies": ["html", "css", "react", "node"],
+    "Databases": ["sql"],
+    "Frameworks": ["pygame", "streamlit"],
+    "Data Science": ["machine learning", "ml", "data structures"],
+    "Tools": ["git"],
+    "Concepts": ["web development"],
+    "Computer Vision": ["deepface"]
+}
+
 # Patterns and keywords
 DEGREE_PATTERNS = [
     r"\bB\.?Tech\b", r"\bB\.?E\b", r"\bB\.?Sc\b", r"\bB\.?Com\b", 
@@ -150,6 +181,7 @@ def clean_entities(entity_dict):
     
     return cleaned
 
+@lru_cache(maxsize=16)
 def split_sections(text: str) -> dict:
     sections = {}
     headers = [
@@ -158,27 +190,27 @@ def split_sections(text: str) -> dict:
         "Education", "Academic Background", "Qualifications",
         "Skills", "Technical Skills", "Key Skills", "Core Competencies",
         "Certifications", "Licenses", "Certificates",
-        "Internships", "Work Experience", "Experience", "Employment History",
+        "Internships", "Work Experience", "Experience", "Employment History",  # Added variations
         "Projects", "Personal Projects", "Academic Projects",
         "Languages", 
         "Declaration", "References"
     ]
 
-    pattern = r"(?im)(^|\n)\s*(" + "|".join(re.escape(h) + r"s?" for h in headers) + r")\s*:?\s*($|\n)"
-    splits = re.split(pattern, text)
+    # Make the pattern more flexible with case-insensitive matching
+    pattern = r"(?im)^\s*(" + "|".join(re.escape(h) + r"s?" for h in headers) + r")\s*:?\s*$"
     
     current_section = "Header"
     sections[current_section] = ""
     
-    for part in splits:
-        if not part:
-            continue
-        is_header = any(h.lower() in part.lower() for h in headers)
-        if is_header:
-            current_section = part.strip().rstrip(':')
+    for line in text.split('\n'):
+        line = line.strip()
+        # Check if line matches any header
+        match = re.fullmatch(pattern, line)
+        if match:
+            current_section = match.group(1).strip().rstrip(':')
             sections[current_section] = ""
         else:
-            sections[current_section] += part.strip() + "\n"
+            sections[current_section] += line + "\n"
     
     sections = {k: v.strip() for k, v in sections.items() if v.strip()}
     
@@ -239,6 +271,7 @@ def extract_contact_info(text):
         contact["github"] = github_match.group(0)
 
     return contact
+
 def extract_education_info(text):
     education = []
     sections = split_sections(text)
@@ -253,6 +286,12 @@ def extract_education_info(text):
             institution = match.group(2).strip()
             dates = match.group(3) or match.group(4)
             dates = dates.strip() if dates else None
+            
+            # Add the fallback date extraction here
+            if not dates:
+                fallback = re.search(r"\b(20\d{2})\b", match.group(0))
+                if fallback:
+                    dates = fallback.group(1)
             
             institution = re.sub(r"\s+", " ", institution)
             institution = re.sub(r"\s*,\s*", ", ", institution)
@@ -291,16 +330,7 @@ def extract_skills(text):
     return sorted(skills_found)
 
 def format_skills_output(skills_list):
-    categories = {
-        "Programming Languages": ["python", "java", "javascript", "c\\+\\+", "c"],
-        "Web Technologies": ["html", "css", "react", "node"],
-        "Databases": ["sql"],
-        "Frameworks": ["pygame", "streamlit"],
-        "Data Science": ["machine learning", "ml", "data structures"],
-        "Tools": ["git"],
-        "Concepts": ["web development"],
-        "Computer Vision": ["deepface"]
-    }
+    categories = SKILL_CATEGORIES
     
     output = []
     for category, patterns in categories.items():
@@ -459,7 +489,9 @@ def print_parsed_resume(parsed_data):
     
     if "ORG" in parsed_data["global_entities"]:
         orgs = clean_entities(parsed_data["global_entities"])["ORG"]
-        print_section("IDENTIFIED ORGANIZATIONS", ", ".join(orgs))
+        # Normalize and deduplicate
+        normalized_orgs = sorted(set(o.lower().strip().replace(".", "") for o in orgs if len(o) > 2))
+        print_section("IDENTIFIED ORGANIZATIONS", ", ".join(normalized_orgs))
 
     sections_str = ""
     for section, content in parsed_data["sections"].items():
@@ -492,5 +524,6 @@ if __name__ == "__main__":
     
     parsed_data = parse_resume(sample_pdf_path)
     parsed_data["global_entities"] = clean_entities(parsed_data["global_entities"])
+    
     
     print_parsed_resume(parsed_data)
