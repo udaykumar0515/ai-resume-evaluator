@@ -1,130 +1,30 @@
 {
   "metadata": {
-    "processing_date": "2025-07-12T18:25:38.361083",
-    "file_type": "pdf"
+    "processing_date": "2025-07-12T19:29:48.043324",
+    "file_type": "pdf",
+    "file_name": "resume_webdev.pdf"
   },
   "sections": {
-    "Education": {
-      "text": "B.Tech, Artificial Intelligence & Machine Learning\nVardhaman College of Engineering, Hyderabad\nExpected Graduation: 2027 | 3nd Year, 5th Semester",
-      "entities": {
-        "ORG": [
-          "B. Tech",
-          "Artificial Intelligence & Machine Learning Vardhaman College of Engineering"
-        ],
-        "LOC": [
-          "Hyderabad"
-        ]
-      }
-    },
-    "Certifications": {
-      "text": "\u2022 JavaScript \u2013 Vardhaman College (83%, Apr 2025)\n\u2022 Fullstack Development \u2013 Cognifyz (2025)\n\u2022 Advanced Python \u2013 Vardhaman College (2025)\n\u2022 AI + ML Basics \u2013 Elsystems (2024)",
-      "entities": {
-        "MISC": [
-          "Java",
-          "Advanced Python"
-        ],
-        "ORG": [
-          "V",
-          "##ardhaman College",
-          "Fullstack Development",
-          "Cognifyz",
-          "V",
-          "##ardhaman College",
-          "AI",
-          "ML Basic",
-          "Elsystems"
-        ]
-      }
-    },
-    "Projects": {
-      "text": "\u2022 Confidence Detection App: React + DeepFace, scores emotional confidence.\n\u2022 Resume Ranker: Python ML model matching resumes to JD and scoring.\n\u2022 Library Management System: Python GUI + SQL, auto -generates IDs and restricts book\nissue logic.\n\u2022 Recipe Finder (Team): Dish fetcher using API, includes login, redirects to full recipe.\n\u2022 News Aggregator: Dynamic site using JS & APIs for live headlines.\n\u2022 Flappy Bird Game: Pygame clone of the classic arcade game.\n\u2022 EMI Calculator: Java -based console app for EMI computation.",
-      "entities": {
-        "MISC": [
-          "Python",
-          "Management System",
-          "Python",
-          "SQL",
-          "J",
-          "Bird Game",
-          "Calcula",
-          "Java"
-        ],
-        "ORG": [
-          "Library",
-          "EMI",
-          "EMI"
-        ]
-      }
-    },
-    "Languages": {
-      "text": "\u2022 English \u2013 Professional\n\u2022 Telugu \u2013 Native\n\u2022 Kannada \u2013 Native\n\u2022 Hindi \u2013 Conversational",
-      "entities": {
-        "MISC": [
-          "English",
-          "Telugu",
-          "Kannada",
-          "Hindi"
-        ]
-      }
-    },
-    "Declaration": {
-      "text": "I declare that the information provided above is true and correct.\nDate: June 2025 Signature: Haibathi Uday Kumar",
-      "entities": {
-        "PER": [
-          "Haibat",
-          "Uday Kumar"
-        ]
-      }
-    },
-    "Contact": {
-      "text": "Haibathi Uday Kumar\nudaykumarhaibathi@gmail.com | +91-7569311188\nLinkedIn | GitHub",
-      "entities": {
-        "PER": [
-          "Haibathi Uday Kumar",
-          "##daykumar"
-        ],
-        "ORG": [
-          "##I",
-          "GitH"
-        ]
-      }
-    }
+    "Education": "B.Tech, Artificial Intelligence & Machine Learning\nVardhaman College of Engineering, Hyderabad\nExpected Graduation: 2027 | 3nd Year, 5th Semester",
+    "Certifications": "\u2022 JavaScript \u2013 Vardhaman College (83%, Apr 2025)\n\u2022 Fullstack Development \u2013 Cognifyz (2025)\n\u2022 Advanced Python \u2013 Vardhaman College (2025)\n\u2022 AI + ML Basics \u2013 Elsystems (2024)",
+    "Projects": "\u2022 Confidence Detection App: React + DeepFace, scores emotional confidence.\n\u2022 Resume Ranker: Python ML model matching resumes to JD and scoring.\n\u2022 Library Management System: Python GUI + SQL, auto -generates IDs and restricts book\nissue logic.\n\u2022 Recipe Finder (Team): Dish fetcher using API, includes login, redirects to full recipe.\n\u2022 News Aggregator: Dynamic site using JS & APIs for live headlines.\n\u2022 Flappy Bird Game: Pygame clone of the classic arcade game.\n\u2022 EMI Calculator: Java -based console app for EMI computation.",
+    "Languages": "\u2022 English \u2013 Professional\n\u2022 Telugu \u2013 Native\n\u2022 Kannada \u2013 Native\n\u2022 Hindi \u2013 Conversational",
+    "Declaration": "I declare that the information provided above is true and correct.\nDate: June 2025 Signature: Haibathi Uday Kumar",
+    "Contact": "Haibathi Uday Kumar\nudaykumarhaibathi@gmail.com | +91-7569311188\nLinkedIn | GitHub"
   },
-  "global_entities": {
+  "entities": {
     "PER": [
       "Haibat",
-      "Uday Kumar",
-      "##daykumar"
-    ],
-    "MISC": [
-      "##H",
-      "Python",
-      "Java",
-      "JavaScript",
-      "C",
-      "C",
-      "Java",
-      "Python",
-      "Python",
-      "Java"
+      "Uday Kumardaykumar"
     ],
     "ORG": [
-      "Artificial Intelligence & Machine Learning V",
-      "##ardhaman College of Engineering",
-      "V",
-      "##ardhaman College",
-      "##sta",
-      "V",
-      "##ardhaman College",
-      "Interns",
-      "Elsystems Services",
-      "ML",
-      "##T",
-      "Web Development Inter",
+      "Artificial Intelligence & Machine Learning Vardhaman College of Engineering",
       "Edunet Foundation",
-      "IBM SkillsB",
-      "M",
-      "Deep"
+      "Elsystems Services",
+      "IBM SkillsBuild",
+      "MLT",
+      "Vardhaman College",
+      "Vardhaman Collegesta"
     ],
     "LOC": [
       "Hyderabad"
@@ -133,36 +33,76 @@
   "contact": {
     "name": "Haibathi Uday Kumar",
     "email": "udaykumarhaibathi@gmail.com",
-    "phone": "+91-7569311188"
+    "phones": [
+      "+91-"
+    ]
   },
   "education": [
     {
-      "degree": "B.Tech",
-      "institution": "Artificial Intelligence & Machine Learning V",
-      "dates": "Apr 2025"
+      "degree": "B.Tech, Artificial Intelligence & Machine Learning",
+      "institution": "Vardhaman College of Engineering",
+      "dates": {
+        "raw": ", Hyderabad"
+      }
     }
   ],
-  "skills": [
-    "##T",
-    "##ardhaman College",
-    "##ardhaman College of Engineering",
-    "##sta",
-    "Artificial Intelligence & Machine Learning V",
-    "Deep",
-    "Edunet Foundation",
-    "Elsystems Services",
-    "IBM SkillsB",
-    "Interns",
-    "M",
-    "ML",
-    "V",
-    "Web Development Inter"
+  "skills": {
+    "Programming Languages": [
+      "Java",
+      "JavaScript",
+      "Python"
+    ],
+    "Web Technologies": [
+      "React"
+    ]
+  },
+  "experience": [],
+  "projects": [
+    {
+      "name": "Confidence Detection App",
+      "description": "React + DeepFace, scores emotional confidence."
+    },
+    {
+      "name": "Resume Ranker",
+      "description": "Python ML model matching resumes to JD and scoring."
+    },
+    {
+      "name": "Library Management System",
+      "description": "Python GUI + SQL, auto -generates IDs and restricts book issue logic."
+    },
+    {
+      "name": "Recipe Finder (Team)",
+      "description": "Dish fetcher using API, includes login, redirects to full recipe."
+    },
+    {
+      "name": "News Aggregator",
+      "description": "Dynamic site using JS & APIs for live headlines."
+    },
+    {
+      "name": "Flappy Bird Game",
+      "description": "Pygame clone of the classic arcade game."
+    },
+    {
+      "name": "EMI Calculator",
+      "description": "Java -based console app for EMI computation."
+    }
   ],
-  "dates": [
-    "Apr 2025",
-    "Oct 2024",
-    "Apr 2025",
-    "June 2025",
-    "June 2025"
+  "certifications": [
+    {
+      "name": "JavaScript \u2013 Vardhaman College (83%, Apr 2025)",
+      "issuer": null
+    },
+    {
+      "name": "Fullstack Development \u2013 Cognifyz (2025)",
+      "issuer": null
+    },
+    {
+      "name": "Advanced Python \u2013 Vardhaman College (2025)",
+      "issuer": null
+    },
+    {
+      "name": "AI + ML Basics \u2013 Elsystems (2024)",
+      "issuer": null
+    }
   ]
 }

@@ -239,20 +239,20 @@ def extract_contact_info(text):
         contact["github"] = github_match.group(0)
 
     return contact
-
 def extract_education_info(text):
     education = []
     sections = split_sections(text)
     
     if "Education" in sections:
         edu_text = sections["Education"]
-        edu_pattern = r"(?i)((?:B\.?Tech|B\.?E|B\.?Sc|B\.?Com|B\.?A|M\.?Tech|M\.?Sc|M\.?Com|M\.?A|Ph\.?D|Bachelor|Master|Diploma|PGDM|MBA|MCA)\b[^@\n]*)(?:@|at|,)?\s*([^\n,\(\)]*)\(?([^\)\n]*)\)?"
+        edu_pattern = r"(?i)((?:B\.?Tech|B\.?E|B\.?Sc|B\.?Com|B\.?A|M\.?Tech|M\.?Sc|M\.?Com|M\.?A|Ph\.?D|Bachelor|Master|Diploma|PGDM|MBA|MCA)\b[^@\n]*)(?:@|at|,)?\s*([^\n,\(\)]*)(?:\(([^\)\n]*)\)|-\s*(.*))?"
         
         matches = re.finditer(edu_pattern, edu_text)
         for match in matches:
             degree = match.group(1).strip()
             institution = match.group(2).strip()
-            dates = match.group(3).strip() if match.group(3) else None
+            dates = match.group(3) or match.group(4)
+            dates = dates.strip() if dates else None
             
             institution = re.sub(r"\s+", " ", institution)
             institution = re.sub(r"\s*,\s*", ", ", institution)
@@ -332,6 +332,41 @@ def extract_projects(text):
     
     return projects
 
+def extract_internships(text):
+    internships = []
+    sections = split_sections(text)
+    
+    if "Internships" in sections:
+        intern_text = sections["Internships"]
+        patterns = [
+            r"(?i)(.+?)\s*[-–]\s*(.+?)\s*\((.+?)\)\s*(.*)",  # Company - Role (Duration) Desc
+            r"(?i)(.+?)\s*[-–]\s*(.+?)\s*\[(.+?)\]\s*(.*)",  # Company - Role [Duration] Desc
+            r"(?i)(.+?)\s*,\s*(.+?)\s*,\s*(.+?)\s*(.*)"      # Company, Role, Duration, Desc
+        ]
+        
+        for line in intern_text.split('\n'):
+            line = line.strip()
+            if not line or line.startswith('•'):
+                continue
+                
+            for pattern in patterns:
+                match = re.match(pattern, line)
+                if match:
+                    company = match.group(1).strip()
+                    role = match.group(2).strip()
+                    duration = match.group(3).strip()
+                    description = match.group(4).strip() if match.group(4) else ""
+                    
+                    internships.append({
+                        "company": company,
+                        "role": role,
+                        "duration": duration,
+                        "description": description
+                    })
+                    break
+    
+    return internships
+
 def extract_certifications(text):
     certs = []
     sections = split_sections(text)
@@ -347,7 +382,6 @@ def extract_certifications(text):
             certs.append(item)
     
     return certs
-
 def parse_resume(file_path_or_buffer, file_type="pdf"):
     text = extract_text_from_pdf(file_path_or_buffer)
     sections = split_sections(text)
@@ -364,7 +398,8 @@ def parse_resume(file_path_or_buffer, file_type="pdf"):
         "education": extract_education_info(text),
         "skills": extract_skills(text),
         "projects": extract_projects(text),
-        "certifications": extract_certifications(text)
+        "certifications": extract_certifications(text),
+        "internships": extract_internships(text)  # THIS WAS MISSING
     }
 
 def print_parsed_resume(parsed_data):
@@ -390,7 +425,16 @@ def print_parsed_resume(parsed_data):
                       f"   @ {edu.get('institution', 'N/A')}\n"
                       f"   {edu.get('dates', 'N/A')}\n\n")
         print_section("EDUCATION", edu_str.strip())
-    
+
+    # ADD THIS SECTION FOR INTERNSHIPS
+    if parsed_data.get("internships"):
+        intern_str = ""
+        for i, intern in enumerate(parsed_data["internships"], 1):
+            intern_str += (f"{i}. {intern['role']} @ {intern['company']}\n"
+                         f"   Duration: {intern['duration']}\n"
+                         f"   {intern.get('description', '')}\n\n")
+        print_section("INTERNSHIPS", intern_str.strip())
+        
     if parsed_data["skills"]:
         print_section("TECHNICAL SKILLS", 
               format_skills_output(parsed_data["skills"]))
@@ -408,7 +452,7 @@ def print_parsed_resume(parsed_data):
         print_section("PROJECTS", proj_str.strip())
     
     other_sections = [s for s in parsed_data["sections"] 
-                     if s not in ["Contact", "Skills", "Education", "Certifications", "Projects"]]
+                     if s not in ["Contact", "Skills", "Education", "Certifications", "Projects", "Internships"]]
     if other_sections:
         other_str = "\n".join(f"• {s}" for s in other_sections)
         print_section("OTHER SECTIONS", other_str)
