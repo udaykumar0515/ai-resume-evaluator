@@ -28,46 +28,88 @@
 # if __name__ == "__main__":
 #     interactive_test()
 
-# similarity.py
-from similarity import ResumeMatcher
+# # similarity.py
+# from similarity import ResumeMatcher
 
-# 📝 Sample JD
-jd_text = """
-We are looking for a Machine Learning Engineer with experience in Python, scikit-learn, and model evaluation.
-Bonus if you've used TensorFlow or deployed models in production.
-"""
+# # 📝 Sample JD
+# jd_text = """
+# We are looking for a Machine Learning Engineer with experience in Python, scikit-learn, and model evaluation.
+# Bonus if you've used TensorFlow or deployed models in production.
+# """
 
-# 👨‍🎓 Simulated structured resume (like parsed student resume)
-structured_resume = {
-    "skills": ["Python", "Machine Learning", "scikit-learn", "TensorFlow"],
-    "projects": [
-        {"title": "ML Classifier", "description": "Built a spam classifier using scikit-learn"},
-        {"title": "Deployed Model", "description": "Deployed a sentiment analysis model using Flask and Docker"}
+# # 👨‍🎓 Simulated structured resume (like parsed student resume)
+# structured_resume = {
+#     "skills": ["Python", "Machine Learning", "scikit-learn", "TensorFlow"],
+#     "projects": [
+#         {"title": "ML Classifier", "description": "Built a spam classifier using scikit-learn"},
+#         {"title": "Deployed Model", "description": "Deployed a sentiment analysis model using Flask and Docker"}
+#     ],
+#     "education": "BTech in Computer Science",
+#     "experience": []
+# }
+
+# # 👨‍💼 Simulated raw resume text (like for recruiter mode)
+# raw_resume = """
+# Experienced Python developer with a strong background in data science and machine learning.
+# Worked on classification models using scikit-learn and deep learning models using TensorFlow and Keras.
+# Deployed models to AWS EC2 using Flask.
+# """
+
+# # 🔍 Initialize the matcher
+# matcher = ResumeMatcher(method="tfidf")
+
+# # 🎯 Structured mode test (student mode)
+# structured_result = matcher.get_similarity_score(
+#     jd_text, [structured_resume], mode="structured", return_analysis=True
+# )
+# print("\n🎓 Structured Resume Result:")
+# print(structured_result)
+
+# # 📦 Raw mode test (recruiter mode)
+# raw_result = matcher.get_similarity_score(
+#     jd_text, [raw_resume], mode="raw", return_analysis=True
+# )
+# print("\n💼 Raw Resume Result:")
+# print(raw_result)
+
+# suggestions.py
+from suggestions import suggest_resume_improvements
+
+# Sample resume data mimicking parsed structure
+sample_resume = {
+    "skills": ["Python", "ML", "Docker", "Team player"],
+    "experience": [
+        {
+            "name": "Software Engineer Intern",
+            "description": "Worked with Python and Docker. Responsible for maintaining the application."
+        },
+        {
+            "name": "Research Assistant",
+            "description": "Assisted in developing a deep learning model. Improved accuracy by 10%."
+        }
     ],
-    "education": "BTech in Computer Science",
-    "experience": []
+    "projects": [
+        {
+            "name": "Spam Classifier",
+            "description": "Implemented a spam classifier using Python and scikit-learn."
+        }
+    ],
+    "education": "B.Tech in Computer Science",
+    # intentionally leaving out certifications, linkedin, email etc to trigger suggestions
 }
 
-# 👨‍💼 Simulated raw resume text (like for recruiter mode)
-raw_resume = """
-Experienced Python developer with a strong background in data science and machine learning.
-Worked on classification models using scikit-learn and deep learning models using TensorFlow and Keras.
-Deployed models to AWS EC2 using Flask.
+# Sample job description
+sample_jd = """
+We are seeking a Machine Learning Engineer with experience in Python, Docker, AWS, and SQL.
+Knowledge of cloud deployment and deep learning is a plus.
 """
 
-# 🔍 Initialize the matcher
-matcher = ResumeMatcher(method="tfidf")
+def print_suggestions(suggestions):
+    for priority, msgs in suggestions.items():
+        print(f"\n{priority.upper()} suggestions:")
+        for msg in msgs:
+            print(f" - {msg}")
 
-# 🎯 Structured mode test (student mode)
-structured_result = matcher.get_similarity_score(
-    jd_text, [structured_resume], mode="structured", return_analysis=True
-)
-print("\n🎓 Structured Resume Result:")
-print(structured_result)
-
-# 📦 Raw mode test (recruiter mode)
-raw_result = matcher.get_similarity_score(
-    jd_text, [raw_resume], mode="raw", return_analysis=True
-)
-print("\n💼 Raw Resume Result:")
-print(raw_result)
+if __name__ == "__main__":
+    suggestions = suggest_resume_improvements(sample_resume, jd_text=sample_jd)
+    print_suggestions(suggestions)
