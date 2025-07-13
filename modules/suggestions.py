@@ -1,85 +1,152 @@
 import re
-from typing import Dict, List, Union
+from typing import Dict, List, Union, Set, Tuple
 
-def suggest_resume_improvements(resume_data: Dict[str, Union[str, List]], jd_text: str = "") -> Dict[str, List[str]]:
-    """
-    Suggest improvements based on resume structure and optional job description.
-    Returns a dictionary with suggestion categories.
-    """
+# ===== CONSTANTS =====
+SKILL_SYNONYMS = {
+    "machine learning": ["ml", "machine learning", "ai", "deep learning"],
+    "python": ["python", "python3", "py"],
+    "docker": ["docker", "containers"],
+    "aws": ["aws", "amazon web services"],
+}
 
+STOPWORDS = {"and", "or", "the", "with", "you", "will", "our", "your", "their", "this"}
+
+CRITICAL_SECTIONS = ["skills", "experience"]
+HIGH_SECTIONS = ["projects", "education"]
+
+WEAK_VERBS = ["did", "made", "helped", "worked on", "was involved in"]
+STRONG_VERBS = ["developed", "implemented", "designed", "optimized", "led", "built"]
+
+BUZZWORDS = {
+    "synergy", "self-starter", "go-getter", "think outside the box",
+    "hard worker", "team player", "detail-oriented", "fast learner"
+}
+
+GENERIC_PHRASES = {
+    "responsible for": "Replace with specific achievements (e.g., 'Increased X by Y%')",
+    "worked with": "Specify your contribution (e.g., 'Built X using Y')",
+    "assisted in": "Quantify impact (e.g., 'Reduced processing time by 30%')",
+}
+
+# ===== HELPER FUNCTIONS =====
+def normalize_keyword(keyword: str) -> str:
+    """Standardize terms using synonyms (e.g., 'ML' → 'machine learning')."""
+    keyword = keyword.lower()
+    for standard_term, variants in SKILL_SYNONYMS.items():
+        if keyword in variants:
+            return standard_term
+    return keyword
+
+def extract_keywords(text: str) -> Set[str]:
+    """Extract and normalize keywords from text, filtering noise."""
+    words = set(re.findall(r"\b[a-z0-9]{3,}\b", text.lower()))
+    return {normalize_keyword(w) for w in words if w not in STOPWORDS}
+
+def detect_achievements(text: str) -> bool:
+    """Check if text contains quantifiable results or outcomes."""
+    return bool(re.search(r"\d+%|\$?\d+\+?|improved|reduced|increased", text.lower()))
+
+# ===== MAIN FUNCTION =====
+def suggest_resume_improvements(
+    resume_data: Dict[str, Union[str, List]], 
+    jd_text: str = ""
+) -> Dict[str, List[str]]:
+    """
+    Suggest resume improvements with prioritized, actionable feedback.
+    Returns structured suggestions by priority level.
+    """
     suggestions = {
-        "general_tips": [],
-        "section_tips": [],
-        "job_match_tips": []
+        "critical": [],
+        "high": [],
+        "medium": [],
+        "low": []
     }
 
-    # --- GENERAL FORMAT SUGGESTIONS ---
-    total_words = 0
-    for value in resume_data.values():
-        if isinstance(value, str):
-            total_words += len(value.split())
-        elif isinstance(value, list):
-            for item in value:
-                if isinstance(item, str):
-                    total_words += len(item.split())
-                elif isinstance(item, dict):
-                    total_words += sum(len(str(v).split()) for v in item.values())
-
+    # --- General Checks ---
+    total_words = sum(
+        len(str(v).split()) if isinstance(v, str) 
+        else sum(len(str(item).split()) for item in v)
+        for v in resume_data.values()
+    )
     if total_words < 200:
-        suggestions["general_tips"].append("Your resume seems too short. Consider adding more details.")
-    elif total_words > 1000:
-        suggestions["general_tips"].append("Your resume might be too long. Try keeping it concise and relevant.")
+        suggestions["critical"].append("Resume too short (under 200 words). Add more details.")
+    elif total_words > 800:
+        suggestions["medium"].append("Resume may be too long (over 800 words). Keep it concise.")
 
-    if 'objective' in resume_data and isinstance(resume_data['objective'], str):
-        if len(resume_data['objective'].split()) < 10:
-            suggestions["section_tips"].append("Your career objective seems too short. Add more clarity about your goals.")
-        elif len(resume_data['objective'].split()) > 50:
-            suggestions["section_tips"].append("Your career objective is too long. Keep it concise and to the point.")
+    # --- Section Presence Checks ---
+    for section in CRITICAL_SECTIONS:
+        if not resume_data.get(section):
+            suggestions["critical"].append(f"Missing critical section: '{section}'.")
+    
+    for section in HIGH_SECTIONS:
+        if not resume_data.get(section):
+            suggestions["high"].append(f"Add '{section}' section to strengthen resume.")
 
-    # --- SECTION-BASED SUGGESTIONS ---
-    if not resume_data.get("projects"):
-        suggestions["section_tips"].append("Add at least 1-2 projects to showcase your hands-on experience.")
+    # ==== SKILL ANALYSIS ====
+    if "skills" in resume_data:
+        skills = [s.lower() for s in resume_data["skills"] if isinstance(s, str)]
+        
+        # Skill relevance to JD
+        if jd_text:
+            jd_keywords = extract_keywords(jd_text)
+            irrelevant_skills = [
+                skill for skill in skills 
+                if not any(normalize_keyword(skill) in jd_keywords)
+                and skill not in BUZZWORDS
+            ][:3]  # Limit to top 3 examples
+            if irrelevant_skills:
+                suggestions["medium"].append(
+                    f"Potentially irrelevant skills for this JD: {', '.join(irrelevant_skills)}. "
+                    "Consider tailoring to the job description."
+                )
 
-    if not resume_data.get("experience"):
-        suggestions["section_tips"].append("Include internships, part-time jobs, or freelance experience if any.")
+    # ==== PROJECT/EXPERIENCE CHECKS ====
+    for section in ["projects", "experience"]:
+        if section in resume_data:
+            for item in resume_data[section]:
+                if isinstance(item, dict):
+                    desc = str(item.get("description", ""))
+                    
+                    # Generic phrases
+                    for phrase, suggestion in GENERIC_PHRASES.items():
+                        if phrase in desc.lower():
+                            suggestions["high"].append(suggestion)
+                    
+                    # Achievements check
+                    if not detect_achievements(desc):
+                        suggestions["high"].append(
+                            f"Add quantifiable results to '{item.get('name', section)}' "
+                            "(e.g., 'Improved performance by 20%')."
+                        )
+                    
+                    # Buzzwords
+                    found_buzzwords = [b for b in BUZZWORDS if b in desc.lower()]
+                    if found_buzzwords:
+                        suggestions["low"].append(
+                            f"Replace buzzwords like '{found_buzzwords[0]}' with concrete examples."
+                        )
 
-    if not resume_data.get("skills"):
-        suggestions["section_tips"].append("Mention your technical or soft skills clearly.")
-
-    if not resume_data.get("education"):
-        suggestions["section_tips"].append("Include your education background.")
-
-    if "skills" in resume_data and isinstance(resume_data["skills"], list):
-        if len(resume_data["skills"]) < 5:
-            suggestions["section_tips"].append("List more relevant skills to show your competency.")
-
-    # --- JOB DESCRIPTION BASED SUGGESTIONS ---
+    # ==== JD-SPECIFIC SUGGESTIONS ====
     if jd_text:
-        jd_text = jd_text.lower()
-        jd_keywords = set(re.findall(r"\b\w+\b", jd_text))
-
-        resume_text = ""
-        for v in resume_data.values():
-            if isinstance(v, str):
-                resume_text += " " + v.lower()
-            elif isinstance(v, list):
-                for item in v:
-                    if isinstance(item, str):
-                        resume_text += " " + item.lower()
-                    elif isinstance(item, dict):
-                        resume_text += " " + " ".join(str(val).lower() for val in item.values())
-
-        missing_keywords = []
-        for keyword in jd_keywords:
-            if keyword in ["and", "or", "the", "with", "you", "will", "our", "your"]:
-                continue
-            if keyword not in resume_text:
-                missing_keywords.append(keyword)
-
-        if len(missing_keywords) > 0:
-            suggestions["job_match_tips"].append(
-                "Try to include more role-relevant keywords from the job description (e.g., "
-                + ", ".join(missing_keywords[:5]) + ("..." if len(missing_keywords) > 5 else "") + ")."
+        jd_keywords = extract_keywords(jd_text)
+        resume_keywords = extract_keywords(" ".join(str(v) for v in resume_data.values()))
+        missing_keywords = jd_keywords - resume_keywords
+        
+        if missing_keywords:
+            top_missing = sorted(
+                missing_keywords, 
+                key=lambda k: jd_text.lower().count(k), 
+                reverse=True
+            )[:5]
+            suggestions["critical"].append(
+                "Missing key JD keywords: " + ", ".join(f"'{k}'" for k in top_missing)
             )
 
-    return suggestions
+    # ==== FORMATTING/STYLE ====
+    resume_text = " ".join(str(v) for v in resume_data.values()).lower()
+    if " i " in resume_text or " my " in resume_text:
+        suggestions["low"].append("Avoid first-person pronouns (use 'Developed X' not 'I developed X').")
+    if not re.search(r"\b[\w\.-]+@[\w\.-]+\.\w+\b", resume_text):
+        suggestions["critical"].append("No email found in contact info.")
+
+    return {k: v for k, v in suggestions.items() if v}
