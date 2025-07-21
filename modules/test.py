@@ -73,43 +73,60 @@
 # print(raw_result)
 
 # suggestions.py
-from suggestions import suggest_resume_improvements
+# from suggestions import suggest_resume_improvements
 
-# Sample resume data mimicking parsed structure
-sample_resume = {
-    "skills": ["Python", "ML", "Docker", "Team player"],
-    "experience": [
-        {
-            "name": "Software Engineer Intern",
-            "description": "Worked with Python and Docker. Responsible for maintaining the application."
-        },
-        {
-            "name": "Research Assistant",
-            "description": "Assisted in developing a deep learning model. Improved accuracy by 10%."
-        }
-    ],
-    "projects": [
-        {
-            "name": "Spam Classifier",
-            "description": "Implemented a spam classifier using Python and scikit-learn."
-        }
-    ],
-    "education": "B.Tech in Computer Science",
-    # intentionally leaving out certifications, linkedin, email etc to trigger suggestions
-}
+# # Sample resume data mimicking parsed structure
+# sample_resume = {
+#     "skills": ["Python", "ML", "Docker", "Team player"],
+#     "experience": [
+#         {
+#             "name": "Software Engineer Intern",
+#             "description": "Worked with Python and Docker. Responsible for maintaining the application."
+#         },
+#         {
+#             "name": "Research Assistant",
+#             "description": "Assisted in developing a deep learning model. Improved accuracy by 10%."
+#         }
+#     ],
+#     "projects": [
+#         {
+#             "name": "Spam Classifier",
+#             "description": "Implemented a spam classifier using Python and scikit-learn."
+#         }
+#     ],
+#     "education": "B.Tech in Computer Science",
+#     # intentionally leaving out certifications, linkedin, email etc to trigger suggestions
+# }
 
-# Sample job description
-sample_jd = """
-We are seeking a Machine Learning Engineer with experience in Python, Docker, AWS, and SQL.
-Knowledge of cloud deployment and deep learning is a plus.
-"""
+# # Sample job description
+# sample_jd = """
+# We are seeking a Machine Learning Engineer with experience in Python, Docker, AWS, and SQL.
+# Knowledge of cloud deployment and deep learning is a plus.
+# """
 
-def print_suggestions(suggestions):
-    for priority, msgs in suggestions.items():
-        print(f"\n{priority.upper()} suggestions:")
-        for msg in msgs:
-            print(f" - {msg}")
+# def print_suggestions(suggestions):
+#     for priority, msgs in suggestions.items():
+#         print(f"\n{priority.upper()} suggestions:")
+#         for msg in msgs:
+#             print(f" - {msg}")
+
+# if __name__ == "__main__":
+#     suggestions = suggest_resume_improvements(sample_resume, jd_text=sample_jd)
+#     print_suggestions(suggestions)
+# Usage Example
 
 if __name__ == "__main__":
-    suggestions = suggest_resume_improvements(sample_resume, jd_text=sample_jd)
-    print_suggestions(suggestions)
+    processor = ranking(min_score=0.4, workers=6)
+    
+    # Assuming you have a list of file objects
+    from io import BytesIO
+    sample_files = [
+        BytesIO(b"John Doe\njohn@example.com\n123-456-7890\nPython Developer..."),
+        BytesIO(b"Jane Smith\njane@example.com\n987-654-3210\nWeb Developer...")
+    ]
+    sample_files[0].name = "john.pdf"
+    sample_files[1].name = "jane.docx"
+    
+    jd_text = "Looking for Python developer with web experience"
+    results = processor.process_batch(sample_files)
+    print(results)
