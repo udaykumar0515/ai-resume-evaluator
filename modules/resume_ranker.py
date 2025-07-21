@@ -4,8 +4,7 @@ import pandas as pd
 from tqdm import tqdm
 from typing import List, Union
 from concurrent.futures import ThreadPoolExecutor
-from parser import extract_text_from_pdf, extract_text_from_docx
-from similarity import ResumeMatcher
+from modules import parser, similarity
 
 class ResumeRanker:
     """High-performance resume ranking based on job description"""
@@ -18,7 +17,7 @@ class ResumeRanker:
         """
         self.min_score = min_score * 100  # Convert to percentage
         self.workers = workers
-        self.matcher = ResumeMatcher(method="embedding")
+        self.matcher = similarity.ResumeMatcher(method="embedding")
         self.email_pattern = re.compile(r"[\w\.-]+@[\w\.-]+\.\w+")
         self.phone_pattern = re.compile(r"(\+91[-\s]?)?[0-9]{10}")
         self.jd_text = None
@@ -48,16 +47,16 @@ class ResumeRanker:
         }
 
     def _process_single(self, filepath: Union[str, os.PathLike]) -> Union[dict, None]:
-        filename = os.path.basename(filepath)  # Safe fallback
+        filename = os.path.basename(filepath)
         try:
             ext = os.path.splitext(filename)[-1].lower()
 
             if ext == ".pdf":
                 with open(filepath, 'rb') as f:
-                    text = extract_text_from_pdf(f)
+                    text = parser.extract_text_from_pdf(f)
             elif ext == ".docx":
                 with open(filepath, 'rb') as f:
-                    text = extract_text_from_docx(f)
+                    text = parser.extract_text_from_docx(f)
             else:
                 print(f"Unsupported file format: {filename}")
                 return None
@@ -85,7 +84,7 @@ class ResumeRanker:
         if not jd_text:
             raise ValueError("Job description text must be provided.")
 
-        self.jd_text = jd_text  # Store for worker access
+        self.jd_text = jd_text
 
         with ThreadPoolExecutor(max_workers=self.workers) as executor:
             results = list(tqdm(
