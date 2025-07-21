@@ -421,18 +421,16 @@ def parse_resume(file_path_or_buffer, file_type=None):
     sections = split_sections(text)
     global_entities = ner.extract_entities(text)
 
-    all_section_texts = list(sections.values())
-    batch_entities = ner.extract_entities("\n\n".join(all_section_texts))  # Single model run
+    # Extract entities from all section texts combined
+    all_section_texts = "\n\n".join(sections.values())
+    batch_entities = ner.extract_entities(all_section_texts)
 
-    # Map back to sections
+    # Filter relevant entities for each section
     section_entities = {}
     for section_name, section_text in sections.items():
-        # Filter entities by their appearance in section text
         section_entities[section_name] = [
-            ent for ent in batch_entities 
-            if ent["word"] in section_text
+            ent for ent in batch_entities if ent in section_text
         ]
-
     return {
         "metadata": {
             "processing_date": datetime.now().isoformat(),
