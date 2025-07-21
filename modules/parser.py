@@ -7,16 +7,19 @@ import os
 from datetime import datetime
 from transformers import pipeline
 from functools import lru_cache
+import torch
+from transformers import pipeline
 
 class ResumeNER:
     def __init__(self):
+        device = 0 if torch.cuda.is_available() else -1  # 0: first GPU, -1: CPU
         self.ner_pipeline = pipeline(
-            "ner", 
+            "ner",
             model="dslim/bert-base-NER",
             aggregation_strategy="simple",
-            device=-1  # Force CPU usage
+            device=device
         )
-    
+
     def extract_entities(self, text):
         try:
             entities = self.ner_pipeline(text)
@@ -82,25 +85,6 @@ DATE_PATTERNS = [
     r"\b\d{1,2}\s*(?:st|nd|rd|th)?\s*(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s*\d{4}"
 ]
 
-SKILL_KEYWORDS = {
-    "Python": ["python"],
-    "Java": ["java"],
-    "JavaScript": ["javascript", "js"],
-    "C++": ["c\\+\\+"],
-    "C": ["c\\b"],
-    "SQL": ["sql"],
-    "HTML": ["html"],
-    "CSS": ["css"],
-    "React": ["react"],
-    "Node.js": ["node", "node.js", "nodejs"],
-    "Pygame": ["pygame"],
-    "Streamlit": ["streamlit"],
-    "Git": ["git"],
-    "Machine Learning": ["machine learning", "ml"],
-    "Data Structures": ["data structures"],
-    "Web Development": ["web development"],
-    "DeepFace": ["deepface"]
-}
 
 INSTITUTION_KEYWORDS = ["college", "university", "institute", "school", "academy", 
                        "foundation", "research center", "company", "corporation", "services"]
@@ -437,17 +421,26 @@ def parse_resume(file_path_or_buffer, file_type=None):
     sections = split_sections(text)
     global_entities = ner.extract_entities(text)
 
+    all_section_texts = list(sections.values())
+    batch_entities = ner.extract_entities("\n\n".join(all_section_texts))  # Single model run
+
+    # Map back to sections
+    section_entities = {}
+    for section_name, section_text in sections.items():
+        # Filter entities by their appearance in section text
+        section_entities[section_name] = [
+            ent for ent in batch_entities 
+            if ent["word"] in section_text
+        ]
+
     return {
-        "metadata": {
-            "processing_date": datetime.now().isoformat(),
-            "file_type": file_type
-        },
         "metadata": {
             "processing_date": datetime.now().isoformat(),
             "file_type": file_type
         },
         "sections": sections,
         "global_entities": global_entities,
+        "section_entities": section_entities, 
         "contact": extract_contact_info(text),
         "education": extract_education_info(text),
         "skills": extract_skills(text),
@@ -529,7 +522,7 @@ def print_parsed_resume(parsed_data):
         preview = "\n".join(lines[:4])
         sections_str += f"{preview}\n"
         
-        entities = ner.extract_entities(content)
+        entities = parsed_data.get("section_entities", {}).get(section, {})
         if entities:
             section_entities = []
             for label, items in entities.items():
@@ -540,6 +533,7 @@ def print_parsed_resume(parsed_data):
                 if len(section_entities) > 5:
                     sections_str += f" (+{len(section_entities)-5} more)"
                 sections_str += "\n"
+
     
     print_section("SECTION OVERVIEW", sections_str.strip())
 
