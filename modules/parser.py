@@ -241,6 +241,15 @@ def extract_text_from_pdf(file_path_or_buffer) -> str:
         print(f"Error extracting PDF text: {e}")
     return text.strip()
 
+def extract_text_from_docx(file_path_or_buffer) -> str:
+    """Extract text from DOCX file"""
+    try:
+        doc = Document(file_path_or_buffer)
+        return "\n".join(paragraph.text for paragraph in doc.paragraphs if paragraph.text)
+    except Exception as e:
+        print(f"Error extracting DOCX text: {e}")
+        return ""
+
 def extract_contact_info(text):
     contact = {}
     lines = text.strip().splitlines()
@@ -412,12 +421,27 @@ def extract_certifications(text):
             certs.append(item)
     
     return certs
-def parse_resume(file_path_or_buffer, file_type="pdf"):
-    text = extract_text_from_pdf(file_path_or_buffer)
+
+def parse_resume(file_path_or_buffer, file_type=None):
+    """Determine file type and extract text accordingly"""
+    if file_type is None:
+        if hasattr(file_path_or_buffer, 'name'):
+            ext = os.path.splitext(file_path_or_buffer.name)[-1].lower()
+            file_type = 'docx' if ext == '.docx' else 'pdf'
+    
+    if file_type == 'docx':
+        text = extract_text_from_docx(file_path_or_buffer)
+    else:  # default to PDF
+        text = extract_text_from_pdf(file_path_or_buffer)
+    
     sections = split_sections(text)
     global_entities = ner.extract_entities(text)
 
     return {
+        "metadata": {
+            "processing_date": datetime.now().isoformat(),
+            "file_type": file_type
+        },
         "metadata": {
             "processing_date": datetime.now().isoformat(),
             "file_type": file_type
