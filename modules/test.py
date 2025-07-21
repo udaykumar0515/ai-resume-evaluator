@@ -115,18 +115,15 @@
 #     print_suggestions(suggestions)
 # Usage Example
 
-if __name__ == "__main__":
-    processor = ranking(min_score=0.4, workers=6)
-    
-    # Assuming you have a list of file objects
-    from io import BytesIO
-    sample_files = [
-        BytesIO(b"John Doe\njohn@example.com\n123-456-7890\nPython Developer..."),
-        BytesIO(b"Jane Smith\njane@example.com\n987-654-3210\nWeb Developer...")
-    ]
-    sample_files[0].name = "john.pdf"
-    sample_files[1].name = "jane.docx"
-    
-    jd_text = "Looking for Python developer with web experience"
-    results = processor.process_batch(sample_files)
-    print(results)
+# resumeranker.py
+from ranking import ResumeRanker
+
+resume_paths = [r"D:\uday\Vscode\Projects\AI_resume_evaluator\resumes\react-developer-resume.pdf",
+                 r"D:\uday\Vscode\Projects\AI_resume_evaluator\resumes\resume_webdev.pdf"]
+
+sample_jd = """We are hiring a Software Engineer with experience in Python, Flask, and cloud services. Candidates should be familiar with APIs and deployment."""
+
+ranker = ResumeRanker()
+df = ranker.process_batch(resume_paths, jd_text=sample_jd)
+
+print(df)
