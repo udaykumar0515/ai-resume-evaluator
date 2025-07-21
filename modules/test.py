@@ -56,7 +56,7 @@
 # """
 
 # # 🔍 Initialize the matcher
-# matcher = ResumeMatcher(method="tfidf")
+# matcher = ResumeMatcher()
 
 # # 🎯 Structured mode test (student mode)
 # structured_result = matcher.get_similarity_score(
@@ -115,15 +115,15 @@
 #     print_suggestions(suggestions)
 # Usage Example
 
-# resumeranker.py
-from ranking import ResumeRanker
+# # resumeranker.py
+# from modules.resume_ranker import ResumeRanker
 
-resume_paths = [r"D:\uday\Vscode\Projects\AI_resume_evaluator\resumes\react-developer-resume.pdf",
-                 r"D:\uday\Vscode\Projects\AI_resume_evaluator\resumes\resume_webdev.pdf"]
+# resume_paths = [r"D:\uday\Vscode\Projects\AI_resume_evaluator\resumes\react-developer-resume.pdf",
+#                  r"D:\uday\Vscode\Projects\AI_resume_evaluator\resumes\resume_webdev.pdf"]
 
-sample_jd = """We are hiring a Software Engineer with experience in Python, Flask, and cloud services. Candidates should be familiar with APIs and deployment."""
+# sample_jd = """We are hiring a Software Engineer with experience in Python, Flask, and cloud services. Candidates should be familiar with APIs and deployment."""
 
-ranker = ResumeRanker()
-df = ranker.process_batch(resume_paths, jd_text=sample_jd)
+# ranker = ResumeRanker()
+# df = ranker.process_batch(resume_paths, jd_text=sample_jd)
 
-print(df)
+# print(df)
