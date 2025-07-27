@@ -132,14 +132,14 @@ def process_resume_upload(uploaded_file, mode: str) -> Dict:
 def get_jd_input(jds: Dict[str, str], tab_prefix: str) -> str:
     """Get job description from user with tab-specific keys"""
     col1, col2 = st.columns([1, 2])
-    
+
     with col1:
         jd_choice = st.selectbox(
             "Select Job Role",
             options=["Custom Input"] + list(jds.keys()),
             key=f"{tab_prefix}_jd_choice"
         )
-    
+
     with col2:
         if jd_choice == "Custom Input":
             return st.text_area(
@@ -148,7 +148,15 @@ def get_jd_input(jds: Dict[str, str], tab_prefix: str) -> str:
                 placeholder="Paste the job description here...",
                 key=f"{tab_prefix}_custom_jd"
             )
-        return jds.get(jd_choice, "")
+        else:
+            st.text_area(
+                "Job Description (Predefined)",
+                value=jds.get(jd_choice, ""),
+                height=200,
+                key=f"{tab_prefix}_readonly_jd",
+                disabled=True
+            )
+            return jds.get(jd_choice, "")
 
 def evaluation_tab(components: Dict):
     """Single resume evaluation interface"""
