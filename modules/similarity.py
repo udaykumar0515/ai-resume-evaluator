@@ -179,32 +179,37 @@ class ResumeMatcher:
             logger.error(f"Embedding error: {str(e)}")
             return [0.0] * len(resume_texts)
 
-
-def get_similarity_score(self, jd_text: str, resumes: List[Union[str, Dict]], mode: str = "structured") -> List[Tuple[int, float]]:
-    if not jd_text or not resumes:
-        return []
-    
-    try:
-        processed_resumes = [
-            self.combine_structured_resume(r) if isinstance(r, dict) 
-            else self.clean_text(r) 
-            for r in resumes
-        ]
+    def get_similarity_score(
+        self,
+        jd_text: str,
+        resumes: List[Union[str, Dict]],
+        mode: str = "structured"
+    ) -> List[Tuple[int, float]]:
+        """Calculate similarity scores between JD and resumes"""
+        if not jd_text or not resumes:
+            return []
         
-        # Calculate scores only
-        if self.method in ('hybrid', 'tfidf'):
-            tfidf_scores = self.compute_tfidf_similarity(jd_text, processed_resumes)
+        try:
+            processed_resumes = [
+                self.combine_structured_resume(r) if isinstance(r, dict) 
+                else self.clean_text(r) 
+                for r in resumes
+            ]
+            
+            # Calculate scores
+            if self.method in ('hybrid', 'tfidf'):
+                tfidf_scores = self.compute_tfidf_similarity(jd_text, processed_resumes)
+            
+            if self.method in ('hybrid', 'embedding'):
+                embedding_scores = self.compute_embedding_similarity(jd_text, processed_resumes)
+            
+            if self.method == 'hybrid':
+                scores = [0.6 * emb + 0.4 * tf for emb, tf in zip(embedding_scores, tfidf_scores)]
+            else:
+                scores = embedding_scores if self.method == 'embedding' else tfidf_scores
+            
+            return list(enumerate([float(round(score, 4)) for score in scores]))
         
-        if self.method in ('hybrid', 'embedding'):
-            embedding_scores = self.compute_embedding_similarity(jd_text, processed_resumes)
-        
-        if self.method == 'hybrid':
-            scores = [0.6 * emb + 0.4 * tf for emb, tf in zip(embedding_scores, tfidf_scores)]
-        else:
-            scores = embedding_scores if self.method == 'embedding' else tfidf_scores
-        
-        return [(idx, float(round(score, 4))) for idx, score in enumerate(scores)]
-    
-    except Exception as e:
-        logger.error(f"Scoring failed: {str(e)}")
-        return []
+        except Exception as e:
+            logger.error(f"Scoring failed: {str(e)}")
+            return []
