@@ -26,21 +26,16 @@ def init_session_state():
     if 'processed_resumes' not in st.session_state:
         st.session_state.processed_resumes = {}
 
-def display_evaluation_results(resume_data: Dict, jd_text: str, score: float, analysis: Dict):
+def display_evaluation_results(resume_data: Dict, jd_text: str, score: float):
     """Display results for single resume evaluation"""
     st.success(f"**Match Score:** {score*100:.1f}%")
     
-    tab1, tab2 = st.tabs(["Suggestions", "Detailed Analysis"])
-    
-    with tab1:
-        suggestion_results = suggestions.suggest_resume_improvements(resume_data, jd_text)
-        for priority, tips in suggestion_results.items():
-            with st.expander(f"{priority.title()} Priority ({len(tips)})"):
-                for tip in tips:
-                    st.write(f"• {tip}")
-    
-    with tab2:
-        st.json(analysis, expanded=False)
+    # Directly show suggestions without analysis
+    suggestion_results = suggestions.suggest_resume_improvements(resume_data, jd_text)
+    for priority, tips in suggestion_results.items():
+        with st.expander(f"{priority.title()} Priority ({len(tips)})"):
+            for tip in tips:
+                st.write(f"• {tip}")
 
 def display_ranking_results(df: pd.DataFrame):
     """Display results for multiple resume ranking"""
@@ -123,13 +118,12 @@ def evaluation_tab(components: Dict):
         results = components['matcher'].get_similarity_score(
             jd_text,
             [resume_data],
-            mode="structured",
-            return_analysis=True
+            mode="structured"
         )
         
         if results:
-            _, score, analysis = results[0]
-            display_evaluation_results(resume_data, jd_text, score, analysis)
+            score = results[0][1]
+            display_evaluation_results(resume_data, jd_text, score)
 
 def ranking_tab(components: Dict):
     """Multiple resume ranking interface"""
