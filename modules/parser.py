@@ -12,21 +12,31 @@ from transformers import pipeline
 
 class ResumeNER:
     def __init__(self):
-        device = 0 if torch.cuda.is_available() else -1  # 0: first GPU, -1: CPU
-        self.ner_pipeline = pipeline(
-            "ner",
-            model="dslim/bert-base-NER",
-            aggregation_strategy="simple",
-            device=device
-        )
+        self._model_loaded = False
+        self._device = 0 if torch.cuda.is_available() else -1
+        self.ner_pipeline = None
+
+    def _load_model(self):
+        if not self._model_loaded:
+            self.ner_pipeline = pipeline(
+                "ner",
+                model="dslim/bert-base-NER",
+                aggregation_strategy="simple",
+                device=self._device
+            )
+            self._model_loaded = True
 
     def extract_entities(self, text):
+        self._load_model()  # Only load when first used
         try:
             entities = self.ner_pipeline(text)
-            return self._format_entities(entities)
+            return {
+                "entities": self._format_entities(entities),
+                "raw": entities
+            }
         except Exception as e:
             print(f"NER Error: {e}")
-            return {}
+            return {"entities": {}, "raw": []}
 
     def _format_entities(self, raw_entities):
         grouped = {}
