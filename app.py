@@ -27,15 +27,64 @@ def init_session_state():
         st.session_state.processed_resumes = {}
 
 def display_evaluation_results(resume_data: Dict, jd_text: str, score: float):
-    """Display results for single resume evaluation"""
+    """Enhanced results display with new sections"""
     st.success(f"**Match Score:** {score*100:.1f}%")
-    
-    # Directly show suggestions without analysis
     suggestion_results = suggestions.suggest_resume_improvements(resume_data, jd_text)
-    for priority, tips in suggestion_results.items():
-        with st.expander(f"{priority.title()} Priority ({len(tips)})"):
-            for tip in tips:
-                st.write(f"• {tip}")
+    
+    # 1. Show Metrics First
+    if "metrics" in suggestion_results:
+        with st.expander("📊 Resume Metrics", expanded=True):
+            for metric in suggestion_results["metrics"]:
+                st.write(f"• {metric}")
+    
+    # 2. Show Strengths
+    if "strengths" in suggestion_results:
+        st.subheader("✅ Your Strengths")
+
+        skill_matches = []
+        fundamentals = ""
+
+        for strength in suggestion_results["strengths"]:
+            if strength.startswith("✅ Strong Keyword Matches:"):
+                continue
+            elif "Strong Fundamental Skills" in strength:
+                fundamentals = strength.split(":")[1].strip()
+            elif ": " in strength:
+                category, terms = strength.split(": ", 1)
+                if category.strip().lower() != "other":
+                    skill_matches.append(terms.strip())
+
+        # Show skill matches in one line
+        if skill_matches:
+            st.markdown("**🛠️ Skill Matches**")
+            st.write(", ".join(skill_matches))
+
+        # Show fundamentals
+        if fundamentals:
+            st.markdown("**📘 Fundamental Skills**")
+            st.write(fundamentals)
+        # Show 'Other' (optional, muted)
+        for strength in suggestion_results["strengths"]:
+            if ": " in strength:
+                category, terms = strength.split(": ", 1)
+                if category.strip().lower() == "other":
+                    st.markdown("**Other Keywords** _(less relevant)_")
+                    st.caption(", ".join(terms.strip().split(", ")[:5]))
+
+
+    # 3. Show Improvement Areas
+    st.subheader("🔍 Improvement Suggestions")
+    for priority in ["critical", "high", "medium", "low"]:
+        if priority in suggestion_results:
+            with st.expander(f"{priority.title()} Priority ({len(suggestion_results[priority])})"):
+                for tip in suggestion_results[priority]:
+                    st.write(f"• {tip}")
+    
+    # 4. Additional Tips
+    if "tips" in suggestion_results:
+        st.subheader("💡 General Tips")
+        for tip in suggestion_results["tips"]:
+            st.info(tip)
 
 def display_ranking_results(df: pd.DataFrame):
     """Display results for multiple resume ranking"""
