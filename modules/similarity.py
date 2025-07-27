@@ -1,264 +1,342 @@
 import re
+import unicodedata
+import logging
+import numpy as np
 from typing import List, Tuple, Dict, Union, Optional
+from collections import defaultdict
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-import unicodedata
-from collections import defaultdict
-import numpy as np
 from sentence_transformers import SentenceTransformer
-import logging
+import torch
+from modules.suggestions import STOPWORDS 
 
-# Set up logging
+# Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class ResumeMatcher:
     """
-    Resume-job description matching system using semantic embeddings by default
-    with fallback to TF-IDF if embeddings are not available.
+    Advanced resume-job description matching system with semantic understanding.
+    Combines embedding-based and keyword-based approaches for optimal results.
     """
-    
+
     def __init__(
         self,
-        method: str = "embedding",  # Changed default to embedding
+        method: str = "hybrid",  # Updated default to hybrid
         section_weights: Optional[Dict[str, float]] = None,
-        min_skill_match: float = 0.7,
+        min_skill_match: float = 0.65,
         use_gpu: bool = False,
-        embedding_model_name: str = 'all-MiniLM-L6-v2'
+        embedding_model: str = 'balanced',  # fast/balanced/accurate
+        tfidf_params: Optional[Dict] = None
     ):
         """
-        Initialize the matcher with configuration options.
-        
-        Args:
-            method: 'embedding' (default) or 'tfidf'
-            section_weights: Dictionary of weights for structured resume sections
-            min_skill_match: Minimum similarity threshold to consider skills matched
-            use_gpu: Whether to use GPU for embedding model if available
-            embedding_model_name: Name of the SentenceTransformer model to use
+        Initialize matcher with enhanced configuration options.
         """
         self.method = method
         self.section_weights = section_weights or {
-            'skills': 0.5,  # Increased weight for skills
-            'experience': 0.3,
-            'education': 0.1,
-            'projects': 0.1
+            'skills': 0.6,
+            'experience': 0.25,
+            'projects': 0.1,
+            'education': 0.05
         }
         self.min_skill_match = min_skill_match
-        self.embedding_model = None
-        self.embedding_model_name = embedding_model_name
+        self.device = 'cuda' if use_gpu and torch.cuda.is_available() else 'cpu'
         
-        # Initialize the preferred method
-        if self.method == "embedding":
+        # Enhanced embedding model selection
+        self.embedding_models = {
+            'fast': 'all-MiniLM-L6-v2',
+            'balanced': 'all-mpnet-base-v2',
+            'accurate': 'paraphrase-multilingual-mpnet-base-v2'
+        }
+        self.embedding_model_name = self.embedding_models.get(
+            embedding_model,
+            'all-mpnet-base-v2'
+        )
+        
+        # Initialize embedding model
+        if self.method in ('hybrid', 'embedding'):
             try:
-                self.embedding_model = SentenceTransformer(self.embedding_model_name)
-                if use_gpu:
-                    self.embedding_model = self.embedding_model.to('cuda')
-                logger.info(f"Initialized embedding model: {self.embedding_model_name}")
-            except ImportError:
-                logger.warning("SentenceTransformers not installed. Falling back to TF-IDF.")
-                self.method = "tfidf"
+                self.embedding_model = SentenceTransformer(
+                    self.embedding_model_name,
+                    device=self.device
+                )
+                logger.info(f"Loaded {self.embedding_model_name} on {self.device}")
             except Exception as e:
-                logger.warning(f"Failed to initialize embedding model: {str(e)}. Falling back to TF-IDF.")
-                self.method = "tfidf"
+                logger.error(f"Embedding model failed: {str(e)}")
+                self.method = 'tfidf' if method != 'hybrid' else 'tfidf-only'
         
-        if self.method == "tfidf":
-            logger.info("Using TF-IDF vectorizer for similarity calculation")
-            self.vectorizer = TfidfVectorizer(stop_words='english', ngram_range=(1, 2))
+        # Enhanced TF-IDF configuration
+        if self.method in ('hybrid', 'tfidf'):
+            self.tfidf_params = tfidf_params or {
+                'ngram_range': (1, 3),
+                'stop_words': 'english',
+                'min_df': 2,
+                'max_features': 5000
+            }
+            self.vectorizer = TfidfVectorizer(**self.tfidf_params)
             self.jd_vector = None
 
     @staticmethod
     def clean_text(text: str) -> str:
-        """
-        Normalize and clean input text.
-        
-        Args:
-            text: Input text to clean
-            
-        Returns:
-            Cleaned and normalized text
-        """
+        """Advanced text normalization preserving tech terminology"""
         if not isinstance(text, str):
             return ""
-            
+        
+        # Preserve key tech symbols (+, #, .) while cleaning
         text = unicodedata.normalize("NFKC", text)
-        text = re.sub(r"\n+", " ", text)
-        text = re.sub(r"\s+", " ", text)
-        text = re.sub(r"[^\w\s-]", "", text)  # Remove special chars except spaces and hyphens
-        return text.strip().lower()
+        text = re.sub(r"[^\w\s+.#@-]", "", text)
+        text = re.sub(r"\s+", " ", text).lower().strip()
+        
+        # Standardize common tech terms
+        replacements = {
+            r"\bc\+\+\b": "cpp",
+            r"\bc#\b": "csharp",
+            r"\b\.net\b": "dotnet",
+            r"\bjs\b": "javascript",
+            r"\baws\b": "amazon web services",
+            r"\bgcp\b": "google cloud",
+            r"\bai\b": "artificial intelligence",
+            r"\bml\b": "machine learning"
+        }
+        for pattern, repl in replacements.items():
+            text = re.sub(pattern, repl, text)
+        
+        return text
 
-    def combine_structured_resume(self, resume_data: Dict[str, Union[str, List]]) -> str:
-        """
-        Combine structured fields (skills, projects, etc.) into one string for similarity comparison.
-        Applies section weights if specified.
+    def combine_structured_resume(self, resume_data: Dict) -> str:
+        """Enhanced resume combining with semantic weighting"""
+        combined = defaultdict(list)
         
-        Args:
-            resume_data: Dictionary containing resume sections
-            
-        Returns:
-            Combined and weighted resume text
-        """
-        combined_parts = defaultdict(list)
-        
-        for field, value in resume_data.items():
-            if not value:
+        for section, content in resume_data.items():
+            if not content:
                 continue
                 
-            if isinstance(value, list):
-                if all(isinstance(item, str) for item in value):
-                    # Simple string list (like skills)
-                    combined_parts[field].extend(value)
-                elif all(isinstance(item, dict) for item in value):
-                    # List of dictionaries (like projects or experience)
-                    for item in value:
-                        combined_parts[field].extend(str(v) for v in item.values() if v)
-            elif isinstance(value, str):
-                combined_parts[field].append(value)
+            if isinstance(content, list):
+                if all(isinstance(x, str) for x in content):
+                    combined[section].extend(content)
+                elif all(isinstance(x, dict) for x in content):
+                    for item in content:
+                        combined[section].extend(
+                            f"{k}: {v}" for k, v in item.items() if v
+                        )
+            elif isinstance(content, str):
+                combined[section].append(content)
         
-        # Apply section weights if specified
-        if self.section_weights:
-            weighted_text = []
-            for field, text_parts in combined_parts.items():
-                weight = self.section_weights.get(field, 1.0)
-                if weight > 0:
-                    section_text = " ".join(text_parts)
-                    # Repeat text based on weight (more precise approach)
-                    weighted_text.append((section_text + " ") * int(weight * 10))
-            return self.clean_text(" ".join(weighted_text))
-        else:
-            return self.clean_text(" ".join(" ".join(parts) for parts in combined_parts.values()))
-
+        # Apply section weights with exponential boosting
+        weighted_text = []
+        for section, text_parts in combined.items():
+            weight = self.section_weights.get(section, 1.0)
+            if weight > 0:
+                section_text = " ".join(text_parts)
+                weighted_text.append((section_text + " ") * int(weight * 15))
+        
+        return self.clean_text(" ".join(weighted_text))
 
     def compute_tfidf_similarity(self, jd_text: str, resume_texts: List[str]) -> List[float]:
-        # Fit only once per JD
-        if self.jd_vector is None:
-            all_texts = [self.clean_text(jd_text)] + [self.clean_text(r) for r in resume_texts]
-            tfidf_matrix = self.tfidf_vectorizer.fit_transform(all_texts)
-            self.jd_vector = tfidf_matrix[0:1]
-            resume_vectors = tfidf_matrix[1:]
-        else:
-            resume_vectors = self.tfidf_vectorizer.transform(
-                [self.clean_text(r) for r in resume_texts]
-            )
-        
-        scores = cosine_similarity(self.jd_vector, resume_vectors).flatten()
-        return [float(round(score, 4)) for score in scores]
-    def compute_embedding_similarity(self, jd_text: str, resume_texts: List[str]) -> List[float]:
-        """
-        Compute cosine similarity scores between JD and multiple resumes using sentence embeddings.
-        More efficient batch processing.
-        """
-        if not self.embedding_model:
-            raise ValueError("Embedding model not initialized")
+        """Enhanced TF-IDF with dynamic fitting"""
+        try:
+            if self.jd_vector is None:
+                all_texts = [self.clean_text(jd_text)] + [self.clean_text(r) for r in resume_texts]
+                tfidf_matrix = self.vectorizer.fit_transform(all_texts)
+                self.jd_vector = tfidf_matrix[0:1]
+                resume_vectors = tfidf_matrix[1:]
+            else:
+                resume_vectors = self.vectorizer.transform(
+                    [self.clean_text(r) for r in resume_texts]
+                )
             
-        # Process all texts at once for better efficiency
-        documents = [self.clean_text(jd_text)] + [self.clean_text(resume) for resume in resume_texts]
-        
-        # Batch processing for better performance
-        batch_size = 32 if len(documents) > 32 else len(documents)
-        embeddings = self.embedding_model.encode(
-            documents,
-            batch_size=batch_size,
-            show_progress_bar=False,
-            convert_to_numpy=True
-        )
-        
-        # Normalize embeddings for more accurate cosine similarity
-        embeddings = embeddings / np.linalg.norm(embeddings, axis=1, keepdims=True)
-        scores = cosine_similarity(embeddings[0:1], embeddings[1:]).flatten()
-        return [float(round(score, 4)) for score in scores]
+            scores = cosine_similarity(self.jd_vector, resume_vectors).flatten()
+            return [float(round(score, 4)) for score in scores]
+        except Exception as e:
+            logger.error(f"TF-IDF error: {str(e)}")
+            return [0.0] * len(resume_texts)
 
-    def analyze_matches(self, jd_text: str, resume_text: str) -> Dict[str, Union[float, List[str]]]:
-        """
-        Enhanced match analysis with term importance and skill-specific matching.
-        """
+    def compute_embedding_similarity(self, jd_text: str, resume_texts: List[str]) -> List[float]:
+        """Optimized embedding computation with chunking"""
+        try:
+            documents = [self.clean_text(jd_text)] + [self.clean_text(r) for r in resume_texts]
+            
+            # Dynamic batch sizing
+            avg_len = sum(len(d) for d in documents) / len(documents)
+            batch_size = max(1, min(64, int(4000 / avg_len)))
+            
+            embeddings = []
+            for i in range(0, len(documents), batch_size):
+                batch = documents[i:i + batch_size]
+                batch_emb = self.embedding_model.encode(
+                    batch,
+                    device=self.device,
+                    show_progress_bar=False,
+                    convert_to_tensor=True
+                )
+                embeddings.append(batch_emb)
+            
+            embeddings = torch.cat(embeddings).cpu().numpy()
+            embeddings = embeddings / np.linalg.norm(embeddings, axis=1, keepdims=True)
+            
+            return cosine_similarity(embeddings[0:1], embeddings[1:]).flatten().tolist()
+        except Exception as e:
+            logger.error(f"Embedding error: {str(e)}")
+            return [0.0] * len(resume_texts)
+
+    def analyze_matches(self, jd_text: str, resume_text: str) -> Dict:
+        """Enhanced match analysis with better term filtering and grouping"""
         jd_clean = self.clean_text(jd_text)
         resume_clean = self.clean_text(resume_text)
         
-        # Tokenize
-        jd_tokens = set(re.findall(r"\b[\w-]+\b", jd_clean))
-        resume_tokens = set(re.findall(r"\b[\w-]+\b", resume_clean))
+        # Custom stopwords for analysis
+        analysis_stopwords = STOPWORDS | {
+            'using', 'with', 'for', 'basic', 'basics', 'knowledge', 'experience'
+        }
         
-        # Find overlaps
+        # Extract meaningful terms (longer than 3 chars, not stopwords)
+        jd_tokens = {
+            word for word in re.findall(r'\b[\w+.#-]{3,}\b', jd_clean)
+            if word not in analysis_stopwords
+        }
+        resume_tokens = {
+            word for word in re.findall(r'\b[\w+.#-]{3,}\b', resume_clean)
+            if word not in analysis_stopwords
+        }
+        
+        # Enhanced skill ontology
+        SKILL_ONTOLOGY = {
+            "programming": {"python", "java", "c++", "c#", "javascript", "typescript"},
+            "web": {"html", "css", "react", "angular", "vue", "django", "flask"},
+            "data": {"sql", "mongodb", "pandas", "numpy", "tensorflow", "pytorch"},
+            "devops": {"docker", "kubernetes", "aws", "azure", "ci/cd", "terraform"},
+            "soft_skills": {"leadership", "communication", "teamwork", "problem-solving"}
+        }
+        
+        # Find direct matches
         overlapping = jd_tokens & resume_tokens
         
-        # Find bigram overlaps
-        jd_words = re.findall(r"\b[\w-]+\b", jd_clean)
-        resume_words = re.findall(r"\b[\w-]+\b", resume_clean)
+        # Find ontology-expanded matches
+        expanded_matches = set(overlapping)
+        for term in overlapping:
+            for category, terms in SKILL_ONTOLOGY.items():
+                if term in terms:
+                    expanded_matches.update(terms)
         
-        jd_bigrams = set(zip(jd_words, jd_words[1:]))
-        resume_bigrams = set(zip(resume_words, resume_words[1:]))
-        overlapping_bigrams = jd_bigrams & resume_bigrams
-        
-        # Calculate match percentages
+        # Calculate meaningful percentages
         jd_total_terms = max(1, len(jd_tokens))
-        match_percentage = len(overlapping) / jd_total_terms
+        direct_match_pct = len(overlapping) / jd_total_terms
+        expanded_match_pct = len(expanded_matches) / jd_total_terms
         
-        # Skill-specific matching (if skills section exists)
-        skill_match = {}
-        if hasattr(self, 'section_weights') and 'skills' in self.section_weights:
-            # Simple skill matching - in real implementation you'd want a skill ontology
-            skill_terms = {'python', 'java', 'machine learning', 'aws', 
-                          'sql', 'tensorflow', 'pytorch', 'docker', 'kubernetes'}
-            jd_skills = jd_tokens & skill_terms
-            resume_skills = resume_tokens & skill_terms
-            matched_skills = jd_skills & resume_skills
-            
-            if jd_skills:
-                skill_match = {
-                    'matched_skills': list(matched_skills),
-                    'skill_coverage': len(matched_skills) / max(1, len(jd_skills))
-                }
-        
+        # Group terms by category
+        term_categories = defaultdict(list)
+        for term in expanded_matches:
+            found = False
+            for category, terms in SKILL_ONTOLOGY.items():
+                if term in terms:
+                    term_categories[category].append(term)
+                    found = True
+            if not found:
+                term_categories["other"].append(term)
+        assert all(term not in STOPWORDS for term in overlapping), f"Junk term found: {overlapping}"
+
         return {
-            "overlapping_terms": list(overlapping),
-            "overlapping_bigrams": [" ".join(bigram) for bigram in overlapping_bigrams],
-            "match_percentage": match_percentage,
-            "skill_match": skill_match,
-            "jd_term_count": jd_total_terms,
-            "resume_term_count": len(resume_tokens)
+            "match_quality": {
+                "direct_match": float(round(direct_match_pct, 4)),
+                "expanded_match": float(round(expanded_match_pct, 4)),
+                "jd_term_count": len(jd_tokens),
+                "resume_term_count": len(resume_tokens)
+            },
+            "term_categories": dict(term_categories),
+            "missing_terms": sorted(jd_tokens - expanded_matches)[:10],
+            "raw_analysis": {
+                "overlapping_terms": sorted(overlapping),
+                "match_percentage": direct_match_pct
+            }
         }
+
+    def format_analysis(self, analysis: Dict) -> str:
+        """Human-readable analysis formatting"""
+        output = []
+        
+        # Match quality section
+        match_qual = analysis["match_quality"]
+        output.append("=== MATCH QUALITY ===")
+        output.append(f"Direct Match: {match_qual['direct_match']:.1%}")
+        output.append(f"Expanded Match: {match_qual['expanded_match']:.1%}")
+        output.append(f"JD Terms: {match_qual['jd_term_count']} | Resume Terms: {match_qual['resume_term_count']}")
+        
+        # Term categories
+        output.append("\n=== MATCHED SKILLS ===")
+        for category, terms in analysis["term_categories"].items():
+            if terms:  # Only show non-empty categories
+                output.append(f"{category.upper()}: {', '.join(sorted(terms)[:5])}" + 
+                             ("..." if len(terms) > 5 else ""))
+        
+        # Missing terms
+        if analysis.get("missing_terms"):
+            output.append("\n=== SUGGESTED IMPROVEMENTS ===")
+            output.append("Consider adding: " + ", ".join(analysis["missing_terms"][:5]))
+        
+        return "\n".join(output)
 
     def get_similarity_score(
         self,
         jd_text: str,
         resumes: List[Union[str, Dict]],
-        mode: str = "raw",
-        return_analysis: bool = False
-    ) -> List[Tuple[int, float, Optional[Dict]]]:
-        """
-        Main entry point with improved error handling and performance.
-        """
+        mode: str = "structured",
+        return_analysis: bool = True,
+        formatted_output: bool = True
+    ) -> List[Tuple[int, float, Optional[Union[Dict, str]]]]:
+        """Hybrid scoring with comprehensive analysis"""
         if not jd_text or not resumes:
             return []
-            
+        
         try:
-            # Pre-process resumes based on mode
-            if mode == "structured":
-                processed_resumes = [self.combine_structured_resume(r) for r in resumes]
+            # Pre-process resumes
+            processed_resumes = [
+                self.combine_structured_resume(r) if isinstance(r, dict) 
+                else self.clean_text(r) 
+                for r in resumes
+            ]
+            
+            # Calculate scores
+            tfidf_scores = []
+            embedding_scores = []
+            
+            if self.method in ('hybrid', 'tfidf'):
+                tfidf_scores = self.compute_tfidf_similarity(jd_text, processed_resumes)
+            
+            if self.method in ('hybrid', 'embedding'):
+                embedding_scores = self.compute_embedding_similarity(jd_text, processed_resumes)
+            
+            # Combine scores for hybrid mode
+            if self.method == 'hybrid':
+                scores = [
+                    0.6 * emb + 0.4 * tf 
+                    for emb, tf in zip(embedding_scores, tfidf_scores)
+                ]
             else:
-                processed_resumes = [self.clean_text(r) if isinstance(r, str) else "" for r in resumes]
-
-            # Calculate similarity scores
-            if self.method == "embedding":
-                scores = self.compute_embedding_similarity(jd_text, processed_resumes)
-            else:
-                scores = self.compute_tfidf_similarity(jd_text, processed_resumes)
-                
-            # Prepare results with optional analysis
+                scores = embedding_scores if self.method == 'embedding' else tfidf_scores
+            
+            # Generate analysis
             results = []
             for idx, score in enumerate(scores):
                 analysis = None
                 if return_analysis:
                     try:
                         analysis = self.analyze_matches(jd_text, processed_resumes[idx])
+                        analysis["score_components"] = {
+                            "final": float(round(score, 4)),
+                            "embedding": float(round(embedding_scores[idx], 4)) if embedding_scores else None,
+                            "tfidf": float(round(tfidf_scores[idx], 4)) if tfidf_scores else None
+                        }
+                        if formatted_output:
+                            analysis["formatted"] = self.format_analysis(analysis)
                     except Exception as e:
-                        logger.warning(f"Failed to analyze matches for resume {idx}: {str(e)}")
+                        logger.warning(f"Analysis failed for resume {idx}: {str(e)}")
                         analysis = {"error": str(e)}
                 
-                results.append((idx, score, analysis))
-                
-            return results
+                results.append((idx, float(round(score, 4)), 
+                               analysis["formatted"] if formatted_output else analysis))
             
+            return results
+        
         except Exception as e:
-            logger.error(f"Error calculating similarity scores: {str(e)}")
+            logger.error(f"Scoring failed: {str(e)}")
             return []
