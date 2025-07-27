@@ -1,6 +1,10 @@
 import re
 from typing import Dict, List, Union, Set, Tuple
 from collections import defaultdict
+import nltk
+from nltk.corpus import stopwords
+nltk.download('stopwords')
+
 
 # ===== CONSTANTS =====
 SKILL_SYNONYMS = {
@@ -39,7 +43,7 @@ SKILL_SYNONYMS = {
     "terraform": ["terraform", "iac", "infrastructure as code"],
 }
 
-STOPWORDS = {
+CUSTOM_STOPWORDS = {
     # Basic English
     "and", "or", "the", "with", "you", "will", "our", "your", "their", "this",
     "that", "have", "from", "which", "also", "they", "would", "about", "there",
@@ -53,6 +57,8 @@ STOPWORDS = {
     "solutions", "leverage", "enable", "stakeholders", "align", "deliverables",
     "paradigm", "ecosystem", "holistic", "value-added", "best practices"
 }
+ENGLISH_STOPWORDS = set(stopwords.words('english'))
+STOPWORDS = ENGLISH_STOPWORDS | CUSTOM_STOPWORDS
 
 FUNDAMENTAL_SKILLS = {
     # CS Fundamentals
