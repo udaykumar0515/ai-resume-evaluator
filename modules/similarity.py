@@ -179,164 +179,32 @@ class ResumeMatcher:
             logger.error(f"Embedding error: {str(e)}")
             return [0.0] * len(resume_texts)
 
-    def analyze_matches(self, jd_text: str, resume_text: str) -> Dict:
-        """Enhanced match analysis with better term filtering and grouping"""
-        jd_clean = self.clean_text(jd_text)
-        resume_clean = self.clean_text(resume_text)
-        
-        # Custom stopwords for analysis
-        analysis_stopwords = STOPWORDS | {
-            'using', 'with', 'for', 'basic', 'basics', 'knowledge', 'experience'
-        }
-        
-        # Extract meaningful terms (longer than 3 chars, not stopwords)
-        jd_tokens = {
-            word for word in re.findall(r'\b[\w+.#-]{3,}\b', jd_clean)
-            if word not in analysis_stopwords
-        }
-        resume_tokens = {
-            word for word in re.findall(r'\b[\w+.#-]{3,}\b', resume_clean)
-            if word not in analysis_stopwords
-        }
-        
-        # Enhanced skill ontology
-        SKILL_ONTOLOGY = {
-            "programming": {"python", "java", "c++", "c#", "javascript", "typescript"},
-            "web": {"html", "css", "react", "angular", "vue", "django", "flask"},
-            "data": {"sql", "mongodb", "pandas", "numpy", "tensorflow", "pytorch"},
-            "devops": {"docker", "kubernetes", "aws", "azure", "ci/cd", "terraform"},
-            "soft_skills": {"leadership", "communication", "teamwork", "problem-solving"}
-        }
-        
-        # Find direct matches
-        overlapping = jd_tokens & resume_tokens
-        
-        # Find ontology-expanded matches
-        expanded_matches = set(overlapping)
-        for term in overlapping:
-            for category, terms in SKILL_ONTOLOGY.items():
-                if term in terms:
-                    expanded_matches.update(terms)
-        
-        # Calculate meaningful percentages
-        jd_total_terms = max(1, len(jd_tokens))
-        direct_match_pct = len(overlapping) / jd_total_terms
-        expanded_match_pct = len(expanded_matches) / jd_total_terms
-        
-        # Group terms by category
-        term_categories = defaultdict(list)
-        for term in expanded_matches:
-            found = False
-            for category, terms in SKILL_ONTOLOGY.items():
-                if term in terms:
-                    term_categories[category].append(term)
-                    found = True
-            if not found:
-                term_categories["other"].append(term)
-        assert all(term not in STOPWORDS for term in overlapping), f"Junk term found: {overlapping}"
 
-        return {
-            "match_quality": {
-                "direct_match": float(round(direct_match_pct, 4)),
-                "expanded_match": float(round(expanded_match_pct, 4)),
-                "jd_term_count": len(jd_tokens),
-                "resume_term_count": len(resume_tokens)
-            },
-            "term_categories": dict(term_categories),
-            "missing_terms": sorted(jd_tokens - expanded_matches)[:10],
-            "raw_analysis": {
-                "overlapping_terms": sorted(overlapping),
-                "match_percentage": direct_match_pct
-            }
-        }
-
-    def format_analysis(self, analysis: Dict) -> str:
-        """Human-readable analysis formatting"""
-        output = []
+def get_similarity_score(self, jd_text: str, resumes: List[Union[str, Dict]], mode: str = "structured") -> List[Tuple[int, float]]:
+    if not jd_text or not resumes:
+        return []
+    
+    try:
+        processed_resumes = [
+            self.combine_structured_resume(r) if isinstance(r, dict) 
+            else self.clean_text(r) 
+            for r in resumes
+        ]
         
-        # Match quality section
-        match_qual = analysis["match_quality"]
-        output.append("=== MATCH QUALITY ===")
-        output.append(f"Direct Match: {match_qual['direct_match']:.1%}")
-        output.append(f"Expanded Match: {match_qual['expanded_match']:.1%}")
-        output.append(f"JD Terms: {match_qual['jd_term_count']} | Resume Terms: {match_qual['resume_term_count']}")
+        # Calculate scores only
+        if self.method in ('hybrid', 'tfidf'):
+            tfidf_scores = self.compute_tfidf_similarity(jd_text, processed_resumes)
         
-        # Term categories
-        output.append("\n=== MATCHED SKILLS ===")
-        for category, terms in analysis["term_categories"].items():
-            if terms:  # Only show non-empty categories
-                output.append(f"{category.upper()}: {', '.join(sorted(terms)[:5])}" + 
-                             ("..." if len(terms) > 5 else ""))
+        if self.method in ('hybrid', 'embedding'):
+            embedding_scores = self.compute_embedding_similarity(jd_text, processed_resumes)
         
-        # Missing terms
-        if analysis.get("missing_terms"):
-            output.append("\n=== SUGGESTED IMPROVEMENTS ===")
-            output.append("Consider adding: " + ", ".join(analysis["missing_terms"][:5]))
+        if self.method == 'hybrid':
+            scores = [0.6 * emb + 0.4 * tf for emb, tf in zip(embedding_scores, tfidf_scores)]
+        else:
+            scores = embedding_scores if self.method == 'embedding' else tfidf_scores
         
-        return "\n".join(output)
-
-    def get_similarity_score(
-        self,
-        jd_text: str,
-        resumes: List[Union[str, Dict]],
-        mode: str = "structured",
-        return_analysis: bool = True,
-        formatted_output: bool = True
-    ) -> List[Tuple[int, float, Optional[Union[Dict, str]]]]:
-        """Hybrid scoring with comprehensive analysis"""
-        if not jd_text or not resumes:
-            return []
-        
-        try:
-            # Pre-process resumes
-            processed_resumes = [
-                self.combine_structured_resume(r) if isinstance(r, dict) 
-                else self.clean_text(r) 
-                for r in resumes
-            ]
-            
-            # Calculate scores
-            tfidf_scores = []
-            embedding_scores = []
-            
-            if self.method in ('hybrid', 'tfidf'):
-                tfidf_scores = self.compute_tfidf_similarity(jd_text, processed_resumes)
-            
-            if self.method in ('hybrid', 'embedding'):
-                embedding_scores = self.compute_embedding_similarity(jd_text, processed_resumes)
-            
-            # Combine scores for hybrid mode
-            if self.method == 'hybrid':
-                scores = [
-                    0.6 * emb + 0.4 * tf 
-                    for emb, tf in zip(embedding_scores, tfidf_scores)
-                ]
-            else:
-                scores = embedding_scores if self.method == 'embedding' else tfidf_scores
-            
-            # Generate analysis
-            results = []
-            for idx, score in enumerate(scores):
-                analysis = None
-                if return_analysis:
-                    try:
-                        analysis = self.analyze_matches(jd_text, processed_resumes[idx])
-                        analysis["score_components"] = {
-                            "final": float(round(score, 4)),
-                            "embedding": float(round(embedding_scores[idx], 4)) if embedding_scores else None,
-                            "tfidf": float(round(tfidf_scores[idx], 4)) if tfidf_scores else None
-                        }
-                        if formatted_output:
-                            analysis["formatted"] = self.format_analysis(analysis)
-                    except Exception as e:
-                        logger.warning(f"Analysis failed for resume {idx}: {str(e)}")
-                        analysis = {"error": str(e)}
-                
-                results.append((idx, float(round(score, 4)), 
-                               analysis["formatted"] if formatted_output else analysis))
-            
-            return results
-        
-        except Exception as e:
-            logger.error(f"Scoring failed: {str(e)}")
-            return []
+        return [(idx, float(round(score, 4))) for idx, score in enumerate(scores)]
+    
+    except Exception as e:
+        logger.error(f"Scoring failed: {str(e)}")
+        return []
