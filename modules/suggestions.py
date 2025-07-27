@@ -5,7 +5,6 @@ import nltk
 from nltk.corpus import stopwords
 nltk.download('stopwords')
 
-
 # ===== CONSTANTS =====
 SKILL_SYNONYMS = {
     # AI/ML
@@ -55,8 +54,10 @@ CUSTOM_STOPWORDS = {
     
     # Corporate Jargon
     "solutions", "leverage", "enable", "stakeholders", "align", "deliverables",
-    "paradigm", "ecosystem", "holistic", "value-added", "best practices"
+    "paradigm", "ecosystem", "holistic", "value-added", "best practices",
+    "basic", "basics", "development", "grow", "frameworks"
 }
+
 ENGLISH_STOPWORDS = set(stopwords.words('english'))
 STOPWORDS = ENGLISH_STOPWORDS | CUSTOM_STOPWORDS
 
@@ -136,6 +137,7 @@ ACHIEVEMENT_TRIGGERS = {
     r"api\s+calls|requests|queries": "throughput metrics",
     r"uptime|availability": "reliability stats"
 }
+
 CONTACT_PATTERNS = {
     "email": re.compile(r"\b[\w\.-]+@[\w\.-]+\.\w+\b"),
     "phone": re.compile(r"(\+\d{1,3}[-\.\s]?)?\d{3}[-\.\s]?\d{3}[-\.\s]?\d{4}"),
@@ -143,7 +145,49 @@ CONTACT_PATTERNS = {
     "github": re.compile(r"github\.com/[\w-]+"),
 }
 
-# ===== HELPER FUNCTIONS =====
+# ===== NEW HELPER FUNCTIONS =====
+def analyze_resume_length(text: str) -> Tuple[str, int]:
+    """Categorize resume length and return word count"""
+    word_count = len(text.split())
+    if word_count < 200:
+        return ("Too Short (Add more details)", word_count)
+    elif 200 <= word_count < 400:
+        return ("Good Length", word_count)
+    else:
+        return ("Too Long (Consider condensing)", word_count)
+
+def get_matching_keywords(jd_text: str, resume_text: str) -> Dict[str, List[str]]:
+    """Identify matching keywords between JD and resume"""
+    jd_keywords = extract_keywords(jd_text)
+    resume_keywords = extract_keywords(resume_text)
+    overlapping = sorted(jd_keywords & resume_keywords)
+    
+    # Group by skill categories
+    matched_categories = defaultdict(list)
+    for term in overlapping:
+        for category, skills in SKILL_SYNONYMS.items():
+            if term in skills:
+                matched_categories[category].append(term)
+                break
+        else:
+            matched_categories["Other"].append(term)
+    
+    return dict(matched_categories)
+
+def check_fundamental_skills(resume_text: str) -> Tuple[List[str], List[str]]:
+    """Check for presence of fundamental CS skills"""
+    present = []
+    missing = []
+    resume_skills = extract_keywords(resume_text)
+    
+    for skill in FUNDAMENTAL_SKILLS:
+        if skill in resume_skills:
+            present.append(skill)
+        else:
+            missing.append(skill)
+    
+    return present[:5], missing[:5]  # Return top 5 each
+
 def normalize_keyword(keyword: str) -> str:
     """Standardize terms using synonyms."""
     keyword = keyword.lower()
@@ -175,18 +219,57 @@ def suggest_resume_improvements(
 ) -> Dict[str, List[str]]:
     """
     Generate prioritized resume improvement suggestions.
-    Returns: {"critical": [], "high": [], "medium": [], "low": [], "strengths": [], "tips": []}
+    Returns: {
+        "metrics": [], 
+        "strengths": [], 
+        "critical": [], 
+        "high": [], 
+        "medium": [], 
+        "low": [], 
+        "tips": []
+    }
     """
     suggestions = defaultdict(list)
     resume_text = " ".join(str(v) for v in resume_data.values()).lower()
     contact_info = analyze_contact_info(resume_text)
 
-    # Stopword-filtered keyword extraction
+    # ===== 1. Resume Metrics =====
+    length_category, word_count = analyze_resume_length(resume_text)
+    suggestions["metrics"].append(
+        f"Resume Length: {word_count} words ({length_category})"
+    )
+    
+    # ===== 2. Keyword Analysis =====
     jd_keywords = extract_keywords(jd_text) if jd_text else set()
     resume_keywords = extract_keywords(resume_text)
     overlapping_keywords = jd_keywords & resume_keywords
 
-    # ==== CRITICAL CHECKS ====
+    if jd_text:
+        # Keyword matching visualization
+        matched_keywords = get_matching_keywords(jd_text, resume_text)
+        if matched_keywords:
+            suggestions["strengths"].append("✅ Strong Keyword Matches:")
+            for category, terms in matched_keywords.items():
+                # Sort and deduplicate for cleanliness
+                unique_terms = sorted(set(terms))
+                suggestions["strengths"].append(
+                    f"- {category.title()}: {', '.join(unique_terms)}"
+                )
+
+        # Fundamental skills check
+        present_skills, missing_skills = check_fundamental_skills(resume_text)
+        if present_skills:
+            suggestions["strengths"].append(
+                "✅ Strong Fundamental Skills: "
+                f"{', '.join(present_skills)}"
+            )
+        if missing_skills:
+            suggestions["high"].append(
+                "⚠️ Consider Adding Fundamental Skills: "
+                f"{', '.join(missing_skills)}"
+            )
+
+    # ===== 3. Critical Checks =====
     for section in CRITICAL_SECTIONS:
         if not resume_data.get(section):
             suggestions["critical"].append(f"Missing critical section: '{section}'")
@@ -196,29 +279,14 @@ def suggest_resume_improvements(
     if not contact_info.get("phone"):
         suggestions["high"].append("Add phone number for recruiter outreach")
 
-    # ==== OPTIONAL SECTIONS ====
-    if jd_text:
-        for section in OPTIONAL_SECTIONS:
-            if not resume_data.get(section):
-                if "engineer" in jd_text.lower() and section == "certifications":
-                    suggestions["medium"].append("Consider adding a 'certifications' section (e.g., AWS/Azure certs)")
-                elif "research" in jd_text.lower() and section == "publications":
-                    suggestions["medium"].append("Add 'publications' section if you have research papers")
-
-    # ==== PROFILE LINKS ====
-    if not contact_info["linkedin"]:
-        suggestions["low"].append("Add LinkedIn profile for professional networking")
-    if "github" not in contact_info and any(x in jd_text.lower() for x in ["developer", "engineer", "programming"]):
-        suggestions["medium"].append("Add GitHub profile to showcase your code")
-
-    # ==== JD-SPECIFIC ANALYSIS ====
-    if jd_keywords:
+    # ===== 4. JD-Specific Analysis =====
+    if jd_text and jd_keywords:
         missing_keywords = jd_keywords - resume_keywords
         top_missing = sorted(missing_keywords, key=lambda k: jd_text.lower().count(k), reverse=True)[:5]
         if top_missing:
             suggestions["critical"].append(f"Missing JD keywords: {', '.join(top_missing)}")
 
-    # ==== SKILL ANALYSIS ====
+    # ===== 5. Skill Analysis =====
     if "skills" in resume_data:
         skills = [s.lower() for s in resume_data["skills"] if isinstance(s, str)]
         if jd_keywords:
@@ -233,14 +301,14 @@ def suggest_resume_improvements(
 
         suggestions["medium"].append("Format skills with proficiency levels (e.g., 'Python (Advanced)')")
 
-    # ==== PROJECTS/EXPERIENCE ANALYSIS ====
+    # ===== 6. Projects/Experience Analysis =====
     for section in ["projects", "experience"]:
         if section in resume_data:
             for item in resume_data[section]:
                 if isinstance(item, dict):
                     desc = str(item.get("description", ""))
                     name = str(item.get("name", section))
-                    has_achievements, achievement_types = detect_achievements(desc)
+                    has_achievements, _ = detect_achievements(desc)
                     if not has_achievements:
                         suggestions["high"].append(f"Add quantifiable results to '{name}' section")
 
@@ -252,7 +320,7 @@ def suggest_resume_improvements(
                         suggestions["medium"].append(
                             f"Replace weak verbs in '{name}' with strong action verbs")
 
-    # ==== STYLE AND READABILITY ====
+    # ===== 7. Style and Readability =====
     found_buzzwords = [b for b in BUZZWORDS if b in resume_text]
     if found_buzzwords:
         suggestions["low"].append(f"Avoid buzzwords: {', '.join(found_buzzwords[:3])}")
@@ -263,26 +331,19 @@ def suggest_resume_improvements(
     if re.search(r"\bwas\s+\w+ed\b", resume_text):
         suggestions["medium"].append("Reduce passive voice (e.g., 'was implemented' → 'implemented')")
 
-    # ==== NEW: STRENGTHS SECTION ====
-    strengths = []
-    if overlapping_keywords:
-        strengths.append(f"Your resume contains relevant keywords from the JD: {', '.join(sorted(overlapping_keywords)[:5])}")
-    if "projects" in resume_data and len(resume_data["projects"]) >= 3:
-        strengths.append("Good number of projects showcasing hands-on experience")
-    if resume_data.get("internships") and len(resume_data["internships"]) >= 2:
-        strengths.append("Multiple internships reflect practical exposure")
-
-    # ==== NEW: TIPS SECTION ====
+    # ===== 8. General Tips =====
     tips = []
-    if len(resume_text.split()) < 250:
+    if word_count < 250:
         tips.append("Resume is very short — try expanding on your experiences")
+    elif word_count > 500:
+        tips.append("Resume is too long — condense to most relevant information")
     if not contact_info.get("linkedin"):
         tips.append("Add a LinkedIn link to improve credibility")
     if "certifications" not in resume_data:
         tips.append("Add certifications to showcase additional qualifications")
     if not resume_data.get("projects"):
         tips.append("Add at least 1-2 projects — recruiters value them heavily")
-
-    suggestions["strengths"] = strengths
+    
     suggestions["tips"] = tips
+
     return dict(suggestions)
