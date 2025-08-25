@@ -9,7 +9,7 @@ from modules import parser, similarity
 class ResumeRanker:
     """High-performance resume ranking based on job description"""
 
-    def __init__(self, min_score: float = 0.3, workers: int = 4):
+    def __init__(self, min_score: float = 0.0, workers: int = 4):
         """
         Args:
             min_score: Minimum similarity score (0-1) to include in results
@@ -17,7 +17,7 @@ class ResumeRanker:
         """
         self.min_score = min_score * 100  # Convert to percentage
         self.workers = workers
-        self.matcher = similarity.ResumeMatcher(method="embedding")
+        self.matcher = similarity.ResumeMatcher(method="tfidf")
         self.email_pattern = re.compile(r"[\w\.-]+@[\w\.-]+\.\w+")
         self.phone_pattern = re.compile(r"(\+91[-\s]?)?[0-9]{10}")
         self.jd_text = None
@@ -66,15 +66,13 @@ class ResumeRanker:
                 self.jd_text, [text], mode="raw"
             )[0][1] * 100
 
-            if score >= self.min_score:
-                return {
-                    "Name": meta['name'],
-                    "Score (%)": round(score, 2),
-                    "Email": meta['email'],
-                    "Phone": meta['phone'],
-                    "Filename": filename
-                }
-            return None
+            return {
+                "Name": meta['name'],
+                "Score (%)": round(score, 2),
+                "Email": meta['email'],
+                "Phone": meta['phone'],
+                "Filename": filename
+            }
 
         except Exception as e:
             print(f"Skipped {filename} due to error: {str(e)}")
