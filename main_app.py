@@ -1,5 +1,6 @@
 # Fixed and Enhanced App - Addresses all user issues
 import streamlit as st
+import streamlit.components.v1 as st_components
 import pandas as pd
 import json
 import os
@@ -162,29 +163,6 @@ hr {
     height: 1px;
     background: linear-gradient(90deg, transparent, #667eea, transparent);
 }
-
-/* Remove this entire block: */
-div[data-testid="column"]:first-child {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    z-index: 1000;
-}
-button[key="floating_toggle"] {
-    background: linear-gradient(45deg, #667eea, #764ba2);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    font-size: 1.5rem;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    transition: all 0.3s ease;
-}
-button[key="floating_toggle"]:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-}      
 
 .progress-container {
     background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
@@ -412,7 +390,7 @@ def init_session_state():
         'ranked_df': None,
         'rank_jd_text': "",
         'rank_ready': False,
-        'sidebar_collapsed': False,
+        'sidebar_collapsed': True,
         'show_reports': False,
         'show_export': False,
         'visualization_mode': "🎮 Game Style (Radar)",
@@ -1872,8 +1850,8 @@ def main():
         st.session_state['pending_active_view'] = ""
     
     # Initialize application
-    components = load_components()
-    if not components:
+    loaded_components = load_components()
+    if not loaded_components:
         st.error("❌ Failed to load application components. Please refresh the page.")
         return
     
@@ -1893,7 +1871,6 @@ def main():
             </h1>
             <p style="font-size: 1.3rem; color: #666; margin: 0;">
                 Advanced AI-powered resume analysis and optimization platform
-                <span class="ai-badge">Next-Gen AI</span>
             </p>
         </div>
         """, unsafe_allow_html=True)
@@ -1942,9 +1919,9 @@ def main():
         """, unsafe_allow_html=True)
     
     if nav == "📝 Resume Evaluation":
-        evaluation_tab(components)
+        evaluation_tab(loaded_components)
     elif nav == "🏆 Bulk Ranking":
-        ranking_tab(components)
+        ranking_tab(loaded_components)
     else:
         feedback_section()
 
@@ -1968,39 +1945,139 @@ def main():
 
     # Floating sidebar toggle button (shown when sidebar is collapsed)
     if st.session_state.sidebar_collapsed:
-        # Use columns to create a floating effect
-        col1, col2 = st.columns([1, 20])
-        with col1:
-            if st.button("📋", key="floating_toggle", help="Open Sidebar"):
-                st.session_state.sidebar_collapsed = False
-                st.rerun()
-        
-        # Add CSS to position the button absolutely
-        st.markdown("""
+        # Render the button at top-level (avoid wrapping it inside columns)
+        if st.button("📋", key="floating_toggle", help="Open Sidebar"):
+            st.session_state.sidebar_collapsed = False
+            st.rerun()
+
+        # Single, robust components.html block (CSS + JS) to pin the toggle
+        _components_top_left = """
         <style>
-        div[data-testid="column"]:first-child {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 1000;
+        /* target many potential selectors and force top-left */
+        button[key="floating_toggle"],
+        div[data-testid="column"] button[key="floating_toggle"],
+        button[aria-label="Toggle sidebar"],
+        button[title*="sidebar"],
+        div[data-testid="stToggleSidebar"] button,
+        div[role="button"][data-testid*="toggle"],
+        button#floating_toggle_btn {
+            position: fixed !important;
+            top: 16px !important;
+            left: 16px !important;
+            bottom: auto !important;
+            right: auto !important;
+            margin: 0 !important;
+            transform: none !important;
+            z-index: 2147483647 !important; /* max z-index to beat everything */
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 48px !important;
+            height: 48px !important;
+            border-radius: 50% !important;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.35) !important;
+            background: transparent !important;
         }
-        button[key="floating_toggle"] {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            font-size: 1.5rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            transition: all 0.3s ease;
-        }
-        button[key="floating_toggle"]:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        @media (max-width: 768px) {
+            button[key="floating_toggle"],
+            button[aria-label="Toggle sidebar"] {
+                top: 12px !important;
+                left: 12px !important;
+            }
         }
         </style>
-        """, unsafe_allow_html=True)
+
+        <script>
+        (function(){
+            function findAndFix() {
+                // 1) Try robust selectors first
+                const selectors = [
+                    'button[aria-label="Toggle sidebar"]',
+                    'button[title*="sidebar"]',
+                    'div[data-testid="stToggleSidebar"] button',
+                    'div[role="button"][data-testid*="toggle"]'
+                ];
+                let btn = null;
+                for (const s of selectors) {
+                    const found = document.querySelector(s);
+                    if (found) { btn = found; break; }
+                }
+
+                // 2) Fallback: find any button whose visible text is exactly the 📋 icon
+                if (!btn) {
+                    const candidates = Array.from(document.querySelectorAll('button'));
+                    btn = candidates.find(b => (b.innerText || '').trim() === '📋') || null;
+                }
+
+                // 3) Fallback heuristic: small button with an icon or short text
+                if (!btn) {
+                    const candidates = Array.from(document.querySelectorAll('button'));
+                    btn = candidates.find(b => {
+                        const w = b.offsetWidth, h = b.offsetHeight;
+                        const txt = (b.innerText || '').trim();
+                        const looksLikeIcon = txt.length <= 3; // emoji or short
+                        return (w && h && Math.max(w,h) <= 80 && (b.querySelector('svg') || looksLikeIcon));
+                    }) || null;
+                }
+
+                if (!btn) return false;
+
+                function applyStyles() {
+                    const important = 'important';
+                    btn.style.setProperty('position', 'fixed', important);
+                    btn.style.setProperty('top', '16px', important);
+                    btn.style.setProperty('left', '16px', important);
+                    btn.style.setProperty('bottom', 'auto', important);
+                    btn.style.setProperty('right', 'auto', important);
+                    btn.style.setProperty('transform', 'none', important);
+                    btn.style.setProperty('margin', '0', important);
+                    btn.style.setProperty('z-index', '2147483647', important);
+                    btn.style.setProperty('width', '48px', important);
+                    btn.style.setProperty('height', '48px', important);
+                    btn.style.setProperty('border-radius', '50%', important);
+                    btn.style.setProperty('box-shadow', '0 6px 18px rgba(0,0,0,0.35)', important);
+                }
+                applyStyles();
+
+                // clear positional styles from ancestors (safe loop limit)
+                let p = btn.parentElement;
+                let safety = 0;
+                while (p && safety < 40) {
+                    try {
+                        if (p.style) {
+                            p.style.transform = 'none';
+                            p.style.bottom = '';
+                            p.style.right = '';
+                            p.style.left = '';
+                        }
+                    } catch(e) {}
+                    p = p.parentElement;
+                    safety++;
+                }
+
+                // observe DOM and reapply when Streamlit rerenders
+                if (!window.__toggle_observer_installed) {
+                    const mo = new MutationObserver(() => applyStyles());
+                    mo.observe(document.body, { childList: true, subtree: true, attributes: true });
+                    window.__toggle_observer_installed = true;
+                }
+                return true;
+            }
+
+            // try repeatedly to handle delayed render
+            let tries = 0;
+            const interval = setInterval(() => {
+                tries++;
+                const ok = findAndFix();
+                if (ok || tries > 60) clearInterval(interval);
+            }, 250);
+        })();
+        </script>
+        """
+
+        st_components.html(_components_top_left, height=0, scrolling=False)
+
+
 
 if __name__ == "__main__":
     main()
