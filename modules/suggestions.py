@@ -3,7 +3,12 @@ from typing import Dict, List, Union, Set, Tuple
 from collections import defaultdict
 import nltk
 from nltk.corpus import stopwords
-nltk.download('stopwords')
+# Ensure stopwords are available without forcing a download every import
+try:
+    ENGLISH_STOPWORDS = set(stopwords.words('english'))
+except LookupError:
+    nltk.download('stopwords', quiet=True)
+    ENGLISH_STOPWORDS = set(stopwords.words('english'))
 
 # ===== CONSTANTS =====
 SKILL_SYNONYMS = {
@@ -58,7 +63,6 @@ CUSTOM_STOPWORDS = {
     "basic", "basics", "development", "grow", "frameworks"
 }
 
-ENGLISH_STOPWORDS = set(stopwords.words('english'))
 STOPWORDS = ENGLISH_STOPWORDS | CUSTOM_STOPWORDS
 
 FUNDAMENTAL_SKILLS = {
