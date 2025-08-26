@@ -17,34 +17,8 @@ try:
     from modules import parser, similarity, jd_handler
     from modules.resume_ranker import ResumeRanker
     
-    # Import the working suggestions system we just created
-    try:
-        from modules.working_suggestions import get_enhanced_suggestions
-        ENHANCED_MODE = True
-        print("✅ Using enhanced suggestions system")
-    except ImportError:
-        from modules.suggestions import suggest_resume_improvements
-        ENHANCED_MODE = False
-        print("⚠️ Using basic suggestions system")
-        
-        # Fallback function
-        def get_enhanced_suggestions(resume_data, jd_text=""):
-            basic_suggestions = suggest_resume_improvements(resume_data, jd_text)
-            return {
-                "overall_score": 65,  
-                "section_scores": {},
-                "priority_suggestions": {
-                    "critical": basic_suggestions.get("critical", []),
-                    "high": basic_suggestions.get("high", []),
-                    "medium": basic_suggestions.get("medium", []),
-                    "low": basic_suggestions.get("low", [])
-                },
-                "personalized_advice": basic_suggestions.get("tips", []),
-                "style_feedback": [],
-                "reasoning": {
-                    "overall": "Analysis completed. Review the suggestions below to improve your resume score."
-                }
-            }
+    # Use the enhanced suggestions system as the single source
+    from modules.working_suggestions import get_enhanced_suggestions
             
 except Exception as e:
     st.error(f"❌ Error importing modules: {e}")
