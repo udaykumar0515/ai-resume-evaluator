@@ -1,9 +1,8 @@
 # Fixed suggestions system that works with the existing modules
 import re
-import json
 import logging
-from typing import Dict, List, Union, Set, Tuple, Any
-from collections import defaultdict, Counter
+from typing import Dict, List, Set, Any
+from collections import defaultdict
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
