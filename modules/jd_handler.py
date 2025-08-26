@@ -17,6 +17,7 @@ def load_predefined_jds(json_path: str = "data/predefined_jds.json") -> Dict[str
 
 def get_job_roles(json_path: str = "data/predefined_jds.json") -> List[str]:
     jd_dict = load_predefined_jds(json_path)
+    # Preserve deterministic order for UI elements
     return list(jd_dict.keys())
 
 def get_description_for_role(role: str, json_path: str = "data/predefined_jds.json") -> str:
