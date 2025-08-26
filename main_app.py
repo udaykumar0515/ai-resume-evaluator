@@ -7,7 +7,7 @@ import os
 import tempfile
 import plotly.graph_objects as go
 from datetime import datetime
-from typing import List, Dict, Any, Optional
+from typing import Dict, Any
 import base64
 from io import BytesIO
 import time
