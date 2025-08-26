@@ -7,6 +7,7 @@ from datetime import datetime
 from transformers import pipeline
 from functools import lru_cache
 import torch
+from modules.text_constants import SKILL_KEYWORDS, SKILL_CATEGORIES, INSTITUTION_KEYWORDS
 
 class ResumeNER:
     def __init__(self):
@@ -47,42 +48,8 @@ class ResumeNER:
 
 ner = ResumeNER()
 
-SKILL_KEYWORDS = {
-    "Python": ["python"],
-    "Java": ["java"],
-    "JavaScript": ["javascript", "js"],
-    "C++": ["c\\+\\+"],
-    "C": ["c\\b"],
-    "SQL": ["sql"],
-    "HTML": ["html"],
-    "CSS": ["css"],
-    "React": ["react"],
-    "Node.js": ["node", "node.js", "nodejs"],
-    "Pygame": ["pygame"],
-    "Streamlit": ["streamlit"],
-    "Git": ["git"],
-    "Machine Learning": ["machine learning", "ml"],
-    "Data Structures": ["data structures"],
-    "Web Development": ["web development"],
-    "DeepFace": ["deepface"]
-}
 
-SKILL_CATEGORIES = {
-    "Programming Languages": ["python", "java", "javascript", "c\\+\\+", "c"],
-    "Web Technologies": ["html", "css", "react", "node"],
-    "Databases": ["sql"],
-    "Frameworks": ["pygame", "streamlit"],
-    "Data Science": ["machine learning", "ml", "data structures"],
-    "Tools": ["git"],
-    "Concepts": ["web development"],
-    "Computer Vision": ["deepface"]
-}
-
-# Patterns and keywords (removed unused DEGREE_PATTERNS/DATE_PATTERNS)
-
-
-INSTITUTION_KEYWORDS = ["college", "university", "institute", "school", "academy", 
-                       "foundation", "research center", "company", "corporation", "services"]
+INSTITUTION_KEYWORDS = INSTITUTION_KEYWORDS
 
 def clean_entities(entity_dict):
     cleaned = {}
