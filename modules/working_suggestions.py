@@ -3,36 +3,12 @@ import re
 import logging
 from typing import Dict, List, Set, Any
 from collections import defaultdict
+from modules.text_constants import SKILL_SYNONYMS, IMPACT_VERBS, QUANTIFIABLE_METRICS
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Enhanced skill mapping
-SKILL_SYNONYMS = {
-    "python": ["python", "python3", "py", "pandas", "numpy", "scipy", "flask", "django", "fastapi"],
-    "javascript": ["js", "javascript", "es6", "typescript", "ts", "react", "vue", "angular", "node.js", "nodejs"],
-    "java": ["java", "spring", "spring boot", "hibernate", "j2ee"],
-    "machine learning": ["ml", "ai", "deep learning", "tensorflow", "pytorch", "scikit-learn", "keras"],
-    "web development": ["html", "css", "react", "vue", "angular", "frontend", "backend", "fullstack"],
-    "databases": ["sql", "mysql", "postgresql", "mongodb", "nosql", "redis", "sqlite"],
-    "cloud": ["aws", "azure", "gcp", "docker", "kubernetes", "devops", "jenkins"],
-    "mobile": ["android", "ios", "react native", "flutter", "kotlin", "swift"],
-    "data science": ["pandas", "numpy", "matplotlib", "seaborn", "jupyter", "data analysis"],
-    "version control": ["git", "github", "gitlab", "bitbucket", "svn"]
-}
-
-IMPACT_VERBS = {
-    "weak": ["did", "made", "helped", "worked on", "was involved in", "participated in", "assisted", "contributed"],
-    "strong": ["developed", "implemented", "optimized", "led", "built", "achieved", "designed", 
-              "reduced", "increased", "automated", "streamlined", "deployed", "created", "managed"]
-}
-
-QUANTIFIABLE_METRICS = [
-    r"\d+%", r"\$\d+[\w,]*", r"\d+k\b", r"\d+,\d+", r"\d+x\b", 
-    r"\d+\s*(users|customers|clients|people)", r"\d+\s*(hours|days|months|weeks)",
-    r"\d+\s*(projects|applications|systems|features)", r"\d+\s*(million|billion|thousand)"
-]
 
 def extract_jd_keywords(jd_text: str) -> Set[str]:
     """Extract relevant keywords from job description"""
