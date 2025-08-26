@@ -1,5 +1,6 @@
-# Enhanced requirements.txt for AI Resume Evaluator Pro
-# Core dependencies
+# Refined requirements for AI Resume Evaluator Pro
+
+# Core
 streamlit>=1.28.0
 pandas>=1.5.0
 numpy>=1.24.0
@@ -7,7 +8,7 @@ numpy>=1.24.0
 # File processing
 PyPDF2>=3.0.0
 python-docx>=0.8.11
-openpyxl>=3.1.0
+xlsxwriter>=3.0.0  # used by pandas ExcelWriter
 
 # NLP and ML
 transformers>=4.21.0
@@ -15,37 +16,20 @@ torch>=1.12.0
 sentence-transformers>=2.2.0
 scikit-learn>=1.1.0
 nltk>=3.8
-spacy>=3.4.0
-
-# Text analysis and grammar
-textstat>=0.7.3
-language-tool-python>=2.7.1
 
 # Visualization
 plotly>=5.15.0
-matplotlib>=3.6.0
-seaborn>=0.12.0
 
-# Additional utilities
+# Utilities
 tqdm>=4.64.0
-regex>=2022.9.13
-unicodedata2>=15.0.0
-uuid
 
 # Optional: GPU support (uncomment if using CUDA)
 # torch>=1.12.0+cu117 -f https://download.pytorch.org/whl/torch_stable.html
 
-# Development dependencies (optional)
+# Dev (optional)
 # pytest>=7.0.0
 # black>=22.0.0
 # flake8>=5.0.0
 
-# Installation notes:
-# 1. Install spaCy English model after installing spacy:
-#    python -m spacy download en_core_web_sm
-#
-# 2. For better performance, consider installing with GPU support
-#
-# 3. LanguageTool requires Java (optional for grammar checking)
-#
-# 4. Some users might need to install Microsoft Visual C++ 14.0 for certain packages
+# Notes:
+# - Removed unused: openpyxl, spacy, textstat, language-tool-python, matplotlib, seaborn, regex, unicodedata2, uuid
