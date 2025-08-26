@@ -8,7 +8,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from sentence_transformers import SentenceTransformer
 import torch
-from modules.suggestions import STOPWORDS 
+from modules.text_constants import STOPWORDS 
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
