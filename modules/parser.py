@@ -2,13 +2,11 @@ import PyPDF2
 from docx import Document
 import re
 import unicodedata
-import json
 import os
 from datetime import datetime
 from transformers import pipeline
 from functools import lru_cache
 import torch
-from transformers import pipeline
 
 class ResumeNER:
     def __init__(self):
@@ -80,20 +78,7 @@ SKILL_CATEGORIES = {
     "Computer Vision": ["deepface"]
 }
 
-# Patterns and keywords
-DEGREE_PATTERNS = [
-    r"\bB\.?Tech\b", r"\bB\.?E\b", r"\bB\.?Sc\b", r"\bB\.?Com\b", 
-    r"\bB\.?A\b", r"\bM\.?Tech\b", r"\bM\.?Sc\b", r"\bM\.?Com\b",
-    r"\bM\.?A\b", r"\bPh\.?D\b", r"\bBachelor\b", r"\bMaster\b",
-    r"\bDiploma\b", r"\bPGDM\b", r"\bMBA\b", r"\bMCA\b"
-]
-
-DATE_PATTERNS = [
-    r"\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s*\d{4}",
-    r"\b\d{1,2}/\d{4}",
-    r"\b\d{4}\s*[-–]\s*\d{4}",
-    r"\b\d{1,2}\s*(?:st|nd|rd|th)?\s*(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s*\d{4}"
-]
+# Patterns and keywords (removed unused DEGREE_PATTERNS/DATE_PATTERNS)
 
 
 INSTITUTION_KEYWORDS = ["college", "university", "institute", "school", "academy", 
@@ -437,10 +422,15 @@ def parse_resume(file_path_or_buffer, file_type=None):
 
     # Filter relevant entities for each section
     section_entities = {}
+    # Map entity labels present in each section using cleaned entities for stability
+    cleaned_batch = clean_entities(batch_entities.get("entities", {})) if isinstance(batch_entities, dict) else {}
     for section_name, section_text in sections.items():
-        section_entities[section_name] = [
-            ent for ent in batch_entities if ent in section_text
-        ]
+        present_labels = {}
+        for label, words in cleaned_batch.items():
+            hits = [w for w in words if w.lower() in section_text.lower()]
+            if hits:
+                present_labels[label] = hits
+        section_entities[section_name] = present_labels
     return {
         "metadata": {
             "processing_date": datetime.now().isoformat(),
