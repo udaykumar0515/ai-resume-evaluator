@@ -5,7 +5,7 @@
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.28+-red.svg)](https://streamlit.io)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Stars](https://img.shields.io/github/stars/your-username/resume-ranker?style=social)](https://github.com/your-username/resume-ranker)
+[![Stars](https://img.shields.io/github/stars/your-username/resume-ranker?style=social)](https://github.com/udaykumar0515/ai-resume-evaluator.git)
 
 An intelligent platform that leverages **state-of-the-art AI and NLP techniques** to revolutionize resume evaluation and candidate ranking. Built for both **students seeking career guidance** and **recruiters optimizing hiring processes**.
 
@@ -49,11 +49,6 @@ An intelligent platform that leverages **state-of-the-art AI and NLP techniques*
 4. **🎯 Gap Analysis**: Identify missing skills, experiences, and keywords
 5. **📊 Scoring & Ranking**: Multi-factor scoring with explainable results
 
-### Accuracy & Reliability
-- **95%+ accuracy** on tested resume-JD pairs
-- **Consistent scoring** across different resume formats
-- **Explainable AI** - understand why each score was given
-- **Domain-adaptive** weighting for different job categories
 
 ---
 
@@ -66,25 +61,39 @@ An intelligent platform that leverages **state-of-the-art AI and NLP techniques*
 | **AI/NLP** | Sentence Transformers | Semantic understanding |
 | **ML** | Scikit-learn | Similarity calculations |
 | **Data Processing** | Pandas, PyPDF2 | File handling & analysis |
-| **Deployment** | Docker (optional) | Containerized deployment |
 
 ---
 
 ## 📁 Project Structure
 
 ```
-resume-ranker/
-├── 📄 app.py                 # Main Streamlit application
-├── 🧠 similarity.py          # AI scoring & feedback engine
-├── 📊 ranking.py             # Multi-resume ranking logic
-├── 📁 sample_resumes/        # Test resumes for validation
-├── 📁 job_descriptions/      # Curated JD library
-├── 📁 tests/                 # Unit and integration tests
-├── 📄 requirements.txt       # Python dependencies
-├── 🐳 Dockerfile             # Container configuration
-├── 📄 .gitignore            # Git ignore rules
-└── 📖 README.md             # Project documentation
+├── .gitignore
+├── README.md
+├── data
+│   └── predefined_jds.json
+├── feedback.json
+├── main_app.py
+├── modules
+│   ├── jd_handler.py
+│   ├── parser.py
+│   ├── resume_ranker.py
+│   ├── similarity.py
+│   ├── test.py
+│   ├── text_constants.py
+│   └── working_suggestions.py
+├── requirements.txt
+├── sample_resumes
+│   ├── aspnet-web-developer-resume-example.pdf
+│   ├── freelance-web-developer-resume-example.pdf
+│   ├── java-web-developer-resume-example.pdf
+│   ├── junior-web-developer-resume-example.pdf
+│   ├── react-developer-resume.pdf
+│   ├── senior-web-developer-resume-example.pdf
+│   ├── web-application-developer-resume-example.pdf
+│   ├── web-developer-intern-resume-example.pdf
+│   └── web-developer-resume-example.pdf
 ```
+
 
 ---
 
@@ -122,11 +131,6 @@ resume-ranker/
 5. **Access the app**
    Open your browser and navigate to `http://localhost:8501`
 
-### Docker Deployment (Alternative)
-```bash
-docker build -t resume-ranker .
-docker run -p 8501:8501 resume-ranker
-```
 
 ---
 
@@ -159,12 +163,6 @@ pip install -r requirements-dev.txt
 pytest tests/
 ```
 
-### Code Style
-- Follow PEP 8 guidelines
-- Use type hints
-- Add docstrings for all functions
-- Write unit tests for new features
-
 ---
 
 ## 📄 License
@@ -187,12 +185,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Email**: udaykumarhaibathi@gmail.com
 
 ---
-
-<div align="center">
-
-**Made with ❤️ by the Resume Ranker Team**
-
-[![GitHub stars](https://img.shields.io/github/stars/your-username/resume-ranker?style=social)](https://github.com/your-username/resume-ranker)
-[![GitHub forks](https://img.shields.io/github/forks/your-username/resume-ranker?style=social)](https://github.com/your-username/resume-ranker)
-
-</div>
