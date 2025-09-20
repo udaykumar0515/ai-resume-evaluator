@@ -91,13 +91,6 @@ with tab1:
     
     else:
         st.info("👆 Please upload a resume file to get started")
-        
-        # Show available sample resumes
-        st.markdown("### Available Sample Resumes")
-        sample_files = [f for f in os.listdir("sample_resumes") if f.endswith('.pdf')]
-        if sample_files:
-            for file in sample_files[:5]:  # Show first 5
-                st.write(f"• {file}")
 
 # Tab 2: Feedback
 with tab2:
@@ -124,32 +117,6 @@ with tab2:
             st.balloons()
         else:
             st.warning("⚠️ Please enter some feedback before submitting.")
-
-# Sidebar
-with st.sidebar:
-    st.markdown("### 📋 Instructions")
-    st.markdown("""
-    **Resume Evaluation:**
-    - Upload resume file
-    - View extracted text
-    - Select job description (optional)
-    
-    **Feedback:**
-    - Enter feedback
-    - Rate the system
-    - Submit (shows confirmation)
-    """)
-    
-    st.markdown("### 🔧 System Info")
-    st.info("""
-    **Version:** Simple 1.0  
-    **Features:** 
-    - Text extraction
-    - Basic feedback form
-    - Job description selection
-    
-    **Status:** Development Phase
-    """)
 
 # Footer
 st.markdown("---")
