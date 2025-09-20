@@ -403,6 +403,7 @@ def parse_resume(file_path_or_buffer, file_type=None):
             "processing_date": datetime.now().isoformat(),
             "file_type": file_type
         },
+        "raw_text": text,  # Add raw text
         "sections": sections,
         "global_entities": global_entities,
         "section_entities": section_entities, 

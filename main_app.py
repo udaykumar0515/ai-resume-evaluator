@@ -70,6 +70,9 @@ with tab1:
             with st.spinner("Extracting text from resume..."):
                 resume_data = parser.parse_resume(tmp_file_path)
             
+            # Debug information
+            st.write("Debug - Resume data keys:", list(resume_data.keys()) if resume_data else "None")
+            
             if resume_data and resume_data.get('raw_text'):
                 st.success("✅ Resume processed successfully!")
                 
@@ -82,6 +85,8 @@ with tab1:
             
             else:
                 st.error("❌ Failed to extract text from the resume.")
+                if resume_data:
+                    st.write("Available data:", resume_data)
             
             # Clean up temporary file
             os.unlink(tmp_file_path)
