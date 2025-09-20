@@ -70,23 +70,72 @@ with tab1:
             with st.spinner("Extracting text from resume..."):
                 resume_data = parser.parse_resume(tmp_file_path)
             
-            # Debug information
-            st.write("Debug - Resume data keys:", list(resume_data.keys()) if resume_data else "None")
-            
-            if resume_data and resume_data.get('raw_text'):
+            if resume_data:
                 st.success("✅ Resume processed successfully!")
                 
-                # Show extracted text
-                st.markdown("### Extracted Resume Text")
-                st.text_area("", resume_data['raw_text'], height=400)
-                
                 # Show file info
-                st.info(f"File: {uploaded_file.name} | Characters: {len(resume_data['raw_text'])}")
+                st.info(f"File: {uploaded_file.name} | Processing Date: {resume_data.get('metadata', {}).get('processing_date', 'Unknown')}")
+                
+                # Show sections found
+                st.markdown("### 📋 Resume Sections Detected")
+                sections = resume_data.get('sections', {})
+                if sections:
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        st.write("**Sections Found:**")
+                        for i, section in enumerate(sections.keys(), 1):
+                            st.write(f"{i}. {section}")
+                    with col2:
+                        st.write("**Section Count:**")
+                        st.metric("Total Sections", len(sections))
+                
+                # Show contact information
+                contact = resume_data.get('contact', {})
+                if contact:
+                    st.markdown("### 👤 Contact Information")
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        if contact.get('name'):
+                            st.write(f"**Name:** {contact['name']}")
+                        if contact.get('email'):
+                            st.write(f"**Email:** {contact['email']}")
+                    with col2:
+                        if contact.get('phone'):
+                            st.write(f"**Phone:** {contact['phone']}")
+                        if contact.get('location'):
+                            st.write(f"**Location:** {contact['location']}")
+                
+                # Show skills
+                skills = resume_data.get('skills', [])
+                if skills:
+                    st.markdown("### 🛠️ Skills Detected")
+                    skills_text = ", ".join(skills[:10])  # Show first 10 skills
+                    st.write(skills_text)
+                    if len(skills) > 10:
+                        st.info(f"... and {len(skills) - 10} more skills")
+                
+                # Show education
+                education = resume_data.get('education', [])
+                if education:
+                    st.markdown("### 🎓 Education")
+                    for i, edu in enumerate(education[:3], 1):  # Show first 3
+                        st.write(f"{i}. {edu}")
+                
+                # Show projects
+                projects = resume_data.get('projects', [])
+                if projects:
+                    st.markdown("### 🚀 Projects")
+                    for i, proj in enumerate(projects[:3], 1):  # Show first 3
+                        st.write(f"{i}. {proj}")
+                
+                # Show raw text in collapsible section
+                if resume_data.get('raw_text'):
+                    with st.expander("📝 View Full Extracted Text"):
+                        st.text_area("", resume_data['raw_text'], height=300)
+                        st.info(f"Total Characters: {len(resume_data['raw_text'])}")
             
             else:
-                st.error("❌ Failed to extract text from the resume.")
-                if resume_data:
-                    st.write("Available data:", resume_data)
+                st.error("❌ Failed to process the resume.")
             
             # Clean up temporary file
             os.unlink(tmp_file_path)
