@@ -108,7 +108,7 @@ An intelligent platform that leverages **state-of-the-art AI and NLP techniques*
 1. **Clone the repository**
    ```bash
    git clone https://github.com/udaykumar0515/ai-resume-evaluator.git
-   cd resume-ranker
+   cd ai-resume-evaluator
    ```
 
 2. **Create virtual environment** (recommended)
@@ -124,7 +124,7 @@ An intelligent platform that leverages **state-of-the-art AI and NLP techniques*
 
 4. **Run the application**
    ```bash
-   streamlit run app.py
+   streamlit run main_app.py
    ```
 
 5. **Access the app**
@@ -158,7 +158,7 @@ An intelligent platform that leverages **state-of-the-art AI and NLP techniques*
 ```bash
 git clone https://github.com/udaykumar0515/ai-resume-evaluator.git
 cd ai-resume-evaluator
-pip install -r requirements-dev.txt
+pip install -r requirements.txt
 pytest tests/
 ```
 
