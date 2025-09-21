@@ -1,0 +1,114 @@
+Sample_ID,Job_Role,Actual_Score,Predicted_Score,Absolute_Error,Percentage_Error,Category_Actual,Category_Predicted
+1,Backend Developer,92,50,42,45.65217391304348,Excellent,Poor
+2,Backend Developer,90,50,40,44.44444444444444,Excellent,Poor
+3,Backend Developer,95,50,45,47.368421052631575,Excellent,Poor
+4,Backend Developer,90,50,40,44.44444444444444,Excellent,Poor
+5,Backend Developer,75,50,25,33.33333333333333,Good,Poor
+6,Backend Developer,70,50,20,28.57142857142857,Fair,Poor
+7,Backend Developer,65,50,15,23.076923076923077,Fair,Poor
+8,Backend Developer,60,50,10,16.666666666666664,Fair,Poor
+9,Backend Developer,50,50,0,0.0,Poor,Poor
+10,Backend Developer,45,50,5,11.11111111111111,Poor,Poor
+11,Backend Developer,40,50,10,25.0,Poor,Poor
+12,Backend Developer,30,50,20,66.66666666666666,Poor,Poor
+13,Backend Developer,20,50,30,150.0,Poor,Poor
+14,Backend Developer,10,50,40,400.0,Poor,Poor
+15,Backend Developer,5,50,45,900.0,Poor,Poor
+16,Backend Developer,98,50,48,48.97959183673469,Excellent,Poor
+17,Backend Developer,95,50,45,47.368421052631575,Excellent,Poor
+18,Backend Developer,90,50,40,44.44444444444444,Excellent,Poor
+19,Backend Developer,60,50,10,16.666666666666664,Fair,Poor
+20,Backend Developer,65,50,15,23.076923076923077,Fair,Poor
+21,Mobile App Developer (Android/iOS),92,50,42,45.65217391304348,Excellent,Poor
+22,Mobile App Developer (Android/iOS),95,50,45,47.368421052631575,Excellent,Poor
+23,Mobile App Developer (Android/iOS),90,50,40,44.44444444444444,Excellent,Poor
+24,Mobile App Developer (Android/iOS),90,50,40,44.44444444444444,Excellent,Poor
+25,Mobile App Developer (Android/iOS),75,50,25,33.33333333333333,Good,Poor
+26,Mobile App Developer (Android/iOS),70,50,20,28.57142857142857,Fair,Poor
+27,Mobile App Developer (Android/iOS),65,50,15,23.076923076923077,Fair,Poor
+28,Mobile App Developer (Android/iOS),60,50,10,16.666666666666664,Fair,Poor
+29,Mobile App Developer (Android/iOS),50,50,0,0.0,Poor,Poor
+30,Mobile App Developer (Android/iOS),20,50,30,150.0,Poor,Poor
+31,Mobile App Developer (Android/iOS),10,50,40,400.0,Poor,Poor
+32,Mobile App Developer (Android/iOS),98,50,48,48.97959183673469,Excellent,Poor
+33,Mobile App Developer (Android/iOS),92,50,42,45.65217391304348,Excellent,Poor
+34,Mobile App Developer (Android/iOS),90,50,40,44.44444444444444,Excellent,Poor
+35,UI/UX Designer,95,50,45,47.368421052631575,Excellent,Poor
+36,UI/UX Designer,92,50,42,45.65217391304348,Excellent,Poor
+37,UI/UX Designer,90,50,40,44.44444444444444,Excellent,Poor
+38,UI/UX Designer,85,50,35,41.17647058823529,Good,Poor
+39,UI/UX Designer,75,50,25,33.33333333333333,Good,Poor
+40,UI/UX Designer,70,50,20,28.57142857142857,Fair,Poor
+41,UI/UX Designer,45,50,5,11.11111111111111,Poor,Poor
+42,UI/UX Designer,40,50,10,25.0,Poor,Poor
+43,UI/UX Designer,20,50,30,150.0,Poor,Poor
+44,UI/UX Designer,15,50,35,233.33333333333334,Poor,Poor
+45,UI/UX Designer,98,50,48,48.97959183673469,Excellent,Poor
+46,UI/UX Designer,92,50,42,45.65217391304348,Excellent,Poor
+47,UI/UX Designer,88,50,38,43.18181818181818,Good,Poor
+48,UI/UX Designer,80,50,30,37.5,Good,Poor
+49,Full Stack Developer,95,50,45,47.368421052631575,Excellent,Poor
+50,Full Stack Developer,92,50,42,45.65217391304348,Excellent,Poor
+51,Full Stack Developer,90,50,40,44.44444444444444,Excellent,Poor
+52,Full Stack Developer,90,50,40,44.44444444444444,Excellent,Poor
+53,Full Stack Developer,85,50,35,41.17647058823529,Good,Poor
+54,Full Stack Developer,50,50,0,0.0,Poor,Poor
+55,Full Stack Developer,60,50,10,16.666666666666664,Fair,Poor
+56,Full Stack Developer,30,50,20,66.66666666666666,Poor,Poor
+57,Full Stack Developer,92,50,42,45.65217391304348,Excellent,Poor
+58,Full Stack Developer,88,50,38,43.18181818181818,Good,Poor
+59,Full Stack Developer,95,50,45,47.368421052631575,Excellent,Poor
+60,Full Stack Developer,55,50,5,9.090909090909092,Poor,Poor
+61,Machine Learning Engineer,98,50,48,48.97959183673469,Excellent,Poor
+62,Machine Learning Engineer,95,50,45,47.368421052631575,Excellent,Poor
+63,Machine Learning Engineer,90,50,40,44.44444444444444,Excellent,Poor
+64,Machine Learning Engineer,92,50,42,45.65217391304348,Excellent,Poor
+65,Machine Learning Engineer,75,50,25,33.33333333333333,Good,Poor
+66,Machine Learning Engineer,70,50,20,28.57142857142857,Fair,Poor
+67,Machine Learning Engineer,60,50,10,16.666666666666664,Fair,Poor
+68,Machine Learning Engineer,50,50,0,0.0,Poor,Poor
+69,Machine Learning Engineer,20,50,30,150.0,Poor,Poor
+70,Machine Learning Engineer,10,50,40,400.0,Poor,Poor
+71,Machine Learning Engineer,15,50,35,233.33333333333334,Poor,Poor
+72,Machine Learning Engineer,98,50,48,48.97959183673469,Excellent,Poor
+73,Machine Learning Engineer,92,50,42,45.65217391304348,Excellent,Poor
+74,Machine Learning Engineer,88,50,38,43.18181818181818,Good,Poor
+75,Full Stack Developer,90,50,40,44.44444444444444,Excellent,Poor
+76,Backend Developer,65,50,15,23.076923076923077,Fair,Poor
+77,UI/UX Designer,92,50,42,45.65217391304348,Excellent,Poor
+78,Mobile App Developer (Android/iOS),88,50,38,43.18181818181818,Good,Poor
+79,Machine Learning Engineer,90,50,40,44.44444444444444,Excellent,Poor
+80,Full Stack Developer,70,50,20,28.57142857142857,Fair,Poor
+81,Backend Developer,60,50,10,16.666666666666664,Fair,Poor
+82,UI/UX Designer,35,50,15,42.857142857142854,Poor,Poor
+83,Mobile App Developer (Android/iOS),92,50,42,45.65217391304348,Excellent,Poor
+84,Full Stack Developer,94,50,44,46.808510638297875,Excellent,Poor
+85,Machine Learning Engineer,65,50,15,23.076923076923077,Fair,Poor
+86,Backend Developer,75,50,25,33.33333333333333,Good,Poor
+87,Full Stack Developer,88,50,38,43.18181818181818,Good,Poor
+88,UI/UX Designer,90,50,40,44.44444444444444,Excellent,Poor
+89,Machine Learning Engineer,55,50,5,9.090909090909092,Poor,Poor
+90,Mobile App Developer (Android/iOS),80,50,30,37.5,Good,Poor
+91,Backend Developer,50,50,0,0.0,Poor,Poor
+92,Full Stack Developer,82,50,32,39.02439024390244,Good,Poor
+93,UI/UX Designer,10,50,40,400.0,Poor,Poor
+94,Mobile App Developer (Android/iOS),92,50,42,45.65217391304348,Excellent,Poor
+95,Backend Developer,68,50,18,26.47058823529412,Fair,Poor
+96,Machine Learning Engineer,60,50,10,16.666666666666664,Fair,Poor
+97,Full Stack Developer,90,50,40,44.44444444444444,Excellent,Poor
+98,UI/UX Designer,30,50,20,66.66666666666666,Poor,Poor
+99,Mobile App Developer (Android/iOS),75,50,25,33.33333333333333,Good,Poor
+100,Machine Learning Engineer,68,50,18,26.47058823529412,Fair,Poor
+101,Full Stack Developer,78,50,28,35.8974358974359,Good,Poor
+102,Backend Developer,40,50,10,25.0,Poor,Poor
+103,UI/UX Designer,88,50,38,43.18181818181818,Good,Poor
+104,Mobile App Developer (Android/iOS),88,50,38,43.18181818181818,Good,Poor
+105,Machine Learning Engineer,82,50,32,39.02439024390244,Good,Poor
+106,Full Stack Developer,90,50,40,44.44444444444444,Excellent,Poor
+107,Backend Developer,55,50,5,9.090909090909092,Poor,Poor
+108,UI/UX Designer,94,50,44,46.808510638297875,Excellent,Poor
+109,Mobile App Developer (Android/iOS),62,50,12,19.35483870967742,Fair,Poor
+110,Full Stack Developer,88,50,38,43.18181818181818,Good,Poor
+111,Machine Learning Engineer,78,50,28,35.8974358974359,Good,Poor
+112,Backend Developer,96,50,46,47.91666666666667,Excellent,Poor
+113,UI/UX Designer,97,50,47,48.45360824742268,Excellent,Poor

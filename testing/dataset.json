@@ -1,0 +1,567 @@
+[
+{
+"job_role": "Backend Developer",
+"resume_text": "Name: Rahul SharmanEmail: [rahul.sharma.dev@example.com](mailto:rahul.sharma.dev@example.com)nPhone: +91-98765-10101nEducation: B.Tech in Computer Science, IIT Roorkee (2018)nSkills: Java, Spring Boot, PostgreSQL, Redis, REST APIs, Kafka, DockernProjects: OrderStream — Built a Spring Boot microservice for order processing with Kafka for eventing; supported 150k orders/day and reduced processing latency by 35%.nExperience: 3 years as Backend Engineer at PayWave (fintech) building payment reconciliation pipelines and APIs.",
+"match_score": 92
+},
+{
+"job_role": "Backend Developer",
+"resume_text": "Name: Kavita RaonEmail: [kavita.rao@example.com](mailto:kavita.rao@example.com)nPhone: +91-91234-20202nEducation: M.S. Computer Science, University of Texas at Dallas (2020)nSkills: Node.js, Express, MongoDB, GraphQL, AWS Lambda, ServerlessnProjects: Chatlytics — Designed a serverless chat ingestion backend using AWS Lambda + DynamoDB; processed 2M messages/day and enabled analytics pipeline.nExperience: 2 years as Backend Developer at MsgLabs (SaaS) working on API design and DB schema optimization.",
+"match_score": 90
+},
+{
+"job_role": "Backend Developer",
+"resume_text": "Name: Daniel ParknEmail: [daniel.park@example.com](mailto:daniel.park@example.com)nPhone: +1-555-30303nEducation: B.Sc. Computer Engineering, UC Irvine (2016)nSkills: Go, gRPC, MySQL, Prometheus, Kubernetes, CI/CDnProjects: MetricsHub — Implemented Go microservices with gRPC for metrics ingestion; containerized with Kubernetes and added Prometheus monitoring.nExperience: 5 years as Backend Engineer at CloudEdge (cloud infra), focused on scalable telemetry services.",
+"match_score": 95
+},
+{
+"job_role": "Backend Developer",
+"resume_text": "Name: Meera IyernEmail: [meera.iyer@example.com](mailto:meera.iyer@example.com)nPhone: +91-99887-40404nEducation: B.Tech in Information Technology, VIT Chennai (2017)nSkills: Python, Django, PostgreSQL, Celery, RabbitMQ, RedisnProjects: EduConnect — Built Django APIs and background workers for assignment grading; reduced queue backlog by 60%.nExperience: 4 years at LearnWell (edtech) as Backend Developer maintaining monolithic Django app and migrating to microservices.",
+"match_score": 90
+},
+{
+"job_role": "Backend Developer",
+"resume_text": "Name: Omar KhalidnEmail: [omar.khalid@example.com](mailto:omar.khalid@example.com)nPhone: +971-50-505050nEducation: B.Tech Computer Science, NED University (2015)nSkills: PHP, Laravel, MySQL, REST, RedisnProjects: ShopCart — Built Laravel backend for e-commerce handling inventory sync and promotions engine.nExperience: 6 years as Backend Developer in e-commerce startups.",
+"match_score": 75
+},
+{
+"job_role": "Backend Developer",
+"resume_text": "Name: Lina GomeznEmail: [lina.gomez@example.com](mailto:lina.gomez@example.com)nPhone: +52-55-606060nEducation: B.Sc. Software Engineering, Tecnológico de Monterrey (2019)nSkills: Ruby on Rails, PostgreSQL, Sidekiq, ElasticSearchnProjects: Recruitly — Rails backend for job matching with ElasticSearch-based candidate search.nExperience: 3 years at TalentMatch as Backend Engineer.",
+"match_score": 70
+},
+{
+"job_role": "Backend Developer",
+"resume_text": "Name: Marcus LinEmail: [marcus.li@example.com](mailto:marcus.li@example.com)nPhone: +86-10-70707070nEducation: B.Eng Computer Science, Tsinghua University (2014)nSkills: Java, Hibernate, Oracle DB, SOAP, JenkinsnProjects: LegacyBank — Maintained and refactored legacy banking services exposing SOAP APIs and migrating to REST.nExperience: 8 years in banking software, deep in monoliths.",
+"match_score": 65
+},
+{
+"job_role": "Backend Developer",
+"resume_text": "Name: Priya MenonnEmail: [priya.menon@example.com](mailto:priya.menon@example.com)nPhone: +91-94444-80808nEducation: Diploma in Computer Applications, Anna University (2013)nSkills: C#, .NET Framework, SQL Server, IISnProjects: ClinicPro — Developed appointment and billing backend for clinics using ASP.NET.nExperience: 7 years as Backend Developer for healthcare-focused SMEs.",
+"match_score": 60
+},
+{
+"job_role": "Backend Developer",
+"resume_text": "Name: Tomasz NowaknEmail: [tomasz.nowak@example.com](mailto:tomasz.nowak@example.com)nPhone: +48-22-909090nEducation: M.Sc. Computer Science, University of Warsaw (2021)nSkills: Python, Flask, SQLite, DockernProjects: PollSmall — Built a Flask-based polling app for university clubs; single-instance deployment on Docker.nExperience: 1 year internship + freelance backend projects.",
+"match_score": 50
+},
+{
+"job_role": "Backend Developer",
+"resume_text": "Name: Fatima BenalinEmail: [fatima.benali@example.com](mailto:fatima.benali@example.com)nPhone: +212-600-111111nEducation: B.Tech Information Systems, Al Akhawayn University (2019)nSkills: JavaScript, Express, Firebase, HTML/CSSnProjects: LocalEvents — Simple event listing backend using Firebase Realtime Database.nExperience: 2 years as full-stack generalist with majority frontend work.",
+"match_score": 45
+},
+{
+"job_role": "Backend Developer",
+"resume_text": "Name: John EdwardsnEmail: [john.edwards@example.com](mailto:john.edwards@example.com)nPhone: +1-555-80808nEducation: B.A. Economics, State University (2012)nSkills: Excel, VBA, Basic SQLnProjects: SalesDashboard — Automated sales reports using Excel VBA; connected to a local MySQL for imports.nExperience: 4 years in business analytics, limited backend development exposure.",
+"match_score": 40
+},
+{
+"job_role": "Backend Developer",
+"resume_text": "Name: Elena PetrovanEmail: [elena.petrova@example.com](mailto:elena.petrova@example.com)nPhone: +7-495-121212nEducation: B.Sc. Mathematics, Moscow State University (2011)nSkills: MATLAB, Fortran, Basic PythonnProjects: SimulationSuite — Numerical simulations and batch scripts for research group.nExperience: 9 years in scientific computing; little web/backend experience.",
+"match_score": 30
+},
+{
+"job_role": "Backend Developer",
+"resume_text": "Name: Kofi MensahnEmail: [kofi.mensah@example.com](mailto:kofi.mensah@example.com)nPhone: +233-20-1234567nEducation: High School DiplomanSkills: WordPress, HTML, Basic PHPnProjects: LocalShop — Set up WordPress e-commerce site with plugins for a local retailer.nExperience: 3 years doing website setups; no backend engineering experience.",
+"match_score": 20
+},
+{
+"job_role": "Backend Developer",
+"resume_text": "Name: Sarah NgnEmail: [sarah.ng@example.com](mailto:sarah.ng@example.com)nPhone: +65-9123-3333nEducation: B.Sc. Biology, NUS (2010)nSkills: Laboratory techniques, R (basic)nProjects: LabDB — Maintained lab sample tracker built by vendor.nExperience: 10 years in laboratory management; no software engineering experience.",
+"match_score": 10
+},
+{
+"job_role": "Backend Developer",
+"resume_text": "Name: Victor SilvanEmail: [victor.silva@example.com](mailto:victor.silva@example.com)nPhone: +55-21-7777777nEducation: B.Tech Mechanical Engineering, UFRJ (2014)nSkills: SolidWorks, CAD, PLC programmingnProjects: FactoryAutomation — Wrote PLC scripts for conveyor control.nExperience: 6 years in manufacturing; unrelated to backend development.",
+"match_score": 5
+},
+{
+"job_role": "Backend Developer",
+"resume_text": "Name: Aditi VermanEmail: [aditi.verma@example.com](mailto:aditi.verma@example.com)nPhone: +91-98000-66666nEducation: B.Tech Computer Science, IIIT Hyderabad (2016)nSkills: Java, Spring Boot, Microservices, AWS, PostgreSQL, Docker, TerraformnProjects: ShopScale — Developed microservices for inventory, checkout, and pricing; deployed on AWS using Terraform; autoscaling supported 200k concurrent users during sale events.nExperience: 6 years as Senior Backend Engineer at RetailCloud; led migration from monolith to microservices.",
+"match_score": 98
+},
+{
+"job_role": "Backend Developer",
+"resume_text": "Name: Leo MüllernEmail: [leo.mueller@example.com](mailto:leo.mueller@example.com)nPhone: +49-30-123456nEducation: M.Sc. Distributed Systems, TU Berlin (2017)nSkills: Scala, Akka, Cassandra, Kafka, Kubernetes, HelmnProjects: StreamVault — High-throughput event processing platform in Scala with Akka Streams and Cassandra for storage; achieved sub-100ms tail latency.nExperience: 5 years building data-intensive backend systems.",
+"match_score": 95
+},
+{
+"job_role": "Backend Developer",
+"resume_text": "Name: Noor Al-FarsinEmail: [noor.alfarsi@example.com](mailto:noor.alfarsi@example.com)nPhone: +971-50-121212nEducation: B.Sc. Computer Science, American University of Sharjah (2018)nSkills: Python, FastAPI, PostgreSQL, Celery, Docker, GCPnProjects: HealthSync — Designed FastAPI services for syncing patient records between clinics; implemented background workers with Celery and Redis.nExperience: 4 years as Backend Developer in healthcare tech.",
+"match_score": 90
+},
+{
+"job_role": "Backend Developer",
+"resume_text": "Name: Ben CarternEmail: [ben.carter@example.com](mailto:ben.carter@example.com)nPhone: +1-555-909090nEducation: Bootcamp: Backend Engineering (2022)nSkills: Node.js, Express, MySQL, JWT, OAuthnProjects: Meetify — Built REST APIs for events booking; implemented auth and payment integration.nExperience: 1 year as Backend Developer at small startup.",
+"match_score": 60
+},
+{
+"job_role": "Backend Developer",
+"resume_text": "Name: Ananya GuptanEmail: [ananya.gupta@example.com](mailto:ananya.gupta@example.com)nPhone: +91-77777-12121nEducation: B.Tech Computer Science, Amity University (2020)nSkills: Python, Flask, MongoDB, DockernProjects: FoodFinder — Prototype backend for restaurant search using Flask and MongoDB; solo project for university.nExperience: Internship (6 months) + freelancing projects.",
+"match_score": 65
+},
+{
+"job_role": "Mobile App Developer (Android/iOS)",
+"resume_text": "Name: Siddharth NairnEmail: [siddharth.nair@example.com](mailto:siddharth.nair@example.com)nPhone: +91-98888-12121nEducation: B.Tech Electronics & Communication, NIT Calicut (2017)nSkills: Kotlin, Android SDK, Jetpack Compose, MVVM, REST APIs, FirebasenProjects: QuickCourier — Android app for delivery tracking, implemented offline sync, reduced crash rate by 40%.nExperience: 4 years as Android Developer at FastShip (logistics).",
+"match_score": 92
+},
+{
+"job_role": "Mobile App Developer (Android/iOS)",
+"resume_text": "Name: Emily ZhangnEmail: [emily.zhang@example.com](mailto:emily.zhang@example.com)nPhone: +1-555-222222nEducation: M.Sc. Human-Computer Interaction, Carnegie Mellon (2020)nSkills: Swift, SwiftUI, Combine, Core Data, MapKitnProjects: TrailMate — iOS hiking app with offline maps and elevation charts; integrated Core Location and improved battery usage.nExperience: 2 years iOS development at TrailCorp.",
+"match_score": 95
+},
+{
+"job_role": "Mobile App Developer (Android/iOS)",
+"resume_text": "Name: Carlos MendesnEmail: [carlos.mendes@example.com](mailto:carlos.mendes@example.com)nPhone: +55-11-333333nEducation: B.Sc. Computer Science, USP (2016)nSkills: React Native, Redux, TypeScript, Android/iOS deployment, FirebasenProjects: FoodFlash — Cross-platform food delivery app built with React Native and Firebase; handled push notifications and geolocation.nExperience: 5 years mobile dev including native and cross-platform at FoodieTech.",
+"match_score": 90
+},
+{
+"job_role": "Mobile App Developer (Android/iOS)",
+"resume_text": "Name: Sahana ReddynEmail: [sahana.reddy@example.com](mailto:sahana.reddy@example.com)nPhone: +91-99900-44444nEducation: B.Tech Computer Science, Osmania University (2019)nSkills: Flutter, Dart, REST APIs, Provider, SQLitenProjects: ClassTrack — Flutter-based attendance and assignment app for schools; offline-first design and local DB sync.nExperience: 3 years developing cross-platform mobile apps.",
+"match_score": 90
+},
+{
+"job_role": "Mobile App Developer (Android/iOS)",
+"resume_text": "Name: Ahmed HassannEmail: [ahmed.hassan@example.com](mailto:ahmed.hassan@example.com)nPhone: +20-100-505050nEducation: B.Sc. Software Engineering, AUC (2015)nSkills: Java (Android), XML layouts, Retrofit, RxJavanProjects: MetroGuide — Android-only transit planner with route optimization and live ETA; integrated 3rd-party transit APIs.nExperience: 6 years at CityApps building consumer mobile apps.",
+"match_score": 75
+},
+{
+"job_role": "Mobile App Developer (Android/iOS)",
+"resume_text": "Name: Yuki TanakanEmail: [yuki.tanaka@example.com](mailto:yuki.tanaka@example.com)nPhone: +81-80-1234-5678nEducation: B.A. Graphic Design, Tama Art University (2014)nSkills: Basic Swift, UI design, Adobe XDnProjects: PhotoFilter — Prototype iOS photo editor focusing on filters and simple UI animations.nExperience: 2 years as mobile UI/UX contributor; limited native development.",
+"match_score": 70
+},
+{
+"job_role": "Mobile App Developer (Android/iOS)",
+"resume_text": "Name: Mark ThompsonnEmail: [mark.thompson@example.com](mailto:mark.thompson@example.com)nPhone: +44-7700-888888nEducation: B.Sc. Computer Science, University of Manchester (2018)nSkills: Ionic, Angular, Cordova, CSSnProjects: QuickSurvey — Hybrid mobile app for surveys; used Cordova plugins for camera and storage.nExperience: 3 years building hybrid apps for market research clients.",
+"match_score": 65
+},
+{
+"job_role": "Mobile App Developer (Android/iOS)",
+"resume_text": "Name: Priyanka DasnEmail: [priyanka.das@example.com](mailto:priyanka.das@example.com)nPhone: +91-98111-22222nEducation: Diploma in Mobile App Dev (2016)nSkills: Android (Java), SQLite, Google Maps APInProjects: LocalEats — Android app listing nearby eateries; implemented offline caching and search.nExperience: 5 years mobile maintenance and client projects.",
+"match_score": 60
+},
+{
+"job_role": "Mobile App Developer (Android/iOS)",
+"resume_text": "Name: Noah WilliamsnEmail: [noah.williams@example.com](mailto:noah.williams@example.com)nPhone: +1-555-444444nEducation: Bootcamp: Mobile Dev (2023)nSkills: Flutter (beginner), Firebase (auth + firestore)nProjects: StudyBuddy — Personal project: notes app built in Flutter with Firebase auth.nExperience: 1 year freelance mobile projects; portfolio apps.",
+"match_score": 50
+},
+{
+"job_role": "Mobile App Developer (Android/iOS)",
+"resume_text": "Name: Aisha KhannEmail: [aisha.khan@example.com](mailto:aisha.khan@example.com)nPhone: +92-300-1234567nEducation: B.Sc. Zoology (no CS degree)nSkills: Microsoft Office, Social MedianProjects: EventPromo — Managed social presence for an app; no development involvement.nExperience: 4 years in marketing for tech startups; not a developer.",
+"match_score": 20
+},
+{
+"job_role": "Mobile App Developer (Android/iOS)",
+"resume_text": "Name: Viktor SokolovnEmail: [viktor.sokolov@example.com](mailto:viktor.sokolov@example.com)nPhone: +7-921-3333333nEducation: B.Eng Mechatronics (2012)nSkills: Embedded C, RTOSnProjects: DeviceController — Firmware for IoT controller with BLE; no mobile app work.nExperience: 8 years embedded systems engineer.",
+"match_score": 10
+},
+{
+"job_role": "Mobile App Developer (Android/iOS)",
+"resume_text": "Name: Leena KapoornEmail: [leena.kapoor@example.com](mailto:leena.kapoor@example.com)nPhone: +91-91111-33333nEducation: M.Tech Computer Science, IIIT Delhi (2019)nSkills: Kotlin, Coroutines, Jetpack Compose, Android Architecture Components, Firebase, CI/CD (Bitrise)nProjects: MedAlert — Android app for medication reminders with secure sync to cloud; implemented WorkManager for reliable background tasks; reduced missed reminders by 48% during trials.nExperience: 4 years as Android Engineer at HealthWave; led feature work and performance tuning.",
+"match_score": 98
+},
+{
+"job_role": "Mobile App Developer (Android/iOS)",
+"resume_text": "Name: Daniel O'ConnornEmail: [daniel.oconnor@example.com](mailto:daniel.oconnor@example.com)nPhone: +353-87-5555555nEducation: B.Sc. Software Engineering, Trinity College Dublin (2016)nSkills: Swift, Objective-C, UIKit, CoreData, In-App PurchasesnProjects: PocketTutor — iOS tutoring app with video lessons and subscriptions; implemented secure in-app purchases and offline caching.nExperience: 5 years iOS development for edtech.",
+"match_score": 92
+},
+{
+"job_role": "Mobile App Developer (Android/iOS)",
+"resume_text": "Name: Sofia RomanonEmail: [sofia.romano@example.com](mailto:sofia.romano@example.com)nPhone: +39-345-7777777nEducation: B.Sc. Computer Science, Politecnico di Milano (2020)nSkills: React Native, TypeScript, Expo, GraphQLnProjects: RideShareX — Implemented real-time tracking and driver matching in React Native; integrated GraphQL backend.nExperience: 3 years building cross-platform apps in mobility space.",
+"match_score": 90
+},
+{
+"job_role": "UI/UX Designer",
+"resume_text": "Name: Arjun BhatnEmail: [arjun.bhat.design@example.com](mailto:arjun.bhat.design@example.com)nPhone: +91-99988-22222nEducation: B.Des Industrial Design, NID (2016)nSkills: Figma, Sketch, Adobe XD, User Research, Interaction Design, PrototypingnProjects: PayEase UI Overhaul — Led end-to-end redesign of payments app, improving conversion by 22% after A/B testing.nExperience: 5 years as UI/UX Designer in fintech and e-commerce.",
+"match_score": 95
+},
+{
+"job_role": "UI/UX Designer",
+"resume_text": "Name: Maria LopeznEmail: [maria.lopez.design@example.com](mailto:maria.lopez.design@example.com)nPhone: +34-600-123456nEducation: M.Des Interaction Design, Elisava (2019)nSkills: Figma, User Flows, Usability Testing, Design Systems, HTML/CSS (basic)nProjects: HealthPortal — Redesigned patient portal with new IA and accessible components; usability score improved from 58 to 82.nExperience: 3 years as UX Designer at HealthSolutions.",
+"match_score": 92
+},
+{
+"job_role": "UI/UX Designer",
+"resume_text": "Name: Jack LiunEmail: [jack.liu@example.com](mailto:jack.liu@example.com)nPhone: +86-138-44444444nEducation: B.A. Graphic Design, Central Academy of Fine Arts (2015)nSkills: Adobe Creative Suite, Motion Design, Prototyping, User ResearchnProjects: GameHub UI — Designed onboarding flows and store UI for mobile gaming portal; increased retention by 12%.nExperience: 6 years as visual/UI designer across gaming and media.",
+"match_score": 90
+},
+{
+"job_role": "UI/UX Designer",
+"resume_text": "Name: Nisha PatelnEmail: [nisha.patel@example.com](mailto:nisha.patel@example.com)nPhone: +91-88000-55555nEducation: Certificate in UX Design, General Assembly (2021)nSkills: Figma, Axure, Wireframing, Accessibility, Research SynthesisnProjects: ShopLite — Wireframed checkout flows and ran remote usability tests; simplified checkout reduced steps by 30%.nExperience: 2 years at an e-commerce startup as product designer.",
+"match_score": 85
+},
+{
+"job_role": "UI/UX Designer",
+"resume_text": "Name: Laurent DuboisnEmail: [laurent.dubois@example.com](mailto:laurent.dubois@example.com)nPhone: +33-6-66666666nEducation: B.Des Visual Communication, ENSAD (2014)nSkills: Sketch, Illustrator, Brand design, PrototypingnProjects: BistroBrand — Brand and mobile UI for restaurant chain; produced style guide and reusable components.nExperience: 7 years as designer for hospitality and retail clients.",
+"match_score": 75
+},
+{
+"job_role": "UI/UX Designer",
+"resume_text": "Name: Hana KimnEmail: [hana.kim@example.com](mailto:hana.kim@example.com)nPhone: +82-10-1234-5678nEducation: B.F.A. Communication Design, Kookmin University (2018)nSkills: Figma, Principle, Motion, HTML/CSS (familiar)nProjects: TutorConnect — Designed responsive web and mobile prototypes; collaborated with engineers to implement animations.nExperience: 4 years in product teams at edtech startups.",
+"match_score": 70
+},
+{
+"job_role": "UI/UX Designer",
+"resume_text": "Name: Daniel MartinsnEmail: [daniel.martins@example.com](mailto:daniel.martins@example.com)nPhone: +55-21-6666666nEducation: B.Com (no design degree)nSkills: Canva, Basic PhotoshopnProjects: EventPoster — Created marketing creatives for events; no UX research experience.nExperience: 3 years in marketing and visual content creation.",
+"match_score": 45
+},
+{
+"job_role": "UI/UX Designer",
+"resume_text": "Name: Prieta SennEmail: [prieta.sen@example.com](mailto:prieta.sen@example.com)nPhone: +91-77222-88888nEducation: Diploma in Fine Arts (2012)nSkills: Photoshop, IllustrationnProjects: Portfolio — Personal portfolio with case studies; lacked research and testing artifacts.nExperience: Freelance graphic designer for 6 years.",
+"match_score": 40
+},
+{
+"job_role": "UI/UX Designer",
+"resume_text": "Name: Omar RuiznEmail: [omar.ruiz@example.com](mailto:omar.ruiz@example.com)nPhone: +52-1-55-7777777nEducation: B.Sc. Computer Science (2010)nSkills: Java, C++nProjects: Internal tools developer; no UX-focused work.nExperience: 10 years software engineering, little UI/UX practice.",
+"match_score": 20
+},
+{
+"job_role": "UI/UX Designer",
+"resume_text": "Name: Keiko SaitonEmail: [keiko.saito@example.com](mailto:keiko.saito@example.com)nPhone: +81-90-7777-7777nEducation: B.Des Toy Design (2013)nSkills: Sketching, Model makingnProjects: Toy prototypes and packaging; not digital UX.nExperience: 8 years in product design, physical goods.",
+"match_score": 15
+},
+{
+"job_role": "UI/UX Designer",
+"resume_text": "Name: Alex RomeronEmail: [alex.romero@example.com](mailto:alex.romero@example.com)nPhone: +1-555-121212nEducation: M.Des Interaction Design, Pratt Institute (2019)nSkills: Figma, Design Systems, Usability Testing, Accessibility, Prototyping (Framer)nProjects: StreamFlow — Led redesign of streaming app's navigation and content discovery; introduced component library and accessibility improvements, increasing average session length by 18%.nExperience: 4 years as product designer at MediaStream.",
+"match_score": 98
+},
+{
+"job_role": "UI/UX Designer",
+"resume_text": "Name: Sofia IvanovanEmail: [sofia.ivanova@example.com](mailto:sofia.ivanova@example.com)nPhone: +7-903-8888888nEducation: B.A. Psychology, Higher School of Economics (2015)nSkills: User Research, Persona Creation, FigmanProjects: ElderCare App — Conducted contextual interviews and prototype testing for senior-friendly healthcare app; recommended accessibility changes implemented by devs.nExperience: 5 years combining research and interaction design.",
+"match_score": 92
+},
+{
+"job_role": "UI/UX Designer",
+"resume_text": "Name: Miguel FernandeznEmail: [miguel.fernandez@example.com](mailto:miguel.fernandez@example.com)nPhone: +34-600-987654nEducation: B.Des Visual Communication, UPV (2012)nSkills: Adobe XD, Motion Graphics, PrototypingnProjects: MarketWatch Dashboard — Designed dashboard layouts and interactive prototypes for sales analytics.nExperience: 8 years in B2B product design.",
+"match_score": 88
+},
+{
+"job_role": "UI/UX Designer",
+"resume_text": "Name: Ria KapoornEmail: [ria.kapoor@example.com](mailto:ria.kapoor@example.com)nPhone: +91-99333-44444nEducation: Certificate in UX (2020)nSkills: Figma, Wireframing, Usability Testing, HTML/CSS basicsnProjects: QuickMed — End-to-end mobile UX including flows, wireframes, and prototypes; collaborated with engineering to ship features.nExperience: 3 years at startup product teams.",
+"match_score": 80
+},
+{
+"job_role": "Full Stack Developer",
+"resume_text": "Name: Harish KulkarninEmail: [harish.kulkarni@example.com](mailto:harish.kulkarni@example.com)nPhone: +91-98222-99999nEducation: B.Tech Computer Science, COEP Pune (2015)nSkills: React, Node.js, Express, MongoDB, Docker, AWSnProjects: CourseConnect — Full-stack platform for online courses; built frontend in React and REST APIs in Node; implemented CI/CD and dockerized services.nExperience: 6 years as Full Stack Developer at EdTech firm.",
+"match_score": 95
+},
+{
+"job_role": "Full Stack Developer",
+"resume_text": "Name: Emma BrownnEmail: [emma.brown@example.com](mailto:emma.brown@example.com)nPhone: +1-555-777777nEducation: M.Sc. Computer Science, University of Toronto (2018)nSkills: Django, React, PostgreSQL, Redis, CelerynProjects: TicketFlow — Built full-stack ticketing app with Django REST API and React SPA; implemented real-time seat availability with Redis pub/sub.nExperience: 4 years as Full Stack Engineer in events tech.",
+"match_score": 92
+},
+{
+"job_role": "Full Stack Developer",
+"resume_text": "Name: Marco RossinEmail: [marco.rossi@example.com](mailto:marco.rossi@example.com)nPhone: +39-345-6666666nEducation: B.Sc. Computer Science, University of Bologna (2016)nSkills: Angular, Java Spring Boot, MySQL, Docker, JenkinsnProjects: AutoManage — Built admin portal (Angular) and Spring Boot backend for vehicle fleet management; improved reporting speed by 30%.nExperience: 5 years as Full Stack at automotive SaaS.",
+"match_score": 90
+},
+{
+"job_role": "Full Stack Developer",
+"resume_text": "Name: Jia ChennEmail: [jia.chen@example.com](mailto:jia.chen@example.com)nPhone: +86-139-11112222nEducation: B.Eng Software Engineering, Shanghai Jiao Tong University (2020)nSkills: MERN stack (MongoDB, Express, React, Node), TypeScript, AWSnProjects: SocialSnap — Built social photo-sharing app with image upload, feed pagination, and likes/comments; used S3 for storage and serverless thumbnails.nExperience: 3 years full-stack at social media startup.",
+"match_score": 90
+},
+{
+"job_role": "Full Stack Developer",
+"resume_text": "Name: Zoe MillernEmail: [zoe.miller@example.com](mailto:zoe.miller@example.com)nPhone: +44-7711-123456nEducation: B.Sc. Information Systems, UCL (2014)nSkills: PHP, Laravel, Vue.js, MySQLnProjects: MarketPlace — End-to-end marketplace with vendor onboarding, product catalog, and order management; integrated Stripe payments.nExperience: 7 years full-stack e-commerce development.",
+"match_score": 85
+},
+{
+"job_role": "Full Stack Developer",
+"resume_text": "Name: Arun DasnEmail: [arun.das@example.com](mailto:arun.das@example.com)nPhone: +91-77000-33333nEducation: Diploma in Web Dev (2013)nSkills: HTML/CSS, jQuery, PHPnProjects: LocalBiz — Small business websites and basic CRUD backends.nExperience: 8 years in web development for SMBs.",
+"match_score": 50
+},
+{
+"job_role": "Full Stack Developer",
+"resume_text": "Name: Fatou DiopnEmail: [fatou.diop@example.com](mailto:fatou.diop@example.com)nPhone: +221-77-1234567nEducation: B.Sc. Computer Science, Cheikh Anta Diop University (2019)nSkills: React (basic), Flask (basic), PostgreSQLnProjects: VolunteerMatch — Prototype connecting volunteers to NGOs; minimal features built by a small team.nExperience: 2 years as junior full-stack and internships.",
+"match_score": 60
+},
+{
+"job_role": "Full Stack Developer",
+"resume_text": "Name: Isaac OseinEmail: [isaac.osei@example.com](mailto:isaac.osei@example.com)nPhone: +233-24-8888888nEducation: B.Sc. Economics (2012)nSkills: Excel, VBA, Basic HTMLnProjects: Internal reporting dashboards in Excel; small web forms using Google Forms.nExperience: 6 years in business analysis, limited dev experience.",
+"match_score": 30
+},
+{
+"job_role": "Full Stack Developer",
+"resume_text": "Name: Laila HaddadnEmail: [laila.haddad@example.com](mailto:laila.haddad@example.com)nPhone: +212-6-66666666nEducation: B.Tech Computer Science, INPT (2018)nSkills: Ruby on Rails, React, PostgreSQL, Redis, Sidekiq, AWSnProjects: TutorLink — Built Rails API and React frontend for tutor-student matching; implemented background jobs for notifications and payment sync.nExperience: 5 years as Full Stack engineer at e-learning startup.",
+"match_score": 92
+},
+{
+"job_role": "Full Stack Developer",
+"resume_text": "Name: Peter NovaknEmail: [peter.novak@example.com](mailto:peter.novak@example.com)nPhone: +420-123-456-789nEducation: M.Sc. Computer Science, CTU Prague (2017)nSkills: Node.js, Next.js, MongoDB, Vercel, DockernProjects: RealEstatePro — Server-side rendered portal with search indexing and image optimization pipelines.nExperience: 4 years as Full Stack at proptech company.",
+"match_score": 88
+},
+{
+"job_role": "Full Stack Developer",
+"resume_text": "Name: Kavya SundarnEmail: [kavya.sundar@example.com](mailto:kavya.sundar@example.com)nPhone: +91-98877-33322nEducation: B.Tech Computer Science, NIT Trichy (2016)nSkills: React, GraphQL, Apollo, Node.js, PostgreSQL, KubernetesnProjects: FitTrack — Built API gateways and frontend dashboards; implemented GraphQL subscriptions for real-time updates and containerized services for staging/production parity.nExperience: 6 years as Full Stack Engineer in health-tech.",
+"match_score": 95
+},
+{
+"job_role": "Full Stack Developer",
+"resume_text": "Name: Omar El-SayednEmail: [omar.elsayed@example.com](mailto:omar.elsayed@example.com)nPhone: +20-12-3456789nEducation: B.Sc. Computer Science, Cairo University (2014)nSkills: ASP.NET, AngularJS (legacy), SQL ServernProjects: ERP-Lite — Maintained legacy ERP modules; migrated parts to newer stack.nExperience: 8 years in enterprise application maintenance.",
+"match_score": 55
+},
+{
+"job_role": "Machine Learning Engineer",
+"resume_text": "Name: Dr. Neel JoshinEmail: [neel.joshi.ml@example.com](mailto:neel.joshi.ml@example.com)nPhone: +91-98100-11111nEducation: Ph.D. Computer Science (ML), IIT Bombay (2021)nSkills: Python, PyTorch, TensorFlow, NLP, Transformers, ML Ops, Docker, KubernetesnProjects: DocSense — Built transformer-based document understanding pipeline achieving 88% F1 on extraction tasks; deployed inference using TorchServe and Kubernetes.nExperience: 3 years (research + industry) developing production ML systems.",
+"match_score": 98
+},
+{
+"job_role": "Machine Learning Engineer",
+"resume_text": "Name: Grace LeenEmail: [grace.lee@example.com](mailto:grace.lee@example.com)nPhone: +1-555-666666nEducation: M.S. Data Science, NYU (2019)nSkills: Python, scikit-learn, TensorFlow, SQL, Feature Engineering, Model EvaluationnProjects: ChurnPredict — Built a gradient boosting model for churn prediction; increased retention campaign ROI by 15%.nExperience: 4 years ML engineer at subscription services.",
+"match_score": 95
+},
+{
+"job_role": "Machine Learning Engineer",
+"resume_text": "Name: Omar FarouknEmail: [omar.farouk.ml@example.com](mailto:omar.farouk.ml@example.com)nPhone: +971-50-999999nEducation: B.Sc. Computer Science, American University of Beirut (2018)nSkills: Python, Keras, OpenCV, CNNs, Data AugmentationnProjects: DefectDetect — Trained CNN model for visual defect detection in manufacturing with 94% accuracy; set up webcam inference on edge devices.nExperience: 3 years at industrial automation startup.",
+"match_score": 90
+},
+{
+"job_role": "Machine Learning Engineer",
+"resume_text": "Name: Hannah SchultznEmail: [hannah.schultz@example.com](mailto:hannah.schultz@example.com)nPhone: +49-151-7777777nEducation: M.Sc. Machine Learning, University of Edinburgh (2020)nSkills: PyTorch, NLP, Transformers, Docker, AWS SagemakernProjects: ConversaBot — Fine-tuned transformer models for customer support triage; integrated model into pipeline with auto-scaling inference endpoints.nExperience: 3 years in applied NLP at customer service tech.",
+"match_score": 92
+},
+{
+"job_role": "Machine Learning Engineer",
+"resume_text": "Name: Miguel SotonEmail: [miguel.soto@example.com](mailto:miguel.soto@example.com)nPhone: +52-1-55-3333333nEducation: B.Sc. Statistics, UNAM (2015)nSkills: R, Python (basic), Regression, Time SeriesnProjects: SalesForecast — Built ARIMA and regression baselines for short-term sales forecasting.nExperience: 6 years in analytics and predictive modeling.",
+"match_score": 75
+},
+{
+"job_role": "Machine Learning Engineer",
+"resume_text": "Name: Amina YusufnEmail: [amina.yusuf@example.com](mailto:amina.yusuf@example.com)nPhone: +234-80-4444444nEducation: B.Tech Computer Engineering, Covenant University (2017)nSkills: Python, scikit-learn, SQL, Basic TensorFlownProjects: FraudRules — Built rule-based and basic ML classifiers for fraud detection; maintained data pipelines.nExperience: 4 years in analytics and ML operations support.",
+"match_score": 70
+},
+{
+"job_role": "Machine Learning Engineer",
+"resume_text": "Name: Pavel NovaknEmail: [pavel.novak@example.com](mailto:pavel.novak@example.com)nPhone: +420-602-222222nEducation: M.Sc. Computer Science, Masaryk University (2013)nSkills: MATLAB, Basic Python, Signal ProcessingnProjects: SensorAnalytics — Statistical models for sensor anomaly detection; no deep learning experience.nExperience: 8 years in R&D, signal processing focus.",
+"match_score": 60
+},
+{
+"job_role": "Machine Learning Engineer",
+"resume_text": "Name: Li WeinEmail: [li.wei@example.com](mailto:li.wei@example.com)nPhone: +86-138-22223333nEducation: B.Eng Computer Science, Beijing Institute of Technology (2019)nSkills: Python, Pandas, Beginner TensorFlownProjects: SalesDash — Built data transformation pipelines and EDA notebooks; no deployed models.nExperience: 2 years as data analyst transitioning to ML.",
+"match_score": 50
+},
+{
+"job_role": "Machine Learning Engineer",
+"resume_text": "Name: Sarah KimnEmail: [sarah.kim@example.com](mailto:sarah.kim@example.com)nPhone: +1-555-101010nEducation: B.Sc. Psychology (2014)nSkills: SPSS, ExcelnProjects: SurveyAnalysis — Statistical analysis for behavioral studies.nExperience: 7 years research assistant; no production ML experience.",
+"match_score": 20
+},
+{
+"job_role": "Machine Learning Engineer",
+"resume_text": "Name: Rajesh PillainEmail: [rajesh.pillai@example.com](mailto:rajesh.pillai@example.com)nPhone: +91-94444-12121nEducation: Diploma in Electronics (2011)nSkills: Embedded C, MicrocontrollersnProjects: HomeAutomation — Microcontroller-based automation with timers; no ML involvement.nExperience: 9 years in embedded systems.",
+"match_score": 10
+},
+{
+"job_role": "Machine Learning Engineer",
+"resume_text": "Name: Elena RossinEmail: [elena.rossi@example.com](mailto:elena.rossi@example.com)nPhone: +39-333-2222222nEducation: Ph.D. in Ecology (2016)nSkills: R, GISnProjects: SpeciesModeling — Used statistical ecology models; did not use ML frameworks.nExperience: 6 years academic research.",
+"match_score": 15
+},
+{
+"job_role": "Machine Learning Engineer",
+"resume_text": "Name: Vikram SaininEmail: [vikram.saini@example.com](mailto:vikram.saini@example.com)nPhone: +91-90000-11111nEducation: M.Tech AI, IIIT Hyderabad (2019)nSkills: Python, PyTorch, TensorFlow, ML Ops, Docker, FastAPInProjects: VisualInspect — Built an image classification pipeline for manufacturing defects; trained ResNet variants, implemented CI/CD for model retraining and deployed using FastAPI and Docker; achieved 96% precision on validation.nExperience: 4 years as ML Engineer including model deployment and monitoring.",
+"match_score": 98
+},
+{
+"job_role": "Machine Learning Engineer",
+"resume_text": "Name: Tomas GarcianEmail: [tomas.garcia@example.com](mailto:tomas.garcia@example.com)nPhone: +34-612-333333nEducation: M.Sc. Artificial Intelligence, UPF (2020)nSkills: PyTorch, Reinforcement Learning, Python, DockernProjects: WarehouseRL — Simulated agents for warehouse picking optimization using RL; published internal report showing 12% throughput improvement in simulation.nExperience: 3 years in applied research and prototyping.",
+"match_score": 92
+},
+{
+"job_role": "Machine Learning Engineer",
+"resume_text": "Name: Chloe NguyennEmail: [chloe.nguyen@example.com](mailto:chloe.nguyen@example.com)nPhone: +84-912-333333nEducation: B.Sc. Computer Science, RMIT Vietnam (2018)nSkills: Python, scikit-learn, Data Cleaning, Model EvaluationnProjects: DemandPredict — Implemented ML pipelines and feature store for small retail chain; improved forecast accuracy over baseline.nExperience: 3 years in ML and data engineering tasks.",
+"match_score": 88
+},
+{
+"job_role": "Full Stack Developer",
+"resume_text": "Name: Sunita RaonEmail: [sunita.rao@example.com](mailto:sunita.rao@example.com)nPhone: +91-88000-12121nEducation: B.Tech Computer Science, BIT Mesra (2014)nSkills: React, Node.js, Express, MongoDB, AWS, DockernProjects: FarmConnect — Built full-stack marketplace connecting farmers to buyers; implemented image uploads, filters, and API integration with payment gateways.nExperience: 7 years full-stack experience across agritech and marketplaces.",
+"match_score": 90
+},
+{
+"job_role": "Backend Developer",
+"resume_text": "Name: Ethan MillernEmail: [ethan.miller@example.com](mailto:ethan.miller@example.com)nPhone: +1-555-131313nEducation: B.Sc. Computer Science, Oregon State University (2012)nSkills: Java, Tomcat, MySQL, SOAPnProjects: LegacyOrder — Maintained SOAP endpoints and scheduled batch jobs for order reconciliation.nExperience: 9 years in legacy enterprise backends.",
+"match_score": 65
+},
+{
+"job_role": "UI/UX Designer",
+"resume_text": "Name: Nandini BosenEmail: [nandini.bose@example.com](mailto:nandini.bose@example.com)nPhone: +91-77700-22222nEducation: B.Des Communication Design, Srishti (2017)nSkills: Figma, Usability Testing, Design Systems, AccessibilitynProjects: SafeRide — End-to-end UX including persona workshops and prototype testing; improved first-time onboarding by 30%.nExperience: 5 years product design in mobility and safety apps.",
+"match_score": 92
+},
+{
+"job_role": "Mobile App Developer (Android/iOS)",
+"resume_text": "Name: Tomas RiveranEmail: [tomas.rivera@example.com](mailto:tomas.rivera@example.com)nPhone: +52-55-8888888nEducation: B.Sc. Computer Engineering, ITESM (2015)nSkills: Kotlin, Java, Android NDK (JNI), FirebasenProjects: MusicStream — Android player with offline caching and native audio processing via NDK.nExperience: 6 years Android dev with multimedia focus.",
+"match_score": 88
+},
+{
+"job_role": "Machine Learning Engineer",
+"resume_text": "Name: Priyanka MalhotranEmail: [priyanka.malhotra@example.com](mailto:priyanka.malhotra@example.com)nPhone: +91-98123-45678nEducation: M.Tech Data Science, NIT Warangal (2020)nSkills: Python, TensorFlow, FastAPI, Docker, SQLnProjects: VoiceAssist — Built speech recognition model fine-tuned for noisy environments and served via FastAPI; added monitoring and A/B testing framework.nExperience: 3 years in ML model development and deployment.",
+"match_score": 90
+},
+{
+"job_role": "Full Stack Developer",
+"resume_text": "Name: Igor PetrovnEmail: [igor.petrov@example.com](mailto:igor.petrov@example.com)nPhone: +7-916-1111111nEducation: B.Sc. Software Engineering, SPbPU (2013)nSkills: Java, Spring, React (basic), MySQLnProjects: LogisticsPortal — Backend-heavy portal with reporting and user roles; frontend mostly handled by template engines.nExperience: 7 years mostly backend within full-stack role.",
+"match_score": 70
+},
+{
+"job_role": "Backend Developer",
+"resume_text": "Name: Hana AlvareznEmail: [hana.alvarez@example.com](mailto:hana.alvarez@example.com)nPhone: +54-9-11-44444444nEducation: B.Sc. Computer Science, UBA (2021)nSkills: Python, Django, PostgreSQL, RESTnProjects: LocalShopAPI — Django REST API for small e-commerce; implemented product search and order history.nExperience: 2 years full-stack role with more frontend responsibilities.",
+"match_score": 60
+},
+{
+"job_role": "UI/UX Designer",
+"resume_text": "Name: Omar HaddadnEmail: [omar.haddad@example.com](mailto:omar.haddad@example.com)nPhone: +961-70-111111nEducation: B.A. Visual Arts, Lebanese American University (2012)nSkills: Illustrator, Photoshop, Basic FigmanProjects: Campaign Creatives — Visual assets for digital campaigns; limited interaction design experience.nExperience: 9 years in marketing and visual communications.",
+"match_score": 35
+},
+{
+"job_role": "Mobile App Developer (Android/iOS)",
+"resume_text": "Name: Sagar MehtanEmail: [sagar.mehta@example.com](mailto:sagar.mehta@example.com)nPhone: +91-70123-99999nEducation: B.Tech IT, RUET (2018)nSkills: Flutter, Dart, REST APIs, Provider, FirebasenProjects: MedNotes — Flutter app for patient notes with secure auth and offline sync; integrated push notifications and crash analytics.nExperience: 3 years building healthcare mobile apps in Flutter.",
+"match_score": 92
+},
+{
+"job_role": "Full Stack Developer",
+"resume_text": "Name: Amrita SinghnEmail: [amrita.singh@example.com](mailto:amrita.singh@example.com)nPhone: +91-88088-44444nEducation: B.Tech Computer Science, Jadavpur University (2016)nSkills: MERN stack, TypeScript, Redis, Nginx, CI/CDnProjects: QuickRide — Full-stack ride-sharing dashboard with real-time driver status and matching using Redis.nExperience: 6 years full-stack at mobility startups.",
+"match_score": 94
+},
+{
+"job_role": "Machine Learning Engineer",
+"resume_text": "Name: Daniel ParknEmail: [daniel.park.ml@example.com](mailto:daniel.park.ml@example.com)nPhone: +1-555-909091nEducation: B.Sc. Computer Science, UC Irvine (2016)nSkills: Python, scikit-learn, TensorFlow (basics), SQLnProjects: RetailInsights — Built ML features and baseline models for sales segmentation; assisted senior ML engineers on model evaluation.nExperience: 3 years as data scientist transitioning to ML engineering.",
+"match_score": 65
+},
+{
+"job_role": "Backend Developer",
+"resume_text": "Name: Meenakshi RaonEmail: [meenakshi.rao@example.com](mailto:meenakshi.rao@example.com)nPhone: +91-99555-12121nEducation: B.Tech Computer Science, RVCE (2019)nSkills: Node.js, Express, MongoDB, JWT, AWS (EC2)nProjects: QuickVote — Built APIs and authentication; handled DB schema design and deployments to EC2.nExperience: 3 years in small startups with full-stack ownership.",
+"match_score": 75
+},
+{
+"job_role": "Full Stack Developer",
+"resume_text": "Name: Victor ChengnEmail: [victor.cheng@example.com](mailto:victor.cheng@example.com)nPhone: +852-6123-4444nEducation: B.Sc. Computer Science, HKU (2017)nSkills: React, Next.js, Node.js, Prisma, PostgreSQL, VercelnProjects: BlogKit — Built SSR blog platform with markdown rendering, search, and image optimization.nExperience: 4 years as Full Stack engineer at content startups.",
+"match_score": 88
+},
+{
+"job_role": "UI/UX Designer",
+"resume_text": "Name: Priyanka NambiarnEmail: [priyanka.nambiar@example.com](mailto:priyanka.nambiar@example.com)nPhone: +91-98444-33333nEducation: B.Des (Hons), Srishti (2015)nSkills: Figma, User Research, Service Design, Workshop FacilitationnProjects: CityServices — Conducted service design workshops and mapped user journeys; produced prototypes that reduced call center volume.nExperience: 7 years in public sector UX projects.",
+"match_score": 90
+},
+{
+"job_role": "Machine Learning Engineer",
+"resume_text": "Name: Samuel OrteganEmail: [samuel.ortega@example.com](mailto:samuel.ortega@example.com)nPhone: +52-1-55-22221111nEducation: B.Sc. Mathematics (2012)nSkills: R, Statistical Modeling, Basic PythonnProjects: DemandAnalytics — Built regression and time-series models for demand planning.nExperience: 8 years in analytics-heavy roles but limited ML engineering.",
+"match_score": 55
+},
+{
+"job_role": "Mobile App Developer (Android/iOS)",
+"resume_text": "Name: Keerthi ReddynEmail: [keerthi.reddy@example.com](mailto:keerthi.reddy@example.com)nPhone: +91-97000-22222nEducation: B.Tech Computer Science, JNTU (2021)nSkills: React Native, Expo, TypeScript, GraphQLnProjects: StudyBuddy — Cross-platform mobile app for students with offline notes and sync; used GraphQL for efficient data fetching.nExperience: 2 years as mobile dev at education startup.",
+"match_score": 80
+},
+{
+"job_role": "Backend Developer",
+"resume_text": "Name: Zainab AlinEmail: [zainab.ali@example.com](mailto:zainab.ali@example.com)nPhone: +92-300-9999999nEducation: B.Sc. Computer Science, FAST (2018)nSkills: Python, Flask, SQLite, HerokunProjects: EventPlanner — Small Flask backend supporting event RSVPs; hosted on Heroku with postgres add-on.nExperience: 2 years freelancing and startup work.",
+"match_score": 50
+},
+{
+"job_role": "Full Stack Developer",
+"resume_text": "Name: Ricardo AlvareznEmail: [ricardo.alvarez@example.com](mailto:ricardo.alvarez@example.com)nPhone: +54-9-11-22221111nEducation: B.Sc. Systems Engineering, ITBA (2014)nSkills: Laravel, Vue.js, MySQL, RedisnProjects: ShopPro — Built vendor portal and admin tools; implemented caching and optimized queries.nExperience: 7 years in e-commerce platforms.",
+"match_score": 82
+},
+{
+"job_role": "UI/UX Designer",
+"resume_text": "Name: Fatima NoornEmail: [fatima.noor@example.com](mailto:fatima.noor@example.com)nPhone: +92-321-1112222nEducation: B.Des Textile Design (2013)nSkills: Textile pattern design, PhotoshopnProjects: FashionLookbook — Visual assets and lookbook layouts; no digital product UX work.nExperience: 9 years in fashion industry.",
+"match_score": 10
+},
+{
+"job_role": "Mobile App Developer (Android/iOS)",
+"resume_text": "Name: Lukas WebernEmail: [lukas.weber@example.com](mailto:lukas.weber@example.com)nPhone: +49-173-5555555nEducation: B.Sc. Computer Science, University of Freiburg (2016)nSkills: Swift, SwiftUI, Combine, FirebasenProjects: FitLog — iOS fitness tracker with HealthKit integration and workout summaries.nExperience: 5 years iOS development at fitness startups.",
+"match_score": 92
+},
+{
+"job_role": "Backend Developer",
+"resume_text": "Name: Ming ZhaonEmail: [ming.zhao@example.com](mailto:ming.zhao@example.com)nPhone: +86-138-66667777nEducation: B.Eng Software Engineering, Beijing Tech (2013)nSkills: Java, Spring MVC, MySQL, TomcatnProjects: HRPortal — Implemented employee management backend and reporting modules.nExperience: 9 years in enterprise HR systems.",
+"match_score": 68
+},
+{
+"job_role": "Machine Learning Engineer",
+"resume_text": "Name: Aisha MaliknEmail: [aisha.malik@example.com](mailto:aisha.malik@example.com)nPhone: +92-300-8888888nEducation: B.Sc. Statistics (2016)nSkills: Python, scikit-learn, SQLnProjects: CustomerSeg — Performed clustering and segmentation; produced actionable insights for marketing campaigns.nExperience: 5 years analytics with occasional predictive modeling.",
+"match_score": 60
+},
+{
+"job_role": "Full Stack Developer",
+"resume_text": "Name: Rohit BansalnEmail: [rohit.bansal@example.com](mailto:rohit.bansal@example.com)nPhone: +91-99876-55555nEducation: B.Tech Computer Science, Punjab Technical University (2014)nSkills: Django, React, PostgreSQL, AWSnProjects: CareConnect — End-to-end telemedicine web app with video integration and secure data storage.nExperience: 6 years in health-tech full-stack roles.",
+"match_score": 90
+},
+{
+"job_role": "UI/UX Designer",
+"resume_text": "Name: Matthew ColenEmail: [matthew.cole@example.com](mailto:matthew.cole@example.com)nPhone: +1-555-909092nEducation: B.A. Fine Arts (2010)nSkills: Photoshop, IllustratornProjects: PosterDesign — Marketing posters for events; limited UX process experience.nExperience: 10 years graphic design for agencies.",
+"match_score": 30
+},
+{
+"job_role": "Mobile App Developer (Android/iOS)",
+"resume_text": "Name: Anil JoshinEmail: [anil.joshi@example.com](mailto:anil.joshi@example.com)nPhone: +91-90111-22222nEducation: B.Tech Computer Science, GBTU (2012)nSkills: Android (Java), Retrofit, SQLite, Google MapsnProjects: AutoCare — Android app for vehicle service booking with map integration.nExperience: 8 years mobile maintenance and feature work.",
+"match_score": 75
+},
+{
+"job_role": "Machine Learning Engineer",
+"resume_text": "Name: Elena PopescunEmail: [elena.popescu@example.com](mailto:elena.popescu@example.com)nPhone: +40-722-333333nEducation: M.Sc. Data Science, University of Bucharest (2021)nSkills: Python, PyTorch (basic), SQL, DockernProjects: ImageTagger — Trained image classification models as prototypes and packaged them into Docker containers for demo.nExperience: 2 years ML internships and prototyping.",
+"match_score": 68
+},
+{
+"job_role": "Full Stack Developer",
+"resume_text": "Name: Sunil RaonEmail: [sunil.rao2@example.com](mailto:sunil.rao2@example.com)nPhone: +91-88000-12122nEducation: B.Tech Computer Science, PES University (2019)nSkills: Vue.js, Laravel, MySQL, AWSnProjects: InventoryCloud — Built CRUD systems, role-based access control, and scheduled reports.nExperience: 4 years full-stack at logistics startups.",
+"match_score": 78
+},
+{
+"job_role": "Backend Developer",
+"resume_text": "Name: Maya PatelnEmail: [maya.patel@example.com](mailto:maya.patel@example.com)nPhone: +91-77000-11111nEducation: B.Tech Computer Science, SASTRA (2020)nSkills: Golang (basic), PostgreSQL, RESTnProjects: QuickAPI — Learning project: built a RESTful service in Go with simple auth.nExperience: 1 year backend internship and personal projects.",
+"match_score": 40
+},
+{
+"job_role": "UI/UX Designer",
+"resume_text": "Name: Rahul BedinEmail: [rahul.bedi@example.com](mailto:rahul.bedi@example.com)nPhone: +91-98000-44444nEducation: B.Des Communication Design, Srishti (2018)nSkills: Figma, Prototyping, User TestingnProjects: RentEasy — Led research and prototyping for rental platform; helped create design tokens used by devs.nExperience: 4 years product design.",
+"match_score": 88
+},
+{
+"job_role": "Mobile App Developer (Android/iOS)",
+"resume_text": "Name: Olivia PereznEmail: [olivia.perez@example.com](mailto:olivia.perez@example.com)nPhone: +1-555-999999nEducation: B.Sc. Computer Science, UCSD (2019)nSkills: React Native, TypeScript, Redux, FastlanenProjects: FitFriend — Cross-platform fitness app with real-time challenges and leaderboard; automated builds with Fastlane.nExperience: 3 years in mobile dev.",
+"match_score": 88
+},
+{
+"job_role": "Machine Learning Engineer",
+"resume_text": "Name: Kenji YamamotonEmail: [kenji.yamamoto@example.com](mailto:kenji.yamamoto@example.com)nPhone: +81-80-22223333nEducation: B.Eng Computer Science, Kyoto University (2018)nSkills: Python, TensorFlow, Keras, OpenCVnProjects: VisualQA — Built CNN+LSTM pipeline for simple visual question answering research prototype.nExperience: 3 years at research lab and prototyping.",
+"match_score": 82
+},
+{
+"job_role": "Full Stack Developer",
+"resume_text": "Name: Ananya SennEmail: [ananya.sen2@example.com](mailto:ananya.sen2@example.com)nPhone: +91-77000-33344nEducation: B.Tech Computer Science, BITS Pilani (2020)nSkills: Next.js, Node.js, MongoDB, AWS, Tailwind CSSnProjects: QuickDocs — Document collaboration platform with real-time cursors using WebSockets.nExperience: 3 years as full-stack engineer at collaboration SaaS.",
+"match_score": 90
+},
+{
+"job_role": "Backend Developer",
+"resume_text": "Name: Jorge CastillonEmail: [jorge.castillo@example.com](mailto:jorge.castillo@example.com)nPhone: +52-1-55-11112222nEducation: B.Sc. Computer Science, UNAM (2016)nSkills: Python, Django (basic), MySQLnProjects: InventoryMgr — Maintained Django app for inventory tracking; most work was frontend CRUD pages.nExperience: 4 years in small business software development.",
+"match_score": 55
+},
+{
+"job_role": "UI/UX Designer",
+"resume_text": "Name: Meera KrishnannEmail: [meera.krishnan@example.com](mailto:meera.krishnan@example.com)nPhone: +91-99999-00000nEducation: B.Des Interaction Design, IIT Bombay (2019)nSkills: Figma, Framer, Design Systems, User ResearchnProjects: LoanAssist — Designed onboarding flows and microcopy for loan application app; reduced drop-off by 18%.nExperience: 4 years as product designer in fintech.",
+"match_score": 94
+},
+{
+"job_role": "Mobile App Developer (Android/iOS)",
+"resume_text": "Name: Farah AlinEmail: [farah.ali@example.com](mailto:farah.ali@example.com)nPhone: +971-55-3333333nEducation: B.Sc. Computer Science, Zayed University (2018)nSkills: Ionic, Angular, Cordova, CapacitornProjects: MarketScan — Hybrid app for retail price comparison; used Capacitor plugins for native features.nExperience: 3 years hybrid mobile app development.",
+"match_score": 62
+},
+{
+"job_role": "Full Stack Developer",
+"resume_text": "Name: Nikhil VermanEmail: [nikhil.verma@example.com](mailto:nikhil.verma@example.com)nPhone: +91-88000-22222nEducation: B.Tech Computer Science, BIT Mesra (2015)nSkills: Flask, Vue.js, PostgreSQL, Docker, NginxnProjects: TaskFlow — Built task management app with roles, real-time notifications via WebSocket and background workers for emails.nExperience: 6 years full-stack engineering across SaaS products.",
+"match_score": 88
+},
+{
+"job_role": "Machine Learning Engineer",
+"resume_text": "Name: Olga KuznetsovanEmail: [olga.kuznetsova@example.com](mailto:olga.kuznetsova@example.com)nPhone: +7-926-6666666nEducation: M.Sc. Applied Mathematics, MSU (2017)nSkills: Python, scikit-learn, TensorFlow (basic), Data PipelinesnProjects: PriceOpt — Built predictive pricing models and served nightly batch predictions for promotions.nExperience: 5 years in analytics and ML pipelines.",
+"match_score": 78
+},
+{
+"job_role": "Backend Developer",
+"resume_text": "Name: Daniel KimnEmail: [daniel.kim.dev@example.com](mailto:daniel.kim.dev@example.com)nPhone: +82-10-33334444nEducation: B.Eng Computer Science, KAIST (2016)nSkills: Java, Spring Boot, PostgreSQL, Kafka, Redis, DockernProjects: PayFlow — Designed resilient payment processing microservices with idempotency and circuit breakers; integrated with third-party payment gateways and implemented monitoring.nExperience: 6 years as Senior Backend Engineer at fintech companies.",
+"match_score": 96
+},
+{
+"job_role": "UI/UX Designer",
+"resume_text": "Name: Aarti ShahnEmail: [aarti.shah@example.com](mailto:aarti.shah@example.com)nPhone: +91-77222-12345nEducation: B.Des, IDC (2015)nSkills: Figma, Prototyping, Usability Research, AccessibilitynProjects: BankEase — Led accessibility-first redesign of mobile banking app; implemented voice-over friendly patterns and larger touch targets; user satisfaction increased by 26%.nExperience: 7 years UX design in finance.",
+"match_score": 97
+}
+]

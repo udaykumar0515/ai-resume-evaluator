@@ -14,7 +14,7 @@ import time
 
 # Import modules with better error handling
 try:
-    from modules import parser, similarity, jd_handler
+    from modules import parser, scoring, jd_handler
     from modules.resume_ranker import ResumeRanker
     
     # Use the enhanced suggestions system as the single source
@@ -340,7 +340,7 @@ def load_components():
     """Load and cache application components"""
     try:
         return {
-            'matcher': similarity.ResumeMatcher(method="hybrid"),
+            'matcher': scoring.ResumeScorer(method="hybrid"),
             'ranker': ResumeRanker(),
             'jds': jd_handler.load_predefined_jds("data/predefined_jds.json")
         }       
@@ -1422,8 +1422,10 @@ def evaluation_tab(components: Dict):
                     
                     elif i == 2:
                         # Calculate similarity score
+                        # Combine structured resume data first
+                        combined_text = parser.combine_structured_resume(resume_data)
                         results = components['matcher'].get_similarity_score(
-                            jd_text, [resume_data], mode="structured"
+                            jd_text, [combined_text]
                         )
                         score = results[0][1] if results else 0
                         st.session_state.current_score = score

@@ -4,7 +4,7 @@ import pandas as pd
 from tqdm import tqdm
 from typing import List, Union
 from concurrent.futures import ThreadPoolExecutor
-from modules import parser, similarity
+from modules import parser, scoring
 
 class ResumeRanker:
     """High-performance resume ranking based on job description"""
@@ -17,7 +17,7 @@ class ResumeRanker:
         """
         self.min_score = min_score * 100  # Convert to percentage
         self.workers = workers
-        self.matcher = similarity.ResumeMatcher(method="tfidf")
+        self.matcher = scoring.ResumeScorer(method="tfidf")
         self.email_pattern = re.compile(r"[\w\.-]+@[\w\.-]+\.\w+")
         self.phone_pattern = re.compile(r"(\+91[-\s]?)?[0-9]{10}")
         self.jd_text = None
@@ -63,7 +63,7 @@ class ResumeRanker:
 
             meta = self._extract_metadata(text, filename)
             score = self.matcher.get_similarity_score(
-                self.jd_text, [text], mode="raw"
+                self.jd_text, [text]
             )[0][1] * 100
 
             return {

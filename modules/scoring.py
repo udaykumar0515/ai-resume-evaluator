@@ -3,7 +3,6 @@ import unicodedata
 import logging
 import numpy as np
 from typing import List, Tuple, Dict, Union, Optional
-from collections import defaultdict
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from sentence_transformers import SentenceTransformer
@@ -14,15 +13,15 @@ from modules.text_constants import STOPWORDS
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-class ResumeMatcher:
+class ResumeScorer:
     """
-    Advanced resume-job description matching system with semantic understanding.
-    Combines embedding-based and keyword-based approaches for optimal results.
+    Pure scoring system for resume-job description matching.
+    ONLY handles scoring - takes resume text and JD text, returns scores.
     """
 
     def __init__(
         self,
-        method: str = "hybrid",  # Updated default to hybrid
+        method: str = "hybrid",  # hybrid, tfidf, embedding
         section_weights: Optional[Dict[str, float]] = None,
         min_skill_match: float = 0.65,
         use_gpu: bool = False,
@@ -30,7 +29,7 @@ class ResumeMatcher:
         tfidf_params: Optional[Dict] = None
     ):
         """
-        Initialize matcher with enhanced configuration options.
+        Initialize scorer with configuration options.
         """
         self.method = method
         self.section_weights = section_weights or {
@@ -103,35 +102,6 @@ class ResumeMatcher:
         
         return text
 
-    def combine_structured_resume(self, resume_data: Dict) -> str:
-        """Enhanced resume combining with semantic weighting"""
-        combined = defaultdict(list)
-        
-        for section, content in resume_data.items():
-            if not content:
-                continue
-                
-            if isinstance(content, list):
-                if all(isinstance(x, str) for x in content):
-                    combined[section].extend(content)
-                elif all(isinstance(x, dict) for x in content):
-                    for item in content:
-                        combined[section].extend(
-                            f"{k}: {v}" for k, v in item.items() if v
-                        )
-            elif isinstance(content, str):
-                combined[section].append(content)
-        
-        # Apply section weights with exponential boosting
-        weighted_text = []
-        for section, text_parts in combined.items():
-            weight = self.section_weights.get(section, 1.0)
-            if weight > 0:
-                section_text = " ".join(text_parts)
-                weighted_text.append((section_text + " ") * int(weight * 15))
-        
-        return self.clean_text(" ".join(weighted_text))
-
     def compute_tfidf_similarity(self, jd_text: str, resume_texts: List[str]) -> List[float]:
         """Enhanced TF-IDF with dynamic fitting"""
         try:
@@ -182,26 +152,31 @@ class ResumeMatcher:
     def get_similarity_score(
         self,
         jd_text: str,
-        resumes: List[Union[str, Dict]],
-        mode: str = "structured"
+        resume_texts: List[str]
     ) -> List[Tuple[int, float]]:
-        """Calculate similarity scores between JD and resumes"""
-        if not jd_text or not resumes:
+        """
+        Calculate similarity scores between JD and resume texts.
+        
+        Args:
+            jd_text: Job description text
+            resume_texts: List of resume texts (already processed/combined)
+        
+        Returns:
+            List of (index, score) tuples
+        """
+        if not jd_text or not resume_texts:
             return []
         
         try:
-            processed_resumes = [
-                self.combine_structured_resume(r) if isinstance(r, dict) 
-                else self.clean_text(r) 
-                for r in resumes
-            ]
+            # Clean all texts
+            cleaned_resumes = [self.clean_text(r) for r in resume_texts]
             
             # Calculate scores
             if self.method in ('hybrid', 'tfidf'):
-                tfidf_scores = self.compute_tfidf_similarity(jd_text, processed_resumes)
+                tfidf_scores = self.compute_tfidf_similarity(jd_text, cleaned_resumes)
             
             if self.method in ('hybrid', 'embedding'):
-                embedding_scores = self.compute_embedding_similarity(jd_text, processed_resumes)
+                embedding_scores = self.compute_embedding_similarity(jd_text, cleaned_resumes)
             
             if self.method == 'hybrid':
                 scores = [0.6 * emb + 0.4 * tf for emb, tf in zip(embedding_scores, tfidf_scores)]
@@ -213,3 +188,6 @@ class ResumeMatcher:
         except Exception as e:
             logger.error(f"Scoring failed: {str(e)}")
             return []
+
+# Backward compatibility alias
+ResumeMatcher = ResumeScorer

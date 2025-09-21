@@ -368,15 +368,62 @@ def extract_certifications(text):
     
     return certs
 
+def combine_structured_resume(resume_data: dict, section_weights: dict = None) -> str:
+    """
+    Combine structured resume data into a single text for scoring.
+    This function handles resume data processing, not scoring.
+    """
+    from collections import defaultdict
+    
+    if section_weights is None:
+        section_weights = {
+            'skills': 0.6,
+            'experience': 0.25,
+            'projects': 0.1,
+            'education': 0.05
+        }
+    
+    combined = defaultdict(list)
+    
+    for section, content in resume_data.items():
+        if not content:
+            continue
+            
+        if isinstance(content, list):
+            if all(isinstance(x, str) for x in content):
+                combined[section].extend(content)
+            elif all(isinstance(x, dict) for x in content):
+                for item in content:
+                    combined[section].extend(
+                        f"{k}: {v}" for k, v in item.items() if v
+                    )
+        elif isinstance(content, str):
+            combined[section].append(content)
+    
+    # Apply section weights with exponential boosting
+    weighted_text = []
+    for section, text_parts in combined.items():
+        weight = section_weights.get(section, 1.0)
+        if weight > 0:
+            section_text = " ".join(text_parts)
+            weighted_text.append((section_text + " ") * int(weight * 15))
+    
+    # Use the clean_text function from this module
+    return clean_text(" ".join(weighted_text))
+
 def parse_resume(file_path_or_buffer, file_type=None):
     """Determine file type and extract text accordingly"""
     if file_type is None:
         if hasattr(file_path_or_buffer, 'name'):
             ext = os.path.splitext(file_path_or_buffer.name)[-1].lower()
-            file_type = 'docx' if ext == '.docx' else 'pdf'
+            file_type = 'docx' if ext == '.docx' else 'txt' if ext == '.txt' else 'pdf'
     
     if file_type == 'docx':
         text = extract_text_from_docx(file_path_or_buffer)
+    elif file_type == 'txt':
+        # For TXT files, just read the content directly
+        with open(file_path_or_buffer, 'r', encoding='utf-8') as f:
+            text = f.read()
     else:  # default to PDF
         text = extract_text_from_pdf(file_path_or_buffer)
     
@@ -403,6 +450,7 @@ def parse_resume(file_path_or_buffer, file_type=None):
             "processing_date": datetime.now().isoformat(),
             "file_type": file_type
         },
+        "raw_text": text,  # Add raw text for scoring
         "sections": sections,
         "global_entities": global_entities,
         "section_entities": section_entities, 
