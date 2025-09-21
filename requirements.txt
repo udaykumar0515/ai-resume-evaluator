@@ -1,16 +1,15 @@
-# Refined requirements for AI Resume Evaluator Pro
+# AI Resume Evaluator - Complete Requirements
 
-# Core
+# Core Framework
 streamlit>=1.28.0
 pandas>=1.5.0
 numpy>=1.24.0
 
-# File processing
+# File Processing
 PyPDF2>=3.0.0
 python-docx>=0.8.11
-xlsxwriter>=3.0.0  # used by pandas ExcelWriter
 
-# NLP and ML
+# AI/ML Libraries
 transformers>=4.21.0
 torch>=1.12.0
 sentence-transformers>=2.2.0
@@ -22,14 +21,13 @@ plotly>=5.15.0
 
 # Utilities
 tqdm>=4.64.0
+huggingface-hub>=0.16.0
 
 # Optional: GPU support (uncomment if using CUDA)
 # torch>=1.12.0+cu117 -f https://download.pytorch.org/whl/torch_stable.html
 
-# Dev (optional)
-# pytest>=7.0.0
-# black>=22.0.0
-# flake8>=5.0.0
-
-# Notes:
-# - Removed unused: openpyxl, spacy, textstat, language-tool-python, matplotlib, seaborn, regex, unicodedata2, uuid
+# Installation Notes:
+# 1. Create virtual environment: python -m venv venv
+# 2. Activate: venv\Scripts\activate (Windows) or source venv/bin/activate (Linux/Mac)
+# 3. Install: pip install -r requirements.txt
+# 4. Run: streamlit run main_app.py
