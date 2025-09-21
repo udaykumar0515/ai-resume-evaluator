@@ -2,6 +2,7 @@
 import streamlit as st
 import os
 import tempfile
+import json
 from modules import parser
 
 # Configure Streamlit
@@ -47,17 +48,40 @@ with tab1:
         help="Upload your resume in PDF, DOCX, or TXT format"
     )
     
-    # Job Description dropdown (just for show)
-    st.markdown("### Select Job Description (Optional)")
-    jd_options = [
-        "Select a job description...",
-        "Software Developer",
-        "Data Scientist", 
-        "Web Developer",
-        "Machine Learning Engineer",
-        "Full Stack Developer"
-    ]
-    selected_jd = st.selectbox("Choose a predefined job description:", jd_options)
+    # Job Description dropdown
+    st.markdown("### Select Job Description")
+    
+    # Load predefined JDs
+    try:
+        with open("data/predefined_jds.json", "r") as f:
+            predefined_jds = json.load(f)
+        
+        jd_options = ["Select a job description..."] + list(predefined_jds.keys())
+        selected_jd = st.selectbox("Choose a predefined job description:", jd_options)
+        
+        # Display selected JD
+        if selected_jd != "Select a job description...":
+            jd_data = predefined_jds[selected_jd]
+            
+            st.markdown("### 📋 Selected Job Description")
+            st.markdown(f"**Position:** {jd_data['title']}")
+            st.markdown(f"**Description:** {jd_data['description']}")
+            
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                st.markdown("**Requirements:**")
+                for req in jd_data['requirements']:
+                    st.write(f"• {req}")
+            
+            with col2:
+                st.markdown("**Responsibilities:**")
+                for resp in jd_data['responsibilities']:
+                    st.write(f"• {resp}")
+    
+    except Exception as e:
+        st.error(f"Error loading job descriptions: {e}")
+        selected_jd = "Select a job description..."
     
     if uploaded_file is not None:
         try:

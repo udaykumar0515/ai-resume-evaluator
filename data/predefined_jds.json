@@ -1,0 +1,107 @@
+{
+  "Software Developer": {
+    "title": "Software Developer",
+    "description": "We are looking for a skilled Software Developer to join our team. The ideal candidate will have experience in developing high-quality software solutions and working in a collaborative environment.",
+    "requirements": [
+      "Bachelor's degree in Computer Science or related field",
+      "3+ years of software development experience",
+      "Proficiency in programming languages such as Java, Python, or C++",
+      "Experience with database design and SQL",
+      "Knowledge of software development methodologies",
+      "Strong problem-solving and analytical skills",
+      "Excellent communication and teamwork abilities"
+    ],
+    "responsibilities": [
+      "Design, develop, and maintain software applications",
+      "Collaborate with cross-functional teams to define requirements",
+      "Write clean, efficient, and well-documented code",
+      "Perform code reviews and ensure code quality",
+      "Debug and troubleshoot software issues",
+      "Participate in software testing and quality assurance"
+    ]
+  },
+  "Data Scientist": {
+    "title": "Data Scientist",
+    "description": "We are seeking a talented Data Scientist to analyze complex data and provide insights that drive business decisions. The role involves working with large datasets and applying machine learning techniques.",
+    "requirements": [
+      "Master's degree in Data Science, Statistics, or related field",
+      "2+ years of experience in data analysis and machine learning",
+      "Proficiency in Python, R, or similar programming languages",
+      "Experience with machine learning frameworks (TensorFlow, PyTorch, scikit-learn)",
+      "Knowledge of statistical analysis and data visualization",
+      "Experience with SQL and database management",
+      "Strong analytical and problem-solving skills"
+    ],
+    "responsibilities": [
+      "Analyze large datasets to identify trends and patterns",
+      "Develop and implement machine learning models",
+      "Create data visualizations and reports",
+      "Collaborate with stakeholders to understand business requirements",
+      "Clean and preprocess data for analysis",
+      "Present findings and recommendations to management"
+    ]
+  },
+  "Web Developer": {
+    "title": "Web Developer",
+    "description": "We are looking for a creative and skilled Web Developer to build and maintain our web applications. The ideal candidate will have experience in both front-end and back-end development.",
+    "requirements": [
+      "Bachelor's degree in Computer Science or related field",
+      "2+ years of web development experience",
+      "Proficiency in HTML, CSS, JavaScript, and modern frameworks",
+      "Experience with server-side languages (Node.js, Python, PHP)",
+      "Knowledge of databases (MySQL, MongoDB, PostgreSQL)",
+      "Experience with version control systems (Git)",
+      "Understanding of responsive design principles"
+    ],
+    "responsibilities": [
+      "Develop and maintain web applications",
+      "Create responsive and user-friendly interfaces",
+      "Optimize applications for maximum speed and scalability",
+      "Collaborate with designers and other developers",
+      "Test and debug web applications",
+      "Stay updated with emerging web technologies"
+    ]
+  },
+  "Machine Learning Engineer": {
+    "title": "Machine Learning Engineer",
+    "description": "We are seeking a Machine Learning Engineer to design and implement ML systems that solve complex business problems. The role involves working with data scientists and software engineers to deploy ML models in production.",
+    "requirements": [
+      "Bachelor's degree in Computer Science, Engineering, or related field",
+      "3+ years of experience in machine learning and software engineering",
+      "Proficiency in Python, Java, or C++",
+      "Experience with ML frameworks (TensorFlow, PyTorch, scikit-learn)",
+      "Knowledge of cloud platforms (AWS, Azure, GCP)",
+      "Experience with MLOps and model deployment",
+      "Strong understanding of algorithms and data structures"
+    ],
+    "responsibilities": [
+      "Design and implement machine learning systems",
+      "Deploy ML models to production environments",
+      "Optimize model performance and scalability",
+      "Collaborate with data scientists and engineers",
+      "Monitor and maintain ML systems in production",
+      "Research and implement new ML techniques"
+    ]
+  },
+  "Full Stack Developer": {
+    "title": "Full Stack Developer",
+    "description": "We are looking for a versatile Full Stack Developer who can work on both client-side and server-side applications. The ideal candidate will have experience across the entire technology stack.",
+    "requirements": [
+      "Bachelor's degree in Computer Science or related field",
+      "3+ years of full-stack development experience",
+      "Proficiency in front-end technologies (React, Angular, Vue.js)",
+      "Experience with back-end technologies (Node.js, Python, Java)",
+      "Knowledge of databases and data modeling",
+      "Experience with cloud platforms and DevOps",
+      "Strong understanding of software architecture"
+    ],
+    "responsibilities": [
+      "Develop both front-end and back-end applications",
+      "Design and implement APIs and web services",
+      "Work with databases and data storage solutions",
+      "Collaborate with cross-functional teams",
+      "Ensure application security and performance",
+      "Participate in code reviews and technical discussions"
+    ]
+  }
+}
