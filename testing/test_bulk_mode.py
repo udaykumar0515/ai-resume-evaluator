@@ -27,7 +27,7 @@ class BulkModeAccuracyTester:
         self.actual_scores = []
         self.results = {}
         # Initialize scorer with BULK MODE config (TF-IDF only, like ResumeRanker)
-        self.scorer = ResumeScorer(method="tfidf", embedding_model="balanced")
+        self.scorer = ResumeScorer(method="advanced")
         
     def load_dataset(self):
         """Load the JSON dataset"""
