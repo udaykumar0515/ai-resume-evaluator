@@ -15,6 +15,7 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 import matplotlib.pyplot as plt
 import seaborn as sns
 from modules.scoring import ResumeScorer
+from accuracy_tracker import record_bulk_mode_accuracy
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -169,6 +170,10 @@ class BulkModeAccuracyTester:
         }
         
         print("✅ Metrics calculated")
+        
+        # Record accuracy for tracking
+        record_bulk_mode_accuracy(self.results['regression_metrics'], "Bulk mode test run")
+        
         return self.results
     
     def print_results(self):

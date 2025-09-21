@@ -16,6 +16,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from modules import parser
 from modules.scoring import ResumeScorer
+from accuracy_tracker import record_detailed_mode_accuracy
 import tempfile
 import warnings
 warnings.filterwarnings('ignore')
@@ -192,6 +193,10 @@ class DetailedModeAccuracyTester:
         }
         
         print("✅ Metrics calculated")
+        
+        # Record accuracy for tracking
+        record_detailed_mode_accuracy(self.results['regression_metrics'], "Detailed mode test run")
+        
         return self.results
     
     def print_results(self):
