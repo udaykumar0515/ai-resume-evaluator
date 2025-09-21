@@ -1,114 +1,110 @@
 # AI Resume Evaluator - Testing Framework
 
-This directory contains comprehensive testing tools to evaluate the accuracy and performance of the AI Resume Evaluator system.
+## 📁 Organized Testing Structure
 
-## 📁 Files
+This testing folder contains organized tests for both scoring modes in the AI Resume Evaluator project.
 
-- `dataset.json` - Test dataset with 100 resume samples, job roles, and ground truth scores
-- `test_accuracy.py` - Main testing framework with ML metrics
-- `run_tests.py` - Simple test runner script
-- `requirements_testing.txt` - Additional packages needed for testing
-- `README.md` - This file
+### 🚀 **test_bulk_mode.py** - BULK MODE Testing
+- **Purpose**: Tests the fast scoring used in **Resume Ranking tab**
+- **Method**: Raw text + TF-IDF only (like `ResumeRanker`)
+- **Use Case**: Bulk processing multiple resumes quickly
+- **Command**: `python test_bulk_mode.py`
+
+### 🎯 **test_detailed_mode.py** - DETAILED MODE Testing  
+- **Purpose**: Tests the complete pipeline used in **Single Resume Evaluation tab**
+- **Method**: Parsing + Structured data + Hybrid scoring (like main app)
+- **Use Case**: Individual resume analysis with high accuracy
+- **Command**: `python test_detailed_mode.py`
+
+### 📊 **test_both_modes.py** - COMPARISON Testing
+- **Purpose**: Runs both modes and compares their performance
+- **Method**: Side-by-side comparison of bulk vs detailed modes
+- **Use Case**: Understanding trade-offs between speed and accuracy
+- **Command**: `python test_both_modes.py`
+
+## 📋 Testing Flow (Correct Approach)
+
+```
+Dataset → Score using scoring.py → Compare with actual scores
+```
+
+1. **Dataset**: Contains resume text + job role + expected score
+2. **Score using scoring.py**: Use actual scoring algorithms
+3. **Compare**: Calculate metrics (MAE, R², accuracy, etc.)
+
+## 📈 Metrics Calculated
+
+### Regression Metrics
+- **MAE**: Mean Absolute Error
+- **MSE**: Mean Squared Error  
+- **RMSE**: Root Mean Squared Error
+- **R²**: Coefficient of Determination
+
+### Classification Metrics
+- **Accuracy**: Overall classification accuracy
+- **Precision**: Weighted precision score
+- **Recall**: Weighted recall score
+- **F1-Score**: Weighted F1 score
+
+## 🎯 Performance Categories
+
+- **Poor**: < 60 points
+- **Fair**: 60-74 points
+- **Good**: 75-89 points
+- **Excellent**: 90+ points
+
+## 📁 Output Files
+
+Each test generates:
+- `*_mode_performance.png` - Visualization charts
+- `*_mode_results.csv` - Detailed results per sample
+- Console output with comprehensive metrics
 
 ## 🚀 Quick Start
 
-### 1. Install Testing Dependencies
+1. **Test Bulk Mode** (Fast):
+   ```bash
+   python test_bulk_mode.py
+   ```
+
+2. **Test Detailed Mode** (Accurate):
+   ```bash
+   python test_detailed_mode.py
+   ```
+
+3. **Compare Both Modes**:
+   ```bash
+   python test_both_modes.py
+   ```
+
+## 🔧 Dependencies
+
+Install testing requirements:
 ```bash
 pip install -r requirements_testing.txt
 ```
 
-### 2. Run Tests
-```bash
-# Simple way
-python run_tests.py
+## 📊 Current Baseline Performance
 
-# Or directly
-python test_accuracy.py
-```
+### Bulk Mode (TF-IDF Only)
+- **MAE**: ~38 points
+- **R²**: ~-1.95 (needs improvement)
+- **Classification Accuracy**: ~25%
 
-## 📊 What Gets Tested
+### Detailed Mode (Hybrid)
+- **Expected**: Better than bulk mode
+- **Status**: To be tested
 
-### Regression Metrics
-- **MAE (Mean Absolute Error)** - Average prediction error
-- **MSE (Mean Squared Error)** - Squared prediction error
-- **RMSE (Root Mean Squared Error)** - Square root of MSE
-- **R² (R-squared)** - Coefficient of determination
+## 🎯 Improvement Strategy
 
-### Classification Metrics
-- **Accuracy** - Overall correctness
-- **Precision** - True positives / (True positives + False positives)
-- **Recall** - True positives / (True positives + False negatives)
-- **F1-Score** - Harmonic mean of precision and recall
+1. **Start with Bulk Mode**: Improve core scoring algorithms
+2. **Test Detailed Mode**: Verify improvements carry over
+3. **Compare Results**: Ensure both modes benefit from improvements
+4. **Iterate**: Continue improving based on metrics
 
-### Score Categories
-- **Poor** (0-60): Low match
-- **Fair** (60-75): Moderate match
-- **Good** (75-90): Good match
-- **Excellent** (90-100): Excellent match
+## 📝 Notes
 
-## 📈 Output Files
-
-After running tests, you'll get:
-
-1. **`dataset.csv`** - Converted JSON to CSV format
-2. **`detailed_results.csv`** - Sample-by-sample results with errors
-3. **`performance_analysis.png`** - Visualization plots
-
-## 🔍 Interpreting Results
-
-### Good Performance Indicators
-- **R² > 0.8** - Strong correlation between predicted and actual
-- **F1-Score > 0.8** - Good classification accuracy
-- **MAE < 10** - Low average prediction error
-
-### Areas for Improvement
-- **R² < 0.6** - Need better feature extraction
-- **F1-Score < 0.6** - Need better job-resume matching
-- **MAE > 15** - Need more training data or better algorithms
-
-## 🛠️ Customizing Tests
-
-### Modify Scoring Logic
-Edit the `calculate_mock_score()` function in `test_accuracy.py` to use your actual scoring algorithm.
-
-### Add More Metrics
-Extend the `calculate_metrics()` function to include additional evaluation metrics.
-
-### Test Different Datasets
-Replace `dataset.json` with your own test data following the same format:
-```json
-[
-  {
-    "job_role": "Job Title",
-    "resume_text": "Resume content...",
-    "match_score": 85
-  }
-]
-```
-
-## 📋 Test Data Format
-
-Each test sample should have:
-- `job_role`: The job position being applied for
-- `resume_text`: The resume content as text
-- `match_score`: Ground truth score (0-100)
-
-## 🎯 Performance Benchmarks
-
-| Metric | Excellent | Good | Fair | Poor |
-|--------|-----------|------|------|------|
-| R² | > 0.8 | 0.6-0.8 | 0.4-0.6 | < 0.4 |
-| F1-Score | > 0.8 | 0.6-0.8 | 0.4-0.6 | < 0.4 |
-| MAE | < 8 | 8-12 | 12-18 | > 18 |
-
-## 🔧 Troubleshooting
-
-### Common Issues
-1. **Import errors**: Make sure you're in the project root directory
-2. **Module not found**: Install requirements from main project
-3. **Memory issues**: Reduce dataset size for testing
-
-### Getting Help
-- Check the console output for detailed error messages
-- Ensure all dependencies are installed
-- Verify the dataset format is correct
+- Both modes use the same `scoring.py` module
+- Improving bulk mode automatically improves detailed mode
+- Focus on core scoring algorithms for maximum impact
+- Test frequently to track improvement progress
