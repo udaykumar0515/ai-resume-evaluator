@@ -76,18 +76,14 @@ with tab1:
                 # Show file info
                 st.info(f"File: {uploaded_file.name} | Processing Date: {resume_data.get('metadata', {}).get('processing_date', 'Unknown')}")
                 
-                # Show sections found
-                st.markdown("### 📋 Resume Sections Detected")
+                # Show sections found with their content
+                st.markdown("### 📋 Resume Sections and Content")
                 sections = resume_data.get('sections', {})
                 if sections:
-                    col1, col2 = st.columns(2)
-                    with col1:
-                        st.write("**Sections Found:**")
-                        for i, section in enumerate(sections.keys(), 1):
-                            st.write(f"{i}. {section}")
-                    with col2:
-                        st.write("**Section Count:**")
-                        st.metric("Total Sections", len(sections))
+                    for section_name, section_content in sections.items():
+                        if section_content.strip():  # Only show non-empty sections
+                            with st.expander(f"📄 {section_name}"):
+                                st.text(section_content)
                 
                 # Show contact information
                 contact = resume_data.get('contact', {})
@@ -128,11 +124,10 @@ with tab1:
                     for i, proj in enumerate(projects[:3], 1):  # Show first 3
                         st.write(f"{i}. {proj}")
                 
-                # Show raw text in collapsible section
+                # Show raw text
                 if resume_data.get('raw_text'):
-                    with st.expander("📝 View Full Extracted Text"):
-                        st.text_area("", resume_data['raw_text'], height=300)
-                        st.info(f"Total Characters: {len(resume_data['raw_text'])}")
+                    st.markdown("### 📝 Full Extracted Text")
+                    st.text_area("", resume_data['raw_text'], height=300)
             
             else:
                 st.error("❌ Failed to process the resume.")
