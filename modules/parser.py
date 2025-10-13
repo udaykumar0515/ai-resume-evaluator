@@ -4,29 +4,55 @@ import re
 import unicodedata
 import os
 from datetime import datetime
-from transformers import pipeline
 from functools import lru_cache
 import torch
 from modules.text_constants import SKILL_KEYWORDS, SKILL_CATEGORIES, INSTITUTION_KEYWORDS
+
+# Set offline mode for transformers to avoid internet dependency
+os.environ['TRANSFORMERS_OFFLINE'] = '1'
+os.environ['HF_HUB_OFFLINE'] = '1'
+
+# Try to import transformers with offline mode
+try:
+    from transformers import pipeline
+    TRANSFORMERS_AVAILABLE = True
+except ImportError:
+    TRANSFORMERS_AVAILABLE = False
+    print("Warning: transformers not available, using fallback parsing")
 
 class ResumeNER:
     def __init__(self):
         self._model_loaded = False
         self._device = 0 if torch.cuda.is_available() else -1
         self.ner_pipeline = None
+        self.use_fallback = False
 
     def _load_model(self):
-        if not self._model_loaded:
-            self.ner_pipeline = pipeline(
-                "ner",
-                model="dslim/bert-base-NER",
-                aggregation_strategy="simple",
-                device=self._device
-            )
+        if not self._model_loaded and TRANSFORMERS_AVAILABLE:
+            try:
+                self.ner_pipeline = pipeline(
+                    "ner",
+                    model="dslim/bert-base-NER",
+                    aggregation_strategy="simple",
+                    device=self._device
+                )
+                self._model_loaded = True
+                print("✅ NER model loaded successfully")
+            except Exception as e:
+                print(f"⚠️ NER model failed to load: {e}")
+                print("🔄 Using fallback parsing methods")
+                self.use_fallback = True
+                self._model_loaded = True  # Mark as loaded to avoid retries
+        elif not TRANSFORMERS_AVAILABLE:
+            self.use_fallback = True
             self._model_loaded = True
 
     def extract_entities(self, text):
         self._load_model()  # Only load when first used
+        
+        if self.use_fallback:
+            return self._fallback_entity_extraction(text)
+        
         try:
             entities = self.ner_pipeline(text)
             return {
@@ -34,8 +60,60 @@ class ResumeNER:
                 "raw": entities
             }
         except Exception as e:
-            print(f"NER Error: {e}")
-            return {"entities": {}, "raw": []}
+            print(f"NER Error: {e}, using fallback")
+            return self._fallback_entity_extraction(text)
+
+    def _fallback_entity_extraction(self, text):
+        """Fallback entity extraction using regex patterns"""
+        entities = {
+            "PER": [],  # Person names
+            "ORG": [],  # Organizations
+            "LOC": []   # Locations
+        }
+        
+        # Extract person names (simple heuristic)
+        # Look for capitalized words that could be names
+        name_pattern = r'\b[A-Z][a-z]+ [A-Z][a-z]+\b'
+        potential_names = re.findall(name_pattern, text)
+        
+        # Filter out common non-name words
+        non_names = {'Web Development', 'Machine Learning', 'Data Science', 'Computer Science', 
+                    'Information Technology', 'Software Engineering', 'Bachelor Degree', 
+                    'Master Degree', 'High School', 'College University'}
+        
+        for name in potential_names:
+            if name not in non_names and len(name.split()) == 2:
+                entities["PER"].append(name)
+        
+        # Extract organizations (companies, universities)
+        org_keywords = ['University', 'College', 'Institute', 'Corporation', 'Company', 
+                       'Ltd', 'Inc', 'LLC', 'Technologies', 'Systems', 'Services']
+        
+        for keyword in org_keywords:
+            pattern = r'\b[A-Z][a-zA-Z\s]+' + re.escape(keyword) + r'\b'
+            orgs = re.findall(pattern, text)
+            entities["ORG"].extend(orgs)
+        
+        # Extract locations (cities, states, countries)
+        location_pattern = r'\b[A-Z][a-z]+(?: [A-Z][a-z]+)*\b'
+        potential_locations = re.findall(location_pattern, text)
+        
+        # Simple location filtering
+        common_locations = {'New York', 'California', 'Texas', 'Florida', 'India', 
+                           'United States', 'Mumbai', 'Delhi', 'Bangalore', 'Hyderabad'}
+        
+        for loc in potential_locations:
+            if loc in common_locations or any(word in loc for word in ['City', 'State', 'Country']):
+                entities["LOC"].append(loc)
+        
+        # Remove duplicates and clean
+        for key in entities:
+            entities[key] = list(set(entities[key]))
+        
+        return {
+            "entities": entities,
+            "raw": []
+        }
 
     def _format_entities(self, raw_entities):
         grouped = {}

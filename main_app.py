@@ -19,6 +19,10 @@ try:
     
     # Use the enhanced suggestions system as the single source
     from modules.working_suggestions import get_enhanced_suggestions
+    
+    # Check if running in offline mode
+    if hasattr(parser, 'ner') and parser.ner.use_fallback:
+        st.info("🔄 Running in offline mode - using fallback parsing methods")
             
 except Exception as e:
     st.error(f"❌ Error importing modules: {e}")
@@ -1867,6 +1871,7 @@ def main():
 
     # Main navigation tabs
     views = ["📝 Resume Evaluation", "🏆 Bulk Ranking", "💬 Feedback & Support"]
+    # views = ["📝 Resume Evaluation", "💬 Feedback & Support"]
 
     # Use .get() so missing keys don't raise AttributeError
     pending = st.session_state.get('pending_active_view', "")

@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """
 BULK MODE ACCURACY TEST
-Tests the raw text scoring used in Resume Ranking tab (TF-IDF only)
-This is the FAST mode for bulk processing multiple resumes
+Tests the raw text scoring used in Resume Ranking tab
 """
 import sys
 import os
@@ -15,25 +14,26 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 import matplotlib.pyplot as plt
 import seaborn as sns
 from modules.scoring import ResumeScorer
-from accuracy_tracker import record_bulk_mode_accuracy
 import warnings
 warnings.filterwarnings('ignore')
 
 class BulkModeAccuracyTester:
-    def __init__(self, dataset_path="dataset.json"):
+    def __init__(self, dataset_path="dataset.csv"):
         self.dataset_path = dataset_path
         self.data = None
         self.predictions = []
         self.actual_scores = []
         self.results = {}
-        # Initialize scorer with BULK MODE config (TF-IDF only, like ResumeRanker)
+        # Initialize scorer with BULK MODE config
         self.scorer = ResumeScorer(method="advanced")
         
     def load_dataset(self):
-        """Load the JSON dataset"""
+        """Load the CSV dataset"""
         print("📊 Loading dataset...")
-        with open(self.dataset_path, 'r') as f:
-            self.data = json.load(f)
+        self.data = pd.read_csv(self.dataset_path).to_dict('records')
+        # Convert match_score to integer
+        for item in self.data:
+            item['match_score'] = int(item['match_score'])
         print(f"✅ Loaded {len(self.data)} resume samples")
         return self.data
     
@@ -56,16 +56,24 @@ class BulkModeAccuracyTester:
             else:
                 return str(jd_data)
         else:
-            return f"Job Role: {job_role}. We are looking for a {job_role} with relevant skills and experience."
+            # Enhanced default job descriptions
+            default_descriptions = {
+                "Backend Developer": "We are looking for a Backend Developer with experience in server-side development, API design, database management, and cloud services. Key skills include Java, Python, Node.js, Spring Boot, Django, Flask, SQL, NoSQL, Docker, Kubernetes, and REST/GraphQL APIs. Experience with microservices architecture, system design, and performance optimization is required.",
+                "Mobile App Developer (Android/iOS)": "We are seeking a Mobile App Developer with expertise in Android or iOS development. Key skills include Kotlin, Java, Swift, React Native, Flutter, Android SDK, iOS SDK, REST APIs, and mobile UI/UX design. Experience with app publishing, performance optimization, and cross-platform development is preferred.",
+                "UI/UX Designer": "We are looking for a UI/UX Designer with a strong portfolio of design projects. Key skills include user research, wireframing, prototyping, visual design, Figma, Sketch, Adobe XD, and design systems. Experience with usability testing, interaction design, and creating responsive designs is required.",
+                "Full Stack Developer": "We are seeking a Full Stack Developer with experience in both frontend and backend development. Key skills include JavaScript, React, Angular, Vue, Node.js, Python, Django, Flask, SQL, NoSQL, REST APIs, and cloud services. Experience with full-stack frameworks, DevOps, and CI/CD is preferred.",
+                "Machine Learning Engineer": "We are looking for a Machine Learning Engineer with expertise in developing and deploying ML models. Key skills include Python, TensorFlow, PyTorch, scikit-learn, data preprocessing, model training, NLP, computer vision, and ML ops. Experience with cloud ML services, model deployment, and performance optimization is required."
+            }
+            return default_descriptions.get(job_role, f"Job Role: {job_role}. We are looking for a {job_role} with relevant skills and experience.")
     
     def calculate_bulk_score(self, resume_text, job_role):
-        """Calculate score using BULK MODE (raw text, TF-IDF only)"""
+        """Calculate score using BULK MODE"""
         try:
             jd_text = self.get_job_description(job_role)
-            scores = self.scorer.get_similarity_score(jd_text, [resume_text])
+            scores = self.scorer.get_similarity_score(jd_text, [resume_text], [job_role])
             
             if scores and len(scores) > 0 and len(scores[0]) > 1:
-                return int(scores[0][1] * 100)
+                return scores[0][1]  # Already a percentage
             else:
                 print(f"❌ Invalid scores returned: {scores}")
                 return 50
@@ -78,9 +86,9 @@ class BulkModeAccuracyTester:
     def run_predictions(self):
         """Run predictions using BULK MODE pipeline"""
         print("🔍 Running BULK MODE predictions...")
-        print("   ✓ Raw text processing (no parsing)")
-        print("   ✓ TF-IDF similarity only")
-        print("   ✓ Fast processing for bulk operations")
+        print("   ✓ Advanced text processing")
+        print("   ✓ Enhanced skill matching")
+        print("   ✓ Role-specific keyword extraction")
         
         self.predictions = []
         self.actual_scores = []
@@ -143,9 +151,9 @@ class BulkModeAccuracyTester:
         
         # Classification metrics
         accuracy = accuracy_score(y_true_cat, y_pred_cat)
-        precision = precision_score(y_true_cat, y_pred_cat, average='weighted')
-        recall = recall_score(y_true_cat, y_pred_cat, average='weighted')
-        f1 = f1_score(y_true_cat, y_pred_cat, average='weighted')
+        precision = precision_score(y_true_cat, y_pred_cat, average='weighted', zero_division=0)
+        recall = recall_score(y_true_cat, y_pred_cat, average='weighted', zero_division=0)
+        f1 = f1_score(y_true_cat, y_pred_cat, average='weighted', zero_division=0)
         
         # Store results
         self.results = {
@@ -170,17 +178,13 @@ class BulkModeAccuracyTester:
         }
         
         print("✅ Metrics calculated")
-        
-        # Record accuracy for tracking
-        record_bulk_mode_accuracy(self.results['regression_metrics'], "Bulk mode test run")
-        
         return self.results
     
     def print_results(self):
         """Print comprehensive results"""
         print("\n" + "="*70)
         print("🎯 AI RESUME EVALUATOR - BULK MODE ACCURACY TEST")
-        print("   (Raw Text + TF-IDF Only - Used in Resume Ranking Tab)")
+        print("   (Advanced Text Processing + Skill Matching)")
         print("="*70)
         
         print("\n📊 REGRESSION METRICS:")
@@ -216,7 +220,7 @@ class BulkModeAccuracyTester:
         
         print(f"\n📋 IMPROVEMENT RECOMMENDATIONS:")
         if r2 < 0.6:
-            print("• Improve TF-IDF text preprocessing")
+            print("• Improve text preprocessing")
             print("• Add better keyword extraction")
             print("• Optimize n-gram ranges and parameters")
         if f1 < 0.6:
@@ -233,7 +237,7 @@ class BulkModeAccuracyTester:
         # Set up the plotting style
         plt.style.use('default')
         fig, axes = plt.subplots(2, 2, figsize=(15, 12))
-        fig.suptitle('AI Resume Evaluator - BULK MODE Performance Analysis\n(Raw Text + TF-IDF Only)', fontsize=16)
+        fig.suptitle('AI Resume Evaluator - BULK MODE Performance Analysis\n(Advanced Text Processing + Skill Matching)', fontsize=16)
         
         # 1. Actual vs Predicted Scatter Plot
         axes[0, 0].scatter(self.actual_scores, self.predictions, alpha=0.6)
@@ -300,7 +304,7 @@ class BulkModeAccuracyTester:
     def run_complete_test(self):
         """Run the complete BULK MODE testing pipeline"""
         print("🚀 Starting AI Resume Evaluator BULK MODE Accuracy Test")
-        print("   Testing the fast scoring used in Resume Ranking tab")
+        print("   Testing the advanced scoring with skill matching")
         print("="*70)
         
         # Load dataset
@@ -325,7 +329,7 @@ class BulkModeAccuracyTester:
         self.save_detailed_results()
         
         print("\n🎉 BULK MODE testing completed successfully!")
-        print("📁 Check the 'testing' folder for all output files")
+        print("📁 Check the output files for results")
 
 if __name__ == "__main__":
     # Run the complete test
