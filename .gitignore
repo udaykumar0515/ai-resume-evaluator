@@ -27,3 +27,8 @@ __pycache__/
 .streamlit/
 
 
+PROJECT_FULL_DOC.md
+
+# Evaluation scripts
+model_evaluation.py
+plots.py
