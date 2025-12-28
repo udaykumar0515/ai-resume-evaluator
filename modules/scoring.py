@@ -171,6 +171,10 @@ class ResumeScorer:
             # Clean all texts
             cleaned_resumes = [self.clean_text(r) for r in resume_texts]
             
+            # Initialize scores to None to prevent reference errors
+            tfidf_scores = None
+            embedding_scores = None
+            
             # Calculate scores
             if self.method in ('hybrid', 'tfidf'):
                 tfidf_scores = self.compute_tfidf_similarity(jd_text, cleaned_resumes)
@@ -178,10 +182,20 @@ class ResumeScorer:
             if self.method in ('hybrid', 'embedding'):
                 embedding_scores = self.compute_embedding_similarity(jd_text, cleaned_resumes)
             
+            # Combine or select scores based on method
             if self.method == 'hybrid':
-                scores = [0.6 * emb + 0.4 * tf for emb, tf in zip(embedding_scores, tfidf_scores)]
-            else:
-                scores = embedding_scores if self.method == 'embedding' else tfidf_scores
+                if tfidf_scores and embedding_scores:
+                    scores = [0.6 * emb + 0.4 * tf for emb, tf in zip(embedding_scores, tfidf_scores)]
+                elif embedding_scores:
+                    scores = embedding_scores
+                elif tfidf_scores:
+                    scores = tfidf_scores
+                else:
+                    return []
+            elif self.method == 'embedding':
+                scores = embedding_scores if embedding_scores else [0.0] * len(cleaned_resumes)
+            else:  # tfidf
+                scores = tfidf_scores if tfidf_scores else [0.0] * len(cleaned_resumes)
             
             return list(enumerate([float(round(score, 4)) for score in scores]))
         
