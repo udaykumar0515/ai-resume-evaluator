@@ -655,19 +655,19 @@ def display_enhanced_suggestions(suggestion_results: Dict[str, Any]):
         
         with tab1:
             if charts['radar']:
-                st.plotly_chart(charts['radar'], use_container_width=True)
+                st.plotly_chart(charts['radar'], width="stretch")
             else:
                 st.info("Radar chart not available")
         
         with tab2:
             if charts['bar']:
-                st.plotly_chart(charts['bar'], use_container_width=True)
+                st.plotly_chart(charts['bar'], width="stretch")
             else:
                 st.info("Bar chart not available")
         
         with tab3:
             if charts['donut']:
-                st.plotly_chart(charts['donut'], use_container_width=True)
+                st.plotly_chart(charts['donut'], width="stretch")
             else:
                 st.info("Donut chart not available")
         
@@ -958,10 +958,10 @@ def enhanced_ranking_display(df: pd.DataFrame, components: Dict, jd_text: str):
     display_df = display_df.reset_index(drop=True)
 
     # Apply styling
-    styled_df = display_df.style.applymap(highlight_scores, subset=['Score (%)'])
+    styled_df = display_df.style.map(highlight_scores, subset=['Score (%)'])
 
     # Show in Streamlit
-    st.dataframe(styled_df, use_container_width=True, hide_index=True)
+    st.dataframe(styled_df, width="stretch", hide_index=True)
 
 
     # Resume preview section
