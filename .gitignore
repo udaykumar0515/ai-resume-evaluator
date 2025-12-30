@@ -26,9 +26,12 @@ __pycache__/
 # Ignore Streamlit cache
 .streamlit/
 
-
-PROJECT_FULL_DOC.md
+PROJECT_FULL_DOC_ORIGINAL.md
 
 # Evaluation scripts
 model_evaluation.py
 plots.py
+
+# Generated Documentation
+PROJECT_FULL_DOC.md
+PROJECT_FULL_DOC_COMPRESSED.md
